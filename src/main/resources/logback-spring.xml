@@ -1,0 +1,29 @@
+<configuration>
+  <!--개발 환경-->
+  <springProfile name="dev">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+        <pattern>%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) - %msg%n</pattern>
+      </encoder>
+    </appender>
+
+    <logger name="com.flab.marketgola" level="debug"></logger>
+
+    <root level="info">
+      <appender-ref ref="STDOUT" />
+    </root>
+  </springProfile>
+
+  <!--운영 환경-->
+  <springProfile name="prod">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+        <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+      </encoder>
+    </appender>
+
+    <root level="info">
+      <appender-ref ref="STDOUT" />
+    </root>
+  </springProfile>
+</configuration>
