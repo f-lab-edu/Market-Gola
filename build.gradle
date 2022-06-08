@@ -27,6 +27,8 @@ dependencies {
 	implementation 'ch.qos.logback:logback-classic:1.1.2'
 	implementation 'org.slf4j:slf4j-log4j12:1.7.7'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+	implementation 'mysql:mysql-connector-java'
 }
 
 tasks.named('test') {
