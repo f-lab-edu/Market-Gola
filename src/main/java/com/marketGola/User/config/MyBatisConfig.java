@@ -1,5 +1,10 @@
 package com.marketGola.User.config;
 
+import com.marketGola.User.repository.UserRepository;
+import com.marketGola.User.repository.mybatis.MyBatisUserRepository;
+import com.marketGola.User.repository.mybatis.UserMapper;
+import com.marketGola.User.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -14,31 +19,22 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
-//참고: https://devncj.tistory.com/48,  https://docs.spring.io/spring-boot/docs/1.4.3.RELEASE/reference/html/howto-data-access.html
+//UserMapper 를 주입받고, 필요한 의존관계 생성.
 @Configuration
-//패키지 명
-@MapperScan(value = "com.marketGola.User.config", sqlSessionFactoryRef = "SqlSessionFactory")
+@RequiredArgsConstructor
+
 public class MyBatisConfig {
-    @Value("${spring.datasource.mapper-locations}")
-    String mPath;
+    private final UserMapper userMapper;
 
-    @Bean(name = "dataSource")
-    @ConfigurationProperties(prefix="spring.datasource")
-    public DataSource DataSource(){
-        return DataSourceBuilder.create().build();
+    @Bean
+    public UserService userService() {
+        return new UserService(userRepository());
+
     }
 
-    @Bean(name = "SqlSessionFactory")
-    public SqlSessionFactory SqlSessionFactory (@Qualifier("dataSource") DataSource DataSource, ApplicationContext applicationContext) throws Exception {
-        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(DataSource);
-        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources(mPath));
-        return sqlSessionFactoryBean.getObject();
-    }
-
-    @Bean(name = "SessionTemplate")
-    public SqlSessionTemplate SqlSessionTemplate(@Qualifier("SqlSessionFactory") SqlSessionFactory  firstSqlSessionFactory)
-    {
-        return new SqlSessionTemplate(firstSqlSessionFactory);
+    @Bean
+    public UserRepository userRepository() {
+        return new MyBatisUserRepository(userMapper);
     }
 }
+
