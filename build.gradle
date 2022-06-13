@@ -12,6 +12,10 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	all {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+		exclude group: 'com.marketGola', module: 'log'
+	}
 }
 
 repositories {
@@ -19,18 +23,29 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+	//JdbcTemplate 추가
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	//MyBatis 추가
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	runtimeOnly 'mysql:mysql-connector-java'
+
+	//log 세팅
+//	implementation 'ch.qos.logback:logback-classic:1.1.5'
+	implementation 'ch.qos.logback:logback-classic:1.2.3'
+
+	//test 관련
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'ch.qos.logback:logback-classic:1.1.2'
-	implementation 'org.slf4j:slf4j-log4j12:1.7.7'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
-	implementation 'mysql:mysql-connector-java'
+
+	//테스트에서 lombok 사용
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
