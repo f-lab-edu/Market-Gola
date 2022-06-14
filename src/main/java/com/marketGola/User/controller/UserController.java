@@ -1,40 +1,32 @@
 package com.marketGola.User.controller;
 
 import com.marketGola.User.domain.User;
+import com.marketGola.User.request.UserDto;
 import com.marketGola.User.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * 우선 회원 가입 (/signup) 과 회원 찾기 (/{userId}) 기능 추가.
  */
 
-@Controller
+@RestController
 @RequestMapping(value = "/user")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/signup")
-    public String signUp(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
-        User savedUser = userService.save(user);
-        redirectAttributes.addAttribute("userId", savedUser.getId());
-        redirectAttributes.addAttribute("status", true);
-        return "redirect:/user/{userId}";
+    @PostMapping("/save")
+    public String signUp(@RequestBody UserDto userDto) {
+        userService.save(userDto);
+        return "가입이 완료되었습니다";
     }
 
     @GetMapping("/{userId}")
-    public String user(@PathVariable long userId, Model model) {
-        User user = userService.findById(userId).get();
-        model.addAttribute("user", user);
-        return "user";
+    public User user(@PathVariable long userId) {
+        return userService.findById(userId).orElseThrow(() -> new NullPointerException("없는 사용자입니다"));
     }
 }
 

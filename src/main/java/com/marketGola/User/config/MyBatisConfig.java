@@ -1,6 +1,5 @@
 package com.marketGola.User.config;
 
-import com.marketGola.User.repository.UserRepository;
 import com.marketGola.User.repository.mybatis.MyBatisUserRepository;
 import com.marketGola.User.repository.mybatis.UserMapper;
 import com.marketGola.User.service.UserService;
@@ -16,11 +15,11 @@ public class MyBatisConfig {
 
     @Bean
     public UserService userService() {
-        return new UserService(userRepository());
+        return new UserService(MyBatisUserRepository());
     }
 
     @Bean
-    public UserRepository userRepository() {
+    public MyBatisUserRepository MyBatisUserRepository() {
         return new MyBatisUserRepository(userMapper);
     }
 }
