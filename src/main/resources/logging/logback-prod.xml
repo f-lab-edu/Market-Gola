@@ -1,7 +1,8 @@
 <included>
     <include resource="logging/logback-console-appender.xml/"/>
-        <logger name="com.marketGola" level="INFO"/>
-    <root level="info">
+    <include resource="logging/logback-file-appender.xml/"/>
+    <logger name="com.marketGola" level="INFO"/>
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
 </included>
