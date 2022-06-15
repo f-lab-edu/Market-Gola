@@ -1,0 +1,12 @@
+<included>
+  <springProperty name="LOG_PATH" source="logging.file.path" defaultValue="logs"/>
+  <springProperty name="LOG_FILE_NAME" source="logging.file.name" defaultValue="market-gola-api"/>
+
+  <include resource="logging/console-appender.xml"/>
+  <include resource="logging/file-appender.xml"/>
+
+  <root level="info">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="FILE"/>
+  </root>
+</included>

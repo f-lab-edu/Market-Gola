@@ -1,0 +1,16 @@
+<configuration>
+  <!--로컬 환경-->
+  <springProfile name="local">
+    <include resource="logging/logback-local.xml"/>
+  </springProfile>
+
+  <!--개발 환경-->
+  <springProfile name="dev">
+    <include resource="logging/logback-dev.xml"/>
+  </springProfile>
+
+  <!--운영 환경-->
+  <springProfile name="prod">
+    <include resource="logging/logback-prod.xml"/>
+  </springProfile>
+</configuration>
