@@ -2,8 +2,6 @@
   <include resource="logging/console-appender.xml"/>
   <include resource="logging/file-appender.xml"/>
 
-  <logger name="com.flab.marketgola" level="info"/>
-
   <root level="info">
     <appender-ref ref="STDOUT"/>
     <appender-ref ref="FILE"/>
