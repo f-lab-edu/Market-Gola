@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface SampleRepository {
 
     void save(Sample sample);
+
+    Sample findById(Long id);
 }

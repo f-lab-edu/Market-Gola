@@ -7,5 +7,11 @@
     insert into sample (sample_name)
     values (#{sampleName})
   </insert>
+
+  <select id="findById" resultType="com.flab.marketgola.user.domain.Sample">
+    select id, sample_name
+    from sample
+    where id = #{id}
+  </select>
 </mapper>
 
