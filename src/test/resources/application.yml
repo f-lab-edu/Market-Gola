@@ -1,0 +1,18 @@
+# Profile
+spring:
+  profiles:
+    active: test
+
+  # Datasource
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
+
+# mysql
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
