@@ -1,10 +1,9 @@
-package com.marketGola.User.controller;
+package com.marketGola.user.controller;
 
-import com.marketGola.User.domain.User;
-import com.marketGola.User.request.UserDto;
-import com.marketGola.User.service.UserService;
+import com.marketGola.user.domain.User;
+import com.marketGola.user.request.UserDto;
+import com.marketGola.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @RestController
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -26,7 +25,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public User user(@PathVariable long userId) {
-        return userService.findById(userId).orElseThrow(() -> new NullPointerException("없는 사용자입니다"));
+        return userService.findById(userId).orElseThrow(() -> new NullPointerException("USER NOT FOUND"));
     }
 }
 
