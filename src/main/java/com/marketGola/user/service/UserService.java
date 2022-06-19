@@ -1,8 +1,8 @@
-package com.marketGola.User.service;
+package com.marketGola.user.service;
 
-import com.marketGola.User.domain.User;
-import com.marketGola.User.repository.mybatis.MyBatisUserRepository;
-import com.marketGola.User.request.UserDto;
+import com.marketGola.user.domain.User;
+import com.marketGola.user.repository.mybatis.MyBatisUserRepository;
+import com.marketGola.user.request.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,6 @@ public class UserService {
     private final MyBatisUserRepository userRepository;
 
     public void save(UserDto userDto) {
-//    public User save(UserDto userDto) {
         String name = userDto.getName();
         String email = userDto.getEmail();
         User user = new User(name, email);
@@ -23,5 +22,5 @@ public class UserService {
 
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
-    };
+    }
 }

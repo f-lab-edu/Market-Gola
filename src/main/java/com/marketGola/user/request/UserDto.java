@@ -1,4 +1,4 @@
-package com.marketGola.User.request;
+package com.marketGola.user.request;
 
 import lombok.Getter;
 

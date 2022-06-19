@@ -1,4 +1,4 @@
-package com.marketGola.User.domain;
+package com.marketGola.user.domain;
 
 import lombok.Data;
 

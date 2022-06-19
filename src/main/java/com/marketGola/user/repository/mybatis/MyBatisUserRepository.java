@@ -1,6 +1,6 @@
-package com.marketGola.User.repository.mybatis;
+package com.marketGola.user.repository.mybatis;
 
-import com.marketGola.User.domain.User;
+import com.marketGola.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
