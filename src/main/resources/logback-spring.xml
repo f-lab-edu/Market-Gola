@@ -1,11 +1,10 @@
 <configuration>
 <!--    로컬환경 -->
-<!--    참고: https://logback.qos.ch/manual/layouts.html#coloring-->
     <springProfile name="local">
         <include resource = "logging/logback-local.xml"/>
     </springProfile>
 
-    <!--    개발환경 -->
+<!--    개발환경 -->
     <springProfile name="dev">
         <include resource = "logging/logback-dev.xml"/>
     </springProfile>

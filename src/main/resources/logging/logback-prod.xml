@@ -1,8 +1,11 @@
 <included>
-    <include resource="logging/logback-console-appender.xml/"/>
-    <include resource="logging/logback-file-appender.xml/"/>
-    <logger name="com.marketGola" level="INFO"/>
+    <springProperty name="LOG_PATH" source="logging.file.path" defaultValue="logs"/>
+    <springProperty name="LOG_FILE_NAME" source="logging.file.name" defaultValue="market-gola-api"/>
+    <include resource="logging/console-appender.xml/"/>
+    <include resource="logging/file-appender.xml/"/>
+
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
     </root>
 </included>
