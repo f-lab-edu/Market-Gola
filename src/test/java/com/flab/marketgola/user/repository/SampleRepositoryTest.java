@@ -1,8 +1,10 @@
 package com.flab.marketgola.user.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.flab.marketgola.user.domain.Sample;
 import lombok.RequiredArgsConstructor;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,16 +19,18 @@ class SampleRepositoryTest {
     public SampleRepository sampleRepository;
 
     @Test
-    void save_메모리DB에_저장_확인() {
+    @DisplayName("메모리 DB에 저장 확인")
+    void save() {
         //given
         Sample sample = new Sample();
         sample.setSampleName("sample");
 
         //when
-        sampleRepository.save(sample);
+        Sample savedSample = sampleRepository.save(sample);
 
         //then
-        Assertions.assertThat(sampleRepository.findById(1L).getSampleName()).isEqualTo("sample");
+        assertThat(sampleRepository.findById(savedSample.getId()).getSampleName())
+                .isEqualTo("sample");
     }
 
 }
