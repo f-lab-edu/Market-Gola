@@ -1,9 +1,9 @@
 package com.flab.marketgola.common.exception;
 
-import com.flab.marketgola.common.util.TimeUtil;
 import java.time.LocalDateTime;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -29,7 +29,8 @@ public class GlobalControllerAdvice {
      * 예외 종류에 따라 다른 level로 로그를 찍는 메소드.
      */
     private void doLog(BaseException e, HttpServletRequest request) {
-        if (e instanceof FatalException) {
+
+        if (e.getLogLevel() == LogLevel.ERROR) {
             log.error("요청 uri = {}, http method = {}", request.getRequestURI(),
                     request.getMethod(), e);
         } else {
