@@ -18,8 +18,8 @@ public class GlobalControllerAdvice {
     /**
      * 예외 처리 핸들러 BaseException 하위의 예외를 받아서 예외 결과를 일관되게 반환한다.
      */
-    @ExceptionHandler()
-    public ResponseEntity<ErrorResult> exceptionHandler(BaseException e,
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<ErrorResult> baseExceptionHandler(BaseException e,
             HttpServletRequest request) {
         doLog(e, request);
         return createErrorResult(e);
