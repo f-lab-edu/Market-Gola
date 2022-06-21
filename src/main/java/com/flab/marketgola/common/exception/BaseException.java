@@ -13,7 +13,6 @@ public class BaseException extends RuntimeException {
     private final HttpStatus responseHttpStatus;
     private final LogLevel logLevel;
 
-
     public BaseException(HttpStatus responseHttpStatus, LogLevel logLevel) {
         super();
         this.responseHttpStatus = responseHttpStatus;
@@ -22,6 +21,19 @@ public class BaseException extends RuntimeException {
 
     public BaseException(HttpStatus responseHttpStatus, LogLevel logLevel, String message) {
         super(message);
+        this.responseHttpStatus = responseHttpStatus;
+        this.logLevel = logLevel;
+    }
+
+    public BaseException(HttpStatus responseHttpStatus, LogLevel logLevel, Exception cause) {
+        super(cause);
+        this.responseHttpStatus = responseHttpStatus;
+        this.logLevel = logLevel;
+    }
+
+    public BaseException(HttpStatus responseHttpStatus, LogLevel logLevel,
+        String message, Exception cause) {
+        super(message, cause);
         this.responseHttpStatus = responseHttpStatus;
         this.logLevel = logLevel;
     }
