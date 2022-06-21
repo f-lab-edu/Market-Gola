@@ -43,7 +43,7 @@ public class GlobalControllerAdvice {
      * 예외 결과를 만들어주는 메소드
      */
     private ResponseEntity<ErrorResult> createErrorResult(BaseException e) {
-        String timestamp = TimeUtil.convert(LocalDateTime.now());
+        LocalDateTime timestamp = LocalDateTime.now();
         int status = e.getResponseHttpStatus().value();
         String error = e.getResponseHttpStatus().getReasonPhrase();
         String type = e.getClass().getSimpleName();

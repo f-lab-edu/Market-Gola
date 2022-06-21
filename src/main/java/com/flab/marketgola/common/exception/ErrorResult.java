@@ -1,5 +1,6 @@
 package com.flab.marketgola.common.exception;
 
+import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
@@ -8,7 +9,7 @@ public class ErrorResult {
     /**
      * 예외 발생 시각
      */
-    private final String timestamp;
+    private final LocalDateTime timestamp;
     /**
      * 반환할 HTTP 상태코드
      */
