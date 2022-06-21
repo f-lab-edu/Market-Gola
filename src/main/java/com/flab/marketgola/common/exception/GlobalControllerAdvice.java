@@ -15,12 +15,24 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice()
 public class GlobalControllerAdvice {
 
+
+    /**
+     * 직접 정의한 예외(BaseException을 상속하는 예외)가 아닌 예상치 못한 예외를 처리하는 핸들러
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResult> unExpectedExceptionHandler(Exception e,
+        HttpServletRequest request) {
+        UnExpectedException unExpectedException = new UnExpectedException(e);
+        doLog(unExpectedException, request);
+        return createErrorResult(unExpectedException);
+    }
+
     /**
      * 예외 처리 핸들러 BaseException 하위의 예외를 받아서 예외 결과를 일관되게 반환한다.
      */
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ErrorResult> baseExceptionHandler(BaseException e,
-            HttpServletRequest request) {
+        HttpServletRequest request) {
         doLog(e, request);
         return createErrorResult(e);
     }
@@ -29,14 +41,14 @@ public class GlobalControllerAdvice {
      * 예외 종류에 따라 다른 level로 로그를 찍는 메소드.
      */
     private void doLog(BaseException e, HttpServletRequest request) {
-
         if (e.getLogLevel() == LogLevel.ERROR) {
             log.error("요청 uri = {}, http method = {}", request.getRequestURI(),
-                    request.getMethod(), e);
+                request.getMethod(), e);
         } else {
             log.debug("요청 uri = {}, http method = {}", request.getRequestURI(),
-                    request.getMethod(), e);
+                request.getMethod(), e);
         }
+
     }
 
     /**

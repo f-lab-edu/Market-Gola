@@ -18,6 +18,11 @@ public class SampleErrorController {
     @GetMapping("/fatal")
     public String fatalException() {
         throw new SampleFatalException(HttpStatus.INTERNAL_SERVER_ERROR, LogLevel.ERROR,
-                "심각한 예외입니다.");
+            "심각한 예외입니다.");
+    }
+
+    @GetMapping("/unExpected")
+    public String unExpectedException() {
+        throw new IllegalCallerException();
     }
 }
