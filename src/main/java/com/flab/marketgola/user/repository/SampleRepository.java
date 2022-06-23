@@ -1,12 +1,22 @@
 package com.flab.marketgola.user.repository;
 
 import com.flab.marketgola.user.domain.Sample;
-import org.apache.ibatis.annotations.Mapper;
+import com.flab.marketgola.user.mapper.SampleMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-@Mapper
 @Repository
-public interface SampleRepository {
+@RequiredArgsConstructor
+public class SampleRepository {
 
-    void save(Sample sample);
+    private final SampleMapper sampleMapper;
+
+    public Sample save(Sample sample) {
+        sampleMapper.save(sample);
+        return sample;
+    }
+
+    public Sample findById(Long id) {
+        return sampleMapper.findById(id);
+    }
 }

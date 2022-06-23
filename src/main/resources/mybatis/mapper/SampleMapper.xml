@@ -2,10 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.flab.marketgola.user.repository.SampleRepository">
+<mapper namespace="com.flab.marketgola.user.mapper.SampleMapper">
   <insert id="save" useGeneratedKeys="true" keyProperty="id">
     insert into sample (sample_name)
     values (#{sampleName})
   </insert>
+
+  <select id="findById" resultType="com.flab.marketgola.user.domain.Sample">
+    select id, sample_name
+    from sample
+    where id = #{id}
+  </select>
 </mapper>
 
