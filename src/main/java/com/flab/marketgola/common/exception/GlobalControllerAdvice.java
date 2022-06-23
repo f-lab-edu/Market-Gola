@@ -37,16 +37,21 @@ public class GlobalControllerAdvice {
         return createErrorResult(e);
     }
 
+
     /**
      * 예외 종류에 따라 다른 level로 로그를 찍는 메소드.
      */
     private void doLog(BaseException e, HttpServletRequest request) {
+        String logMessage = "요청 uri = {}, http method = {}";
+
         if (e.getLogLevel() == LogLevel.ERROR) {
-            log.error("요청 uri = {}, http method = {}", request.getRequestURI(),
-                request.getMethod(), e);
+            log.error(logMessage, request.getRequestURI(), request.getMethod(), e);
+        } else if (e.getLogLevel() == LogLevel.WARN) {
+            log.warn(logMessage, request.getRequestURI(), request.getMethod(), e);
+        } else if (e.getLogLevel() == LogLevel.INFO) {
+            log.info(logMessage, request.getRequestURI(), request.getMethod(), e);
         } else {
-            log.debug("요청 uri = {}, http method = {}", request.getRequestURI(),
-                request.getMethod(), e);
+            log.debug(logMessage, request.getRequestURI(), request.getMethod(), e);
         }
 
     }
