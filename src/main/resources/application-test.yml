@@ -1,12 +1,10 @@
 logging:
-  file:
-    name: market-gola-api
-    path: logs
   level:
-    org:
-      springframework:
-        boot:
-          autoconfigure: ERROR
+    com:
+      marketgola:
+        user:
+          repository:
+            mybatis: trace
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
