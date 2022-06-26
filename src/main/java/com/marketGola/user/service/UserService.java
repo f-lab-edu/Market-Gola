@@ -1,26 +1,36 @@
-package com.marketGola.user.service;
+package com.marketgola.user.service;
 
-import com.marketGola.user.domain.User;
-import com.marketGola.user.repository.mybatis.MyBatisUserRepository;
-import com.marketGola.user.request.UserDto;
+import com.marketgola.user.domain.User;
+import com.marketgola.user.repository.mybatis.UserMapper;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final MyBatisUserRepository userRepository;
 
-    public void save(UserDto userDto) {
-        String name = userDto.getName();
-        String email = userDto.getEmail();
-        User user = new User(name, email);
-        userRepository.save(user);
+    private final UserMapper userMapper;
+
+    public void register(User user) {
+        userMapper.save(user);
     }
 
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    public void validateDuplicateMember(String name) {
+        boolean isExistingName = userMapper.findByName(name);
+        if (isExistingName) {
+            throw new IllegalStateException("name ALREADY TAKEN");
+        }
     }
+
+
+    public User findByIdOrElseThrow(Long id) {
+        return userMapper.findById(id)
+                .orElseThrow(() -> new IllegalStateException("user does not exist"));
+    }
+
+    public Optional<User> findByIdOrElseNull(Long id) {
+        return userMapper.findById(id);
+    }
+
 }
