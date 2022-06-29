@@ -13,24 +13,19 @@ public class UserService {
     private final UserMapper userMapper;
 
     public void register(User user) {
+        if (validateDuplicateMember(user.getLoginId())) {
+            throw new IllegalStateException("LOGIN ID ALREADY TAKEN");
+        }
         userMapper.save(user);
     }
 
-    public void validateDuplicateMember(String name) {
-        boolean isExistingName = userMapper.findByName(name);
-        if (isExistingName) {
-            throw new IllegalStateException("name ALREADY TAKEN");
-        }
+    public Boolean validateDuplicateMember(String loginId) {
+        Optional<User> found = userMapper.findByLoginId(loginId);
+        return found.isPresent();
     }
 
-
-    public User findByIdOrElseThrow(Long id) {
-        return userMapper.findById(id)
-                .orElseThrow(() -> new IllegalStateException("user does not exist"));
+    public User findByIdOrElseThrowIllegalState(String loginId) {
+        return userMapper.findByLoginId(loginId)
+                .orElseThrow(() -> new IllegalStateException("USER DOES NOT EXIST"));
     }
-
-    public Optional<User> findByIdOrElseNull(Long id) {
-        return userMapper.findById(id);
-    }
-
 }

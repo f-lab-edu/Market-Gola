@@ -3,21 +3,14 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.marketgola.user.repository.mybatis.UserMapper">
   <insert id="save" useGeneratedKeys="true" keyProperty="id">
-    insert into user (name, email)
-    values (#{name}, #{email})
+    insert into user (login_id, email)
+    values (#{loginId}, #{email})
   </insert>
 
-  <select id="findByName" resultType="boolean">
-    SELECT EXISTS(select id, name, email
-                  from user
-                  where name = #{name});
-
-  </select>
-
-  <select id="findById" resultType="User">
-    select id, name, email
+  <select id="findByLoginId" resultType="com.marketgola.user.domain.User">
+    select id, login_id, email
     from user
-    where id = #{id}
+    where login_id = #{loginId};
   </select>
 
 </mapper>

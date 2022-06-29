@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 public class User {
 
     private Long id;
-    private String name;
+    private String loginId;
     private String email;
 
-    public User(String name, String email) {
-        this.name = name;
+    public User(String loginId, String email) {
+        this.loginId = loginId;
         this.email = email;
     }
 }
