@@ -1,12 +1,12 @@
 package com.marketgola.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.marketgola.user.domain.User;
 import com.marketgola.user.repository.mybatis.UserMapper;
 import com.marketgola.user.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,43 +25,45 @@ class UserIntegrationTest {
     @Autowired
     UserMapper userMapper;
 
-    @Test
-    @DisplayName("회원 가입 성공")
-    void register() {
-        //given
-        User user = new User("JK", "jk@gmail3.com");
+    User user1;
 
-        //when
-        userMapper.save(user);
-
-        //then
-        User foundUser = userMapper.findById(user.getId()).get();
-        assertEquals(user, foundUser);
+    @BeforeEach
+    void beforeEach() {
+        user1 = new User();
+        user1.setId(1L);
+        user1.setLoginId("user1");
+        user1.setEmail("user1@gmail.com");
     }
 
     @Test
     @DisplayName("중복 회원인 경우 예외를 던진다")
     void validateDuplicateMember() {
-
-        User user1 = new User();
-        user1.setName("user1");
-        user1.setEmail("user1@gmail1.com");
-
+        //Given
         User user2 = new User();
-        user2.setName("user1");
+        user2.setLoginId("user1");
         user2.setEmail("user1@gmail1.com");
 
+        //When
+        userService.register(user1);
+        // Then
+        IllegalStateException e = assertThrows(IllegalStateException.class,
+                () -> userService.register(user2));
+        assertThat(e.getMessage()).isEqualTo("LOGIN ID ALREADY TAKEN");
+    }
+
+    @Test
+    @DisplayName("중복 회원이 아닐 경우 예외를 던지지 않는다")
+    void validateNoDuplicateMember() {
+        //Given
         User user3 = new User();
-        user3.setName("user3");
+        user3.setLoginId("user3");
         user3.setEmail("user3@gmail1.com");
 
-        //when
-        userService.register(user1);
+        //When
+        userService.register(user3);
 
-        IllegalStateException e = assertThrows(IllegalStateException.class,
-                () -> userService.validateDuplicateMember(user2.getName()));
-        assertThat(e.getMessage()).isEqualTo("name ALREADY TAKEN");
-
-        userService.validateDuplicateMember(user3.getName());
+        //Then
+        User foundUser = userMapper.findByLoginId(user3.getLoginId()).get();
+        assertThat(foundUser).isEqualTo(user3);
     }
 }
