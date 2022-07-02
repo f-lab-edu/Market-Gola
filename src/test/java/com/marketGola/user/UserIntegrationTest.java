@@ -20,10 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 class UserIntegrationTest {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
     User user1;
 
