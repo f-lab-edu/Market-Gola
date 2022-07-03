@@ -1,0 +1,9 @@
+<included>
+  <include resource="logging/console-appender.xml/"/>
+  <logger name="com.marketgola.user.repository.mybatis">
+    <level value="trace"/>
+  </logger>
+  <root level="DEBUG">
+    <appender-ref ref="STDOUT"/>
+  </root>
+</included>

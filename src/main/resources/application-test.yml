@@ -1,0 +1,18 @@
+logging:
+  level:
+    com:
+      marketgola:
+        user:
+          repository:
+            mybatis: trace
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:/mapper/**/*.xml
+  type-aliases-package: com.marketgola.user.domain
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password:
+    url:
+    username:
