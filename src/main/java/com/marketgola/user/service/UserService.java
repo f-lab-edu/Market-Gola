@@ -1,6 +1,8 @@
 package com.marketgola.user.service;
 
 import com.marketgola.user.domain.User;
+import com.marketgola.user.exception.DuplicatedUserException;
+import com.marketgola.user.exception.UserNotFoundException;
 import com.marketgola.user.repository.mybatis.UserMapper;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +16,7 @@ public class UserService {
 
     public void register(User user) {
         if (validateDuplicateMember(user.getLoginId())) {
-            throw new IllegalStateException("LOGIN ID ALREADY TAKEN");
+            throw new DuplicatedUserException("LOGIN ID ALREADY TAKEN");
         }
         userMapper.save(user);
     }
@@ -24,8 +26,8 @@ public class UserService {
         return found.isPresent();
     }
 
-    public User findByIdOrElseThrowIllegalState(String loginId) {
+    public User findByIdOrElseThrowUserNotFound(String loginId) {
         return userMapper.findByLoginId(loginId)
-                .orElseThrow(() -> new IllegalStateException("USER DOES NOT EXIST"));
+                .orElseThrow(() -> new UserNotFoundException("USER DOES NOT EXIST"));
     }
 }

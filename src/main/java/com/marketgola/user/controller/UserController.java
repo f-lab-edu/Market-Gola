@@ -19,13 +19,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public String signUp(@RequestBody User user) {
-        try {
-            userService.register(user);
-            return "가입이 완료되었습니다";
-        } catch (IllegalStateException e) {
-            return "동일한 ID의 유저가 존재합니다";
-        }
+    public void signUp(@RequestBody User user) {
+        userService.register(user);
     }
 
 
@@ -36,7 +31,7 @@ public class UserController {
 
     @GetMapping("/{loginId}")
     public User findUser(@PathVariable String loginId) {
-        return userService.findByIdOrElseThrowIllegalState(loginId);
+        return userService.findByIdOrElseThrowUserNotFound(loginId);
     }
 }
 
