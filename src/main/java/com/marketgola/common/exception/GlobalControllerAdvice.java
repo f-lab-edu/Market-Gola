@@ -25,6 +25,10 @@ public class GlobalControllerAdvice {
         return createErrorResult(e, request);
     }
 
+    /**
+     * 예상치 못한 (base Exception 을 구현하지 않는 Exception)을 처리하는 핸들러
+     */
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResult> unExpectedHandler(Exception e, HttpServletRequest request) {
         UnExpectedException unexpectedException = new UnExpectedException(e);
@@ -41,7 +45,7 @@ public class GlobalControllerAdvice {
                 .body(ErrorResult.builder().status(e.getStatus().value())
                         .error(e.getStatus().name())
                         .message(e.getMessage())
-                        .url(request.getRequestURI())
+                        .path(request.getRequestURI())
                         .build());
     }
 
@@ -52,16 +56,19 @@ public class GlobalControllerAdvice {
         LogLevel level = e.getLogLevel();
         String requestURI = request.getRequestURI();
         String method = request.getMethod();
-        String logMessage = String.format("[EXCEPTION LOGGING] errorCode:{} method: {} path:{}");
-        
+        String logFormat = String.format("status: (%d) method: (%s) path: (%s)",
+                e.getStatus().value(),
+                method,
+                requestURI);
+
         if (level == LogLevel.ERROR) {
-            log.error(logMessage, e.getStatus(), method, requestURI);
+            log.error(logFormat, e);
         } else if (level == LogLevel.WARN) {
-            log.warn(logMessage, e.getStatus(), method, requestURI);
+            log.warn(logFormat, e);
         } else if (level == LogLevel.INFO) {
-            log.info(logMessage, e.getStatus(), method, requestURI);
+            log.info(logFormat, e);
         } else if (level == LogLevel.DEBUG) {
-            log.debug(logMessage, e.getStatus(), method, requestURI);
+            log.debug(logFormat, e);
         }
     }
 }

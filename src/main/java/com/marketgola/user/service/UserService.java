@@ -1,7 +1,7 @@
 package com.marketgola.user.service;
 
 import com.marketgola.user.domain.User;
-import com.marketgola.user.exception.DuplicatedUserException;
+import com.marketgola.user.exception.UserDuplicatedException;
 import com.marketgola.user.exception.UserNotFoundException;
 import com.marketgola.user.repository.mybatis.UserMapper;
 import java.util.Optional;
@@ -16,7 +16,7 @@ public class UserService {
 
     public void register(User user) {
         if (validateDuplicateMember(user.getLoginId())) {
-            throw new DuplicatedUserException("LOGIN ID ALREADY TAKEN");
+            throw new UserDuplicatedException("LOGIN ID ALREADY TAKEN");
         }
         userMapper.save(user);
     }
