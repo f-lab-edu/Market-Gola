@@ -1,7 +1,7 @@
-package com.flab.marketgola.user.controller;
+package com.flab.marketgola.sample.controller;
 
-import com.flab.marketgola.user.domain.Sample;
-import com.flab.marketgola.user.service.SampleService;
+import com.flab.marketgola.sample.domain.Sample;
+import com.flab.marketgola.sample.service.SampleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

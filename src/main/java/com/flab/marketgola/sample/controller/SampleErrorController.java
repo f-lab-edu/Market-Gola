@@ -1,7 +1,7 @@
-package com.flab.marketgola.user.controller;
+package com.flab.marketgola.sample.controller;
 
-import com.flab.marketgola.user.exception.SampleFatalException;
-import com.flab.marketgola.user.exception.SampleGeneralException;
+import com.flab.marketgola.sample.exception.SampleFatalException;
+import com.flab.marketgola.sample.exception.SampleGeneralException;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

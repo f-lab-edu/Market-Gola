@@ -1,8 +1,8 @@
-package com.flab.marketgola.user.repository;
+package com.flab.marketgola.sample.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.flab.marketgola.user.domain.Sample;
+import com.flab.marketgola.sample.domain.Sample;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

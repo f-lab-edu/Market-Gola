@@ -1,6 +1,6 @@
-package com.flab.marketgola.user.mapper;
+package com.flab.marketgola.sample.mapper;
 
-import com.flab.marketgola.user.domain.Sample;
+import com.flab.marketgola.sample.domain.Sample;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

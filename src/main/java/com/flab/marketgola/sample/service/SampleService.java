@@ -1,7 +1,7 @@
-package com.flab.marketgola.user.service;
+package com.flab.marketgola.sample.service;
 
-import com.flab.marketgola.user.domain.Sample;
-import com.flab.marketgola.user.repository.SampleRepository;
+import com.flab.marketgola.sample.domain.Sample;
+import com.flab.marketgola.sample.repository.SampleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

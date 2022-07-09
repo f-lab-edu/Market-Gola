@@ -1,4 +1,4 @@
-package com.flab.marketgola.user.exception;
+package com.flab.marketgola.sample.exception;
 
 import com.flab.marketgola.common.exception.BaseException;
 import org.springframework.boot.logging.LogLevel;

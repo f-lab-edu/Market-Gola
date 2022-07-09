@@ -1,4 +1,4 @@
-package com.flab.marketgola.user.domain;
+package com.flab.marketgola.sample.domain;
 
 import lombok.Data;
 

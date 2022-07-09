@@ -1,4 +1,4 @@
-package com.flab.marketgola.user.exception;
+package com.flab.marketgola.sample.exception;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
