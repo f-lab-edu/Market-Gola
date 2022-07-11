@@ -1,7 +1,7 @@
 # Datasource
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/db_example
+    url: jdbc:mysql://localhost:3306/marketgola
     driver-class-name: com.mysql.cj.jdbc.Driver
     username:
     password:
