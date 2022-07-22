@@ -44,25 +44,42 @@ jacoco {
 }
 
 jacocoTestReport {
-	finalizedBy jacocoTestCoverageVerification
+    finalizedBy jacocoTestCoverageVerification
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    'com/flab/marketgola/*/mapper/*',
+                    'com/flab/marketgola/*/dto/*',
+                    'com/flab/marketgola/*/exception/*',
+                    'com/flab/marketgola/MarketGolaApplication.class'
+            ])
+        }))
+    }
 }
 
 jacocoTestCoverageVerification {
-	violationRules {
-		rule {
-			element = 'CLASS' //각각의 클래스 파일이 이 기준을 넘어야 함
+    violationRules {
+        rule {
+            element = 'CLASS' //각각의 클래스 파일이 이 기준을 넘어야 함
 
-			limit {
-				counter = 'INSTRUCTION'
-				value = 'COVEREDRATIO'
-				minimum = 0.60
-			}
+            limit {
+                counter = 'INSTRUCTION'
+                value = 'COVEREDRATIO'
+                minimum = 0.60
+            }
 
-			limit {
-				counter = 'BRANCH'
-				value = 'COVEREDRATIO'
-				minimum = 0.60
-			}
-		}
-	}
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.60
+            }
+
+            excludes = [
+                    '*.exception.*',
+                    '*.mapper.*',
+                    '*.dto.*',
+                    'com.flab.marketgola.MarketGolaApplication'
+            ]
+        }
+    }
 }
