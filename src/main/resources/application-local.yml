@@ -11,3 +11,5 @@ mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
   configuration:
     map-underscore-to-camel-case: 'true'
+  type-aliases-package:
+    'com.flab.marketgola.user.domain'
