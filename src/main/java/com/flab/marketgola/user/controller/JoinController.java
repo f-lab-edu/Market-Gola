@@ -24,7 +24,7 @@ public class JoinController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public void join(@Validated @RequestBody UserJoinDto userJoinDto) throws Exception {
+    public void join(@Validated @RequestBody UserJoinDto userJoinDto) {
         joinService.join(userJoinDto);
     }
 

@@ -29,11 +29,12 @@ public class JoinService {
     }
 
     @Transactional
-    public User join(UserJoinDto userJoinDto) throws Exception {
+    public User join(UserJoinDto userJoinDto) {
         User user = userJoinDto.toUser();
         ShippingAddress shippingAddress = userJoinDto.toShippingAddress(user);
 
         user.encryptPassword();
+
         try {
             userRepository.create(user);
         } catch (DuplicateKeyException e) {
@@ -43,7 +44,7 @@ public class JoinService {
         return user;
     }
 
-    private Exception identifyError(DuplicateKeyException e) {
+    private RuntimeException identifyError(DuplicateKeyException e) {
         String errorField = extractErrorField(e);
         if (errorField.equals("login_id")) {
             return new DuplicatedLoginIdExcepiton(LogLevel.DEBUG);
