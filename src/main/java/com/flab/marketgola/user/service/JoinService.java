@@ -46,14 +46,15 @@ public class JoinService {
 
     private RuntimeException identifyError(DuplicateKeyException e) {
         String errorField = extractErrorField(e);
-        if (errorField.equals("login_id")) {
-            return new DuplicatedLoginIdExcepiton(LogLevel.DEBUG);
-        } else if (errorField.equals("email")) {
-            return new DuplicatedEmailExcepiton(LogLevel.DEBUG);
-        } else if (errorField.equals("phone_number")) {
-            return new DuplicatedPhoneNumberException(LogLevel.DEBUG);
-        } else {
-            return e;
+        switch (errorField) {
+            case "login_id":
+                return new DuplicatedLoginIdExcepiton(LogLevel.DEBUG);
+            case "email":
+                return new DuplicatedEmailExcepiton(LogLevel.DEBUG);
+            case "phone_number":
+                return new DuplicatedPhoneNumberException(LogLevel.DEBUG);
+            default:
+                return e;
         }
     }
 
