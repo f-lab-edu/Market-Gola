@@ -17,13 +17,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserService {
+public class JoinService {
 
     private final UserMapper userRepository;
     private final ShippingAddressMapper addressRepository;
 
     @Autowired
-    public UserService(UserMapper userRepository, ShippingAddressMapper addressRepository) {
+    public JoinService(UserMapper userRepository, ShippingAddressMapper addressRepository) {
         this.userRepository = userRepository;
         this.addressRepository = addressRepository;
     }

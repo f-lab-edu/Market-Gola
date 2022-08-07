@@ -29,10 +29,10 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("unit")
-class UserServiceTest {
+class JoinServiceTest {
 
     @InjectMocks
-    private UserService userService;
+    private JoinService joinService;
 
     @Mock
     private UserMapper userRepository;
@@ -56,7 +56,7 @@ class UserServiceTest {
                 .build();
 
         //when
-        User user = userService.join(userJoinDto);
+        User user = joinService.join(userJoinDto);
     }
 
     @DisplayName("비밀번호가 암호화되어 저장되어야 한다.")
@@ -72,7 +72,7 @@ class UserServiceTest {
                 .address(ValidUser.ADDRESS)
                 .build();
         //when
-        User joinedUser = userService.join(joiningUser);
+        User joinedUser = joinService.join(joiningUser);
 
         //then
         assertThat(joinedUser.getPassword()).isNotEqualTo(ValidUser.PASSWORD);
@@ -96,7 +96,7 @@ class UserServiceTest {
                 .build();
 
         //when
-        assertThatThrownBy(() -> userService.join(joiningUser))
+        assertThatThrownBy(() -> joinService.join(joiningUser))
                 .isInstanceOf(exceptionClass);
     }
 
@@ -117,7 +117,7 @@ class UserServiceTest {
                 .thenReturn(Optional.of(new User()));
 
         //when
-        boolean result = userService.isDuplicatedLoginId(ValidUser.LOGIN_ID);
+        boolean result = joinService.isDuplicatedLoginId(ValidUser.LOGIN_ID);
 
         //then
         assertThat(result).isTrue();
@@ -131,7 +131,7 @@ class UserServiceTest {
                 .thenReturn(Optional.empty());
 
         //when
-        boolean result = userService.isDuplicatedLoginId(ValidUser.LOGIN_ID);
+        boolean result = joinService.isDuplicatedLoginId(ValidUser.LOGIN_ID);
 
         //then
         assertThat(result).isFalse();
@@ -146,7 +146,7 @@ class UserServiceTest {
                 .thenReturn(Optional.of(new User()));
 
         //when
-        boolean result = userService.isDuplicatedEmail(ValidUser.EMAIL);
+        boolean result = joinService.isDuplicatedEmail(ValidUser.EMAIL);
 
         //then
         assertThat(result).isTrue();
@@ -160,7 +160,7 @@ class UserServiceTest {
                 .thenReturn(Optional.empty());
 
         //when
-        boolean result = userService.isDuplicatedEmail(ValidUser.EMAIL);
+        boolean result = joinService.isDuplicatedEmail(ValidUser.EMAIL);
 
         //then
         assertThat(result).isFalse();
@@ -174,7 +174,7 @@ class UserServiceTest {
                 .thenReturn(Optional.of(new User()));
 
         //when
-        boolean result = userService.isDuplicatedPhoneNumber(ValidUser.PHONE_NUMBER);
+        boolean result = joinService.isDuplicatedPhoneNumber(ValidUser.PHONE_NUMBER);
 
         //then
         assertThat(result).isTrue();
@@ -188,7 +188,7 @@ class UserServiceTest {
                 .thenReturn(Optional.empty());
 
         //when
-        boolean result = userService.isDuplicatedPhoneNumber(ValidUser.PHONE_NUMBER);
+        boolean result = joinService.isDuplicatedPhoneNumber(ValidUser.PHONE_NUMBER);
 
         //then
         assertThat(result).isFalse();

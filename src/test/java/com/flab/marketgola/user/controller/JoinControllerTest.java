@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.marketgola.user.ValidUser;
 import com.flab.marketgola.user.dto.UserJoinDto;
-import com.flab.marketgola.user.service.UserService;
+import com.flab.marketgola.user.service.JoinService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,14 +28,14 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 @ActiveProfiles("unit")
-@WebMvcTest(UserJoinController.class)
-class UserControllerTest {
+@WebMvcTest(JoinController.class)
+class JoinControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private UserService userService;
+    private JoinService joinService;
 
     @Autowired
     private ObjectMapper objectMapper;
