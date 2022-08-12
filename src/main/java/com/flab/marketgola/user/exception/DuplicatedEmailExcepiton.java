@@ -6,9 +6,7 @@ import org.springframework.http.HttpStatus;
 
 public class DuplicatedEmailExcepiton extends BaseException {
 
-    private static final String MESSAGE = "이미 존재하는 이메일입니다.";
-
-    public DuplicatedEmailExcepiton(LogLevel logLevel) {
-        super(HttpStatus.CONFLICT, logLevel, MESSAGE);
+    public DuplicatedEmailExcepiton() {
+        super(HttpStatus.CONFLICT, LogLevel.DEBUG);
     }
 }

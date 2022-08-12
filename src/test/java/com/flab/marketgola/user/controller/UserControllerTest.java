@@ -28,7 +28,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 @ActiveProfiles("unit")
-@WebMvcTest(UserJoinController.class)
+@WebMvcTest(UserController.class)
 class UserControllerTest {
 
     @Autowired
@@ -87,8 +87,8 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.subErrors[0].field").value("password"))
-                .andExpect(jsonPath("$.subErrors[0].rejectedValue").doesNotExist())
+                .andExpect(jsonPath("$.validationErrors[0].field").value("password"))
+                .andExpect(jsonPath("$.validationErrors[0].rejectedValue").doesNotExist())
                 .andDo(print());
     }
 
@@ -112,8 +112,8 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.subErrors[0].field").value("address"))
-                .andExpect(jsonPath("$.subErrors[0].rejectedValue").doesNotExist())
+                .andExpect(jsonPath("$.validationErrors[0].field").value("address"))
+                .andExpect(jsonPath("$.validationErrors[0].rejectedValue").doesNotExist())
                 .andDo(print());
     }
 
@@ -132,7 +132,7 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.subErrors[0].field").value("gender"))
+                .andExpect(jsonPath("$.validationError.field").value("gender"))
                 .andDo(print());
     }
 
@@ -158,7 +158,7 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.subErrors[0].field").value("loginId"))
+                .andExpect(jsonPath("$.validationErrors[0].field").value("loginId"))
                 .andDo(print());
     }
 
@@ -184,7 +184,7 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.subErrors[0].field").value("password"))
+                .andExpect(jsonPath("$.validationErrors[0].field").value("password"))
                 .andDo(print());
     }
 
@@ -210,7 +210,7 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.subErrors[0].field").value("email"))
+                .andExpect(jsonPath("$.validationErrors[0].field").value("email"))
                 .andDo(print());
     }
 
