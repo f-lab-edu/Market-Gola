@@ -1,4 +1,4 @@
-package com.flab.marketgola.user.dto;
+package com.flab.marketgola.user.dto.request;
 
 import com.flab.marketgola.user.domain.Gender;
 import com.flab.marketgola.user.domain.ShippingAddress;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class UserJoinDto {
+public class JoinUserRequestDto {
 
     @Pattern(regexp = "[A-Za-z]+[A-Za-z0-9]{5,15}", message = "6자 이상 16자 이하의 영문 또는 영문 숫자 조합만 가능합니다.")
 
@@ -37,7 +37,7 @@ public class UserJoinDto {
     private String address;
 
     @Builder
-    public UserJoinDto(String loginId, String password, String name, String email,
+    public JoinUserRequestDto(String loginId, String password, String name, String email,
             String phoneNumber,
             Gender gender, LocalDate birth, String address) {
         this.loginId = loginId;
