@@ -8,10 +8,10 @@ import lombok.ToString;
 @NoArgsConstructor
 public class ShippingAddress {
 
-    Long id;
-    User user;
-    String address;
-    boolean isDefault;
+    private Long id;
+    private User user;
+    private String address;
+    private boolean isDefault;
 
     @Builder
     public ShippingAddress(User user, String address, boolean isDefault) {

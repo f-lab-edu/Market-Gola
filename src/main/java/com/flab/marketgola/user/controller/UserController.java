@@ -24,14 +24,14 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Void> joinUser(
             @Validated @RequestBody JoinUserRequestDto joinUserRequestDto) throws Exception {
         userService.join(joinUserRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<FindUserResponseDto> findUser(
             @ModelAttribute FindUserRequestDto findUserRequestDto) {
         return new ResponseEntity<>(userService.findByCondition(findUserRequestDto), HttpStatus.OK);

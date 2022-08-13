@@ -1,5 +1,6 @@
 package com.flab.marketgola.user.domain;
 
+import java.math.BigDecimal;
 import lombok.Builder;
 import lombok.ToString;
 
@@ -8,5 +9,5 @@ import lombok.ToString;
 public class Membership {
 
     private String level;
-    private float pointRate;
+    private BigDecimal pointRate;
 }
