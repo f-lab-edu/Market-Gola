@@ -1,4 +1,9 @@
 spring:
+  # Profile
+  config:
+    activate:
+      on-profile: integration
+
   # Datasource
   datasource:
     url: jdbc:mysql://localhost:3306/marketgola

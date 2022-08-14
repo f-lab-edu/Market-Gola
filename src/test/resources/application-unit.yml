@@ -1,4 +1,9 @@
 spring:
+  # Profile
+  config:
+    activate:
+      on-profile: unit
+
   # Datasource
   datasource:
     # 어떤 환경에서도 테스트가 수행가능하고, 빠른 테스트, 테스트 격리 목적으로 메모리 DB사용

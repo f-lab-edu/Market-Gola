@@ -1,4 +1,1 @@
-# Profile
-spring:
-  profiles:
-    active: test
+# Common

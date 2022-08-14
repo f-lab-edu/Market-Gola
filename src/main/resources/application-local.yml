@@ -1,5 +1,10 @@
-# Datasource
 spring:
+  # Profile
+  config:
+    activate:
+      on-profile: local
+
+  # Datasource
   datasource:
     url: jdbc:mysql://localhost:3306/marketgola
     driver-class-name: com.mysql.cj.jdbc.Driver
