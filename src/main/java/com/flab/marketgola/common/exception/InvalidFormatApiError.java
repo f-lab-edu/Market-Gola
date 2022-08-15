@@ -8,17 +8,17 @@ import org.springframework.web.context.request.WebRequest;
 
 @Getter
 @Setter
-public class InvalidFormatApiError extends ApiError {
+public class InvalidFormatApiError extends ApiError<ValidationFieldError> {
 
-    private ValidationFieldError validationError;
+    public static final String MESSAGE = "잘못된 타입의 입력값입니다.";
+    private ValidationFieldError detail;
 
     public InvalidFormatApiError(HttpStatus httpStatus, InvalidFormatException exception,
             WebRequest request) {
         super(httpStatus, exception, request);
 
         String field = exception.getPath().get(0).getFieldName();
-        String message = "잘못된 타입의 입력값입니다.";
 
-        validationError = new ValidationFieldError(field, message);
+        detail = new ValidationFieldError(field, MESSAGE);
     }
 }

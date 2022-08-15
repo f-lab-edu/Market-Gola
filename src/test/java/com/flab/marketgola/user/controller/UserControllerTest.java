@@ -86,8 +86,8 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.validationErrors[0].field").value("password"))
-                .andExpect(jsonPath("$.validationErrors[0].rejectedValue").doesNotExist())
+                .andExpect(jsonPath("$.detail[0].field").value("password"))
+                .andExpect(jsonPath("$.detail[0].rejectedValue").doesNotExist())
                 .andDo(print());
     }
 
@@ -111,8 +111,8 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.validationErrors[0].field").value("address"))
-                .andExpect(jsonPath("$.validationErrors[0].rejectedValue").doesNotExist())
+                .andExpect(jsonPath("$.detail[0].field").value("address"))
+                .andExpect(jsonPath("$.detail[0].rejectedValue").doesNotExist())
                 .andDo(print());
     }
 
@@ -131,7 +131,7 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.validationError.field").value("gender"))
+                .andExpect(jsonPath("$.detail.field").value("gender"))
                 .andDo(print());
     }
 
@@ -157,7 +157,7 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.validationErrors[0].field").value("loginId"))
+                .andExpect(jsonPath("$.detail[0].field").value("loginId"))
                 .andDo(print());
     }
 
@@ -183,7 +183,7 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.validationErrors[0].field").value("password"))
+                .andExpect(jsonPath("$.detail[0].field").value("password"))
                 .andDo(print());
     }
 
@@ -209,7 +209,7 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.validationErrors[0].field").value("email"))
+                .andExpect(jsonPath("$.detail[0].field").value("email"))
                 .andDo(print());
     }
 

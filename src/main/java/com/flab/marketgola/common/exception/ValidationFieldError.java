@@ -10,11 +10,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
-public class ValidationFieldError {
+public class ValidationFieldError extends ApiSubError {
 
     private String field;
     private Object rejectedValue;
-    private String message;
 
     public ValidationFieldError(String field, String message) {
         this.field = field;
