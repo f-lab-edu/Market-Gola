@@ -4,7 +4,7 @@ import com.flab.marketgola.user.domain.ShippingAddress;
 import com.flab.marketgola.user.domain.User;
 import com.flab.marketgola.user.dto.request.FindUserRequestDto;
 import com.flab.marketgola.user.dto.request.JoinUserRequestDto;
-import com.flab.marketgola.user.dto.response.FindUserResponseDto;
+import com.flab.marketgola.user.dto.response.UserResponseDto;
 import com.flab.marketgola.user.exception.DuplicatedEmailExcepiton;
 import com.flab.marketgola.user.exception.DuplicatedLoginIdExcepiton;
 import com.flab.marketgola.user.exception.DuplicatedPhoneNumberException;
@@ -28,7 +28,7 @@ public class UserService {
     }
 
     @Transactional
-    public User join(JoinUserRequestDto joinUserRequestDto) throws Exception {
+    public UserResponseDto join(JoinUserRequestDto joinUserRequestDto) throws Exception {
         validateDuplication(joinUserRequestDto);
 
         User user = joinUserRequestDto.toUser();
@@ -38,7 +38,13 @@ public class UserService {
 
         userRepository.create(user);
         addressRepository.create(shippingAddress);
-        return user;
+
+        return UserResponseDto.builder()
+                .id(user.getId())
+                .loginId(user.getLoginId())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .build();
     }
 
     private void validateDuplication(JoinUserRequestDto joinUserRequestDto) {
@@ -65,10 +71,15 @@ public class UserService {
         }
     }
 
-    public FindUserResponseDto findByCondition(FindUserRequestDto findUserRequestDto) {
+    public UserResponseDto findByCondition(FindUserRequestDto findUserRequestDto) {
         User user = userRepository.findByCondition(findUserRequestDto)
                 .orElseThrow(NoSuchUserException::new);
 
-        return new FindUserResponseDto(user.getId());
+        return UserResponseDto.builder()
+                .id(user.getId())
+                .loginId(user.getLoginId())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .build();
     }
 }

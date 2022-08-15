@@ -2,7 +2,7 @@ package com.flab.marketgola.user.controller;
 
 import com.flab.marketgola.user.dto.request.FindUserRequestDto;
 import com.flab.marketgola.user.dto.request.JoinUserRequestDto;
-import com.flab.marketgola.user.dto.response.FindUserResponseDto;
+import com.flab.marketgola.user.dto.response.UserResponseDto;
 import com.flab.marketgola.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,14 +25,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<Void> joinUser(
+    public ResponseEntity<UserResponseDto> joinUser(
             @Validated @RequestBody JoinUserRequestDto joinUserRequestDto) throws Exception {
-        userService.join(joinUserRequestDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.join(joinUserRequestDto), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<FindUserResponseDto> findUser(
+    public ResponseEntity<UserResponseDto> findUser(
             @ModelAttribute FindUserRequestDto findUserRequestDto) {
         return new ResponseEntity<>(userService.findByCondition(findUserRequestDto), HttpStatus.OK);
     }

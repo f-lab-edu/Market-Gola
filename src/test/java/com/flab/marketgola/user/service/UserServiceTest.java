@@ -1,6 +1,5 @@
 package com.flab.marketgola.user.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -53,26 +52,7 @@ class UserServiceTest {
                 .build();
 
         //when
-        User user = userService.join(joinUserRequestDto);
-    }
-
-    @DisplayName("비밀번호가 암호화되어 저장되어야 한다.")
-    @Test
-    void join_encrypt() throws Exception {
-        //given
-        JoinUserRequestDto joiningUser = JoinUserRequestDto.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .password(ValidUser.PASSWORD)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .address(ValidUser.ADDRESS)
-                .build();
-        //when
-        User joinedUser = userService.join(joiningUser);
-
-        //then
-        assertThat(joinedUser.getPassword()).isNotEqualTo(ValidUser.PASSWORD);
+        userService.join(joinUserRequestDto);
     }
 
     @DisplayName("아이디가 중복될 경우 가입에 실패한다.")
