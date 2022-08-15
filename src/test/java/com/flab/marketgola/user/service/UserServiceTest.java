@@ -8,7 +8,7 @@ import com.flab.marketgola.user.domain.User;
 import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
 import com.flab.marketgola.user.dto.request.GetUserRequestDto;
 import com.flab.marketgola.user.exception.DuplicatedEmailExcepiton;
-import com.flab.marketgola.user.exception.DuplicatedLoginIdExcepiton;
+import com.flab.marketgola.user.exception.DuplicatedLoginIdException;
 import com.flab.marketgola.user.exception.DuplicatedPhoneNumberException;
 import com.flab.marketgola.user.exception.NoSuchUserException;
 import com.flab.marketgola.user.mapper.ShippingAddressMapper;
@@ -73,7 +73,7 @@ class UserServiceTest {
 
         //when
         assertThatThrownBy(() -> userService.create(createUserRequestDto))
-                .isInstanceOf(DuplicatedLoginIdExcepiton.class);
+                .isInstanceOf(DuplicatedLoginIdException.class);
     }
 
 

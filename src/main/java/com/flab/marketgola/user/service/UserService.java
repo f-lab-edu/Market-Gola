@@ -6,7 +6,7 @@ import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
 import com.flab.marketgola.user.dto.request.GetUserRequestDto;
 import com.flab.marketgola.user.dto.response.UserResponseDto;
 import com.flab.marketgola.user.exception.DuplicatedEmailExcepiton;
-import com.flab.marketgola.user.exception.DuplicatedLoginIdExcepiton;
+import com.flab.marketgola.user.exception.DuplicatedLoginIdException;
 import com.flab.marketgola.user.exception.DuplicatedPhoneNumberException;
 import com.flab.marketgola.user.exception.NoSuchUserException;
 import com.flab.marketgola.user.mapper.ShippingAddressMapper;
@@ -55,7 +55,7 @@ public class UserService {
 
     private void validateLoginId(String loginId) {
         if (userRepository.findByLoginId(loginId).isPresent()) {
-            throw new DuplicatedLoginIdExcepiton();
+            throw new DuplicatedLoginIdException();
         }
     }
 
