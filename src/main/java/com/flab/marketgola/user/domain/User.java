@@ -1,8 +1,6 @@
 package com.flab.marketgola.user.domain;
 
 import com.flab.marketgola.user.util.PasswordEncrypter;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Builder;
@@ -42,7 +40,11 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public void encryptPassword() throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public void encryptPassword() {
         this.password = PasswordEncrypter.encrypt(password);
+    }
+
+    public boolean isPasswordEqual(String password) {
+        return PasswordEncrypter.validatePassword(this.password, password);
     }
 }

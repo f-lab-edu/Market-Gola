@@ -16,14 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("users")
+@RequestMapping(UserController.BASE_PATH)
 @RestController
-public class JoinController {
+public class UserController {
 
+    public static final String BASE_PATH = "/users";
     private final JoinService joinService;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping()
+    @PostMapping
     public void join(@Validated @RequestBody UserJoinDto userJoinDto) {
         joinService.join(userJoinDto);
     }

@@ -28,8 +28,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 @ActiveProfiles("unit")
-@WebMvcTest(JoinController.class)
-class JoinControllerTest {
+@WebMvcTest(UserController.class)
+class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

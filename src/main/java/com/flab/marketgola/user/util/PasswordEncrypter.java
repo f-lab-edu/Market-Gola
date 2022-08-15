@@ -1,6 +1,9 @@
 package com.flab.marketgola.user.util;
 
+import com.flab.marketgola.user.exception.PasswordEncryptionFailException;
+import com.flab.marketgola.user.exception.PasswordValidationFailException;
 import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -9,25 +12,34 @@ import javax.crypto.spec.PBEKeySpec;
 
 public class PasswordEncrypter {
 
+    public static final int ENOUGH_ITERATION_COUNT = 1000;
+    public static final int KEY_LENGTH = 256;
+    public static final String SEPERATION = ":";
+
     private PasswordEncrypter() {
     }
 
-    public static String encrypt(String password)
-            throws NoSuchAlgorithmException, InvalidKeySpecException {
-        int iterations = 1000;
-        char[] chars = password.toCharArray();
-        byte[] salt = getSalt();
+    public static String encrypt(String password) {
+        try {
+            char[] chars = password.toCharArray();
+            byte[] salt = getSalt();
+            byte[] digest = makeDijest(ENOUGH_ITERATION_COUNT, chars, salt);
 
-        //다이제스트(Password-Based-Encryption Key)에 대한 스펙 정의하기
-        PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 4);
+            // 추후 하드웨어 성능 향상으로 인해 iteration이 더 커지더라도
+            // 이전 iteration으로 암호화된 비밀번호를 알아내기 위하여 iteration과 digest를 같이 보관
+            return ENOUGH_ITERATION_COUNT + SEPERATION + toHex(salt) + SEPERATION + toHex(digest);
+        } catch (Exception e) {
+            throw new PasswordEncryptionFailException(e);
+        }
+    }
 
+    private static byte[] makeDijest(int iteration, char[] chars, byte[] salt)
+            throws InvalidKeySpecException, NoSuchAlgorithmException {
+
+        PBEKeySpec spec = new PBEKeySpec(chars, salt, iteration,
+                KEY_LENGTH); //다이제스트(Password-Based-Encryption Key)에 대한 스펙 정의하기
         SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-
-        byte[] digest = secretKeyFactory.generateSecret(spec).getEncoded();
-
-        // 추후 하드웨어 성능 향상으로 인해 iteration이 더 커지더라도
-        // 이전 iteration으로 암호화된 비밀번호를 알아내기 위하여 iteration과 digest를 같이 보관
-        return iterations + ":" + toHex(salt) + ":" + toHex(digest);
+        return secretKeyFactory.generateSecret(spec).getEncoded();
     }
 
     private static byte[] getSalt() throws NoSuchAlgorithmException {
@@ -40,5 +52,30 @@ public class PasswordEncrypter {
     private static String toHex(byte[] array) {
         BigInteger bi = new BigInteger(1, array);
         return bi.toString(16);
+    }
+
+    public static boolean validatePassword(String storedPasswordCombi, String comparedPassword) {
+        try {
+            String[] parts = storedPasswordCombi.split(SEPERATION);
+
+            int iteration = Integer.parseInt(parts[0]);
+            byte[] salt = fromHex(parts[1]);
+            byte[] storedPasswordDijest = fromHex(parts[2]);
+
+            byte[] comparingPasswordDijest = makeDijest(iteration, comparedPassword.toCharArray(),
+                    salt);
+
+            return MessageDigest.isEqual(storedPasswordDijest, comparingPasswordDijest);
+        } catch (Exception e) {
+            throw new PasswordValidationFailException(e);
+        }
+    }
+
+    private static byte[] fromHex(String hex) {
+        byte[] bytes = new byte[hex.length() / 2];
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = (byte) Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
+        }
+        return bytes;
     }
 }
