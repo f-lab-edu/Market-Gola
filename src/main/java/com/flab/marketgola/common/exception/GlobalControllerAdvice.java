@@ -99,7 +99,7 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
             log.warn(logMessage, e);
         } else if (logLevel == LogLevel.INFO) {
             log.info(logMessage, e);
-        } else {
+        } else if (logLevel == LogLevel.DEBUG) {
             log.debug(logMessage, e);
         }
     }
