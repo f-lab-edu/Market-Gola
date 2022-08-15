@@ -3,35 +3,33 @@ package com.flab.marketgola.common.exception;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
 
 @Getter
 @Setter
 @JsonInclude(Include.NON_EMPTY)
-public class ApiError {
+public class ApiError<T> {
 
     private final LocalDateTime timestamp;
     private final HttpStatus status;
-    private final String message;
+    private final String errorCode;
     private final String path;
-    /**
-     * Validation Error와 같은 구체적인 sub error를 담는 리스트
-     */
-    private List<ApiSubError> subErrors;
+    private T detail;
 
-    public ApiError(HttpStatus status, String message, String path) {
+    public ApiError(HttpStatus status, Exception exception, WebRequest request) {
         timestamp = LocalDateTime.now();
-        subErrors = new ArrayList<>();
         this.status = status;
-        this.message = message;
-        this.path = path;
+        this.errorCode = parseErrorCode(exception);
+        this.path = ((ServletWebRequest) request).getRequest().getRequestURI();
     }
 
-    public void addApiSubError(ApiSubError apiSubError) {
-        subErrors.add(apiSubError);
+    private String parseErrorCode(Exception exception) {
+        String className = exception.getClass().getSimpleName();
+        return className.substring(0, className.length() - "Exception".length());
     }
+
 }

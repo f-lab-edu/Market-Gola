@@ -1,4 +1,4 @@
-package com.flab.marketgola.user.dto;
+package com.flab.marketgola.user.dto.request;
 
 import com.flab.marketgola.user.domain.Gender;
 import java.time.LocalDate;

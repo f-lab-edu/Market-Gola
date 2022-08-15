@@ -6,9 +6,7 @@ import org.springframework.http.HttpStatus;
 
 public class DuplicatedPhoneNumberException extends BaseException {
 
-    private static final String MESSAGE = "이미 존재하는 핸드폰 번호입니다.";
-
-    public DuplicatedPhoneNumberException(LogLevel logLevel) {
-        super(HttpStatus.CONFLICT, logLevel, MESSAGE);
+    public DuplicatedPhoneNumberException() {
+        super(HttpStatus.CONFLICT, LogLevel.DEBUG);
     }
 }

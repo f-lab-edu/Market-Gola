@@ -4,9 +4,11 @@ import com.flab.marketgola.common.exception.BaseException;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.http.HttpStatus;
 
-public class DuplicatedEmailExcepiton extends BaseException {
+public class DuplicatedLoginIdException extends BaseException {
 
-    public DuplicatedEmailExcepiton() {
+    public DuplicatedLoginIdException() {
         super(HttpStatus.CONFLICT, LogLevel.DEBUG);
+
     }
+
 }

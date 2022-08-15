@@ -5,8 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ValidationGlobalError implements ApiSubError {
+public class ValidationGlobalError extends ApiSubError {
 
-    String errorCode;
-    String message;
+    private String errorCode;
 }

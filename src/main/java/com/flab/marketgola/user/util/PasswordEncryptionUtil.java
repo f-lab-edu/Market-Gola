@@ -10,13 +10,13 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-public class PasswordEncrypter {
+public class PasswordEncryptionUtil {
 
     public static final int ENOUGH_ITERATION_COUNT = 1000;
     public static final int KEY_LENGTH = 256;
     public static final String SEPERATION = ":";
 
-    private PasswordEncrypter() {
+    private PasswordEncryptionUtil() {
     }
 
     public static String encrypt(String password) {

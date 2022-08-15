@@ -8,7 +8,7 @@ import com.flab.marketgola.user.domain.User;
 import com.flab.marketgola.user.dto.UserLoginDto;
 import com.flab.marketgola.user.exception.LoginFailException;
 import com.flab.marketgola.user.mapper.UserMapper;
-import com.flab.marketgola.user.util.PasswordEncrypter;
+import com.flab.marketgola.user.util.PasswordEncryptionUtil;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class LoginServiceTest {
         //given
         User user = User.builder()
                 .loginId(ValidUser.LOGIN_ID)
-                .password(PasswordEncrypter.encrypt(ValidUser.PASSWORD))
+                .password(PasswordEncryptionUtil.encrypt(ValidUser.PASSWORD))
                 .name(ValidUser.NAME)
                 .build();
 
@@ -69,7 +69,7 @@ class LoginServiceTest {
         //given
         User user = User.builder()
                 .loginId(ValidUser.LOGIN_ID)
-                .password(PasswordEncrypter.encrypt(ValidUser.PASSWORD))
+                .password(PasswordEncryptionUtil.encrypt(ValidUser.PASSWORD))
                 .build();
 
         Mockito.when(userRepository.findByLoginId(ValidUser.LOGIN_ID))

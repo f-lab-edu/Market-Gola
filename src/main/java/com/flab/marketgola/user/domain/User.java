@@ -1,6 +1,6 @@
 package com.flab.marketgola.user.domain;
 
-import com.flab.marketgola.user.util.PasswordEncrypter;
+import com.flab.marketgola.user.util.PasswordEncryptionUtil;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Builder;
@@ -41,10 +41,10 @@ public class User {
     }
 
     public void encryptPassword() {
-        this.password = PasswordEncrypter.encrypt(password);
+        this.password = PasswordEncryptionUtil.encrypt(password);
     }
 
     public boolean isPasswordEqual(String password) {
-        return PasswordEncrypter.validatePassword(this.password, password);
+        return PasswordEncryptionUtil.validatePassword(this.password, password);
     }
 }

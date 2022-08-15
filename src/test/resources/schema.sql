@@ -2,9 +2,9 @@
 -- 테스트용 메모리DB의 Schema를 만들어준다
 CREATE TABLE `membership`
 (
-    `id`         tinyint     NOT NULL AUTO_INCREMENT,
-    `level`      varchar(45) NOT NULL,
-    `point_rate` float       NOT NULL,
+    `id`         tinyint       NOT NULL AUTO_INCREMENT,
+    `level`      varchar(45)   NOT NULL,
+    `point_rate` decimal(6, 3) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `level_UNIQUE` (`level`)
 ) ENGINE = InnoDB

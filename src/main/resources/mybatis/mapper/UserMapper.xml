@@ -43,7 +43,22 @@
     where phone_number = #{phoneNumber}
   </select>
 
-  <insert id="create" useGeneratedKeys="true" keyProperty="id">
+  <select id="findByCondition" resultType="User">
+    select id,
+    name,
+    login_id,
+    password,
+    email,
+    phone_number
+    from `USER`
+    <where>
+      <if test="loginId != null">and login_id = #{loginId}</if>
+      <if test="email != null">and email = #{email}</if>
+      <if test="phoneNumber != null">and phone_number = #{phoneNumber}</if>
+    </where>
+  </select>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
     insert into `USER` (login_id, password, name, email, phone_number, gender, birth)
     values (#{loginId}, #{password}, #{name}, #{email}, #{phoneNumber}, #{gender}, #{birth})
   </insert>

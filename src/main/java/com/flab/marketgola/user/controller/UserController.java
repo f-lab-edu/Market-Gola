@@ -1,17 +1,19 @@
 package com.flab.marketgola.user.controller;
 
-import com.flab.marketgola.user.dto.UserJoinDto;
-import com.flab.marketgola.user.service.JoinService;
+import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
+import com.flab.marketgola.user.dto.request.GetUserRequestDto;
+import com.flab.marketgola.user.dto.response.UserResponseDto;
+import com.flab.marketgola.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -20,27 +22,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
+
     public static final String BASE_PATH = "/users";
-    private final JoinService joinService;
+    private final UserService userService;
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void join(@Validated @RequestBody UserJoinDto userJoinDto) {
-        joinService.join(userJoinDto);
+    public ResponseEntity<UserResponseDto> createUser(
+            @Validated @RequestBody CreateUserRequestDto createUserRequestDto) throws Exception {
+        return new ResponseEntity<>(userService.create(createUserRequestDto), HttpStatus.CREATED);
     }
 
-    @GetMapping("/id-exists")
-    public boolean checkIdDupllication(@RequestParam String loginId) {
-        return joinService.isDuplicatedLoginId(loginId);
+    @GetMapping
+    public ResponseEntity<UserResponseDto> getUser(
+            @ModelAttribute GetUserRequestDto getUserRequestDto) {
+        return new ResponseEntity<>(userService.getByCondition(getUserRequestDto), HttpStatus.OK);
     }
 
-    @GetMapping("/email-exists")
-    public boolean checkEmailDupllication(@RequestParam String email) {
-        return joinService.isDuplicatedEmail(email);
-    }
-
-    @GetMapping("/phone-number-exists")
-    public boolean checkPhoneNumberDupllication(@RequestParam String phoneNumber) {
-        return joinService.isDuplicatedPhoneNumber(phoneNumber);
-    }
 }

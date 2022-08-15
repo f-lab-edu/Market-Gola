@@ -2,6 +2,7 @@ package com.flab.marketgola.user.config;
 
 import com.flab.marketgola.user.argumentresolver.LoginArgumentResolver;
 import com.flab.marketgola.user.controller.LoginController;
+import com.flab.marketgola.user.controller.UserController;
 import com.flab.marketgola.user.intercepter.LoginCheckInterceptor;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns(LoginController.LOGIN_PATH);
+                .excludePathPatterns(LoginController.LOGIN_PATH, UserController.BASE_PATH);
     }
 
     @Override

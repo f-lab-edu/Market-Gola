@@ -1,5 +1,10 @@
 package com.flab.marketgola.common.exception;
 
-public interface ApiSubError {
+import lombok.Getter;
+
+@Getter
+public class ApiSubError {
+
+    protected String message;
 
 }

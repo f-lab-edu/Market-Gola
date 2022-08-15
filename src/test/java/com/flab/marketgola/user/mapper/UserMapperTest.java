@@ -5,7 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.flab.marketgola.user.ValidUser;
 import com.flab.marketgola.user.domain.Gender;
 import com.flab.marketgola.user.domain.User;
-import com.flab.marketgola.user.dto.UserUpdateDto;
+import com.flab.marketgola.user.dto.request.GetUserRequestDto;
+import com.flab.marketgola.user.dto.request.UserUpdateDto;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,10 +45,10 @@ class UserMapperTest {
                 .build();
 
         //when
-        userMapper.create(user);
+        userMapper.insert(user);
 
         //then
-        assertThat(userMapper.findByLoginId(loginId).isPresent()).isTrue();
+        assertThat(userMapper.findByLoginId(loginId)).isPresent();
     }
 
     @Test
@@ -62,7 +64,7 @@ class UserMapperTest {
                 .gender(Gender.MALE)
                 .build();
 
-        userMapper.create(user);
+        userMapper.insert(user);
 
         //when
         User userInfo = userMapper.findByLoginId(ValidUser.LOGIN_ID).get();
@@ -84,7 +86,7 @@ class UserMapperTest {
                 .gender(Gender.MALE)
                 .build();
 
-        userMapper.create(user);
+        userMapper.insert(user);
         UserUpdateDto updateParam = new UserUpdateDto();
         updateParam.setName("김유미");
         updateParam.setGender(Gender.FEMALE);
@@ -110,7 +112,7 @@ class UserMapperTest {
                 .phoneNumber(ValidUser.PHONE_NUMBER)
                 .gender(Gender.MALE)
                 .build();
-        userMapper.create(user);
+        userMapper.insert(user);
 
         //when
         userMapper.delete(user.getId());
@@ -118,5 +120,35 @@ class UserMapperTest {
 
         //then
         assertThat(isEmpty).isTrue();
+    }
+
+
+    @Test
+    @DisplayName("아이디 또는 이메일 또는 전화번호로 유저를 찾을 수 있다.")
+    void findByCondition() {
+        //given
+        User user = User.builder()
+                .loginId(ValidUser.LOGIN_ID)
+                .email(ValidUser.EMAIL)
+                .name(ValidUser.NAME)
+                .password(ValidUser.PASSWORD)
+                .phoneNumber(ValidUser.PHONE_NUMBER)
+                .gender(Gender.MALE)
+                .build();
+
+        userMapper.insert(user);
+
+        //when
+        Optional<User> userFoundByLoginId = userMapper.findByCondition(
+                GetUserRequestDto.builder().loginId(ValidUser.LOGIN_ID).build());
+        Optional<User> userFoundByEmail = userMapper.findByCondition(
+                GetUserRequestDto.builder().email(ValidUser.EMAIL).build());
+        Optional<User> userFoundByPhoneNumber = userMapper.findByCondition(
+                GetUserRequestDto.builder().phoneNumber(ValidUser.PHONE_NUMBER).build());
+
+        //then
+        assertThat(userFoundByLoginId).isNotEmpty();
+        assertThat(userFoundByEmail).isNotEmpty();
+        assertThat(userFoundByPhoneNumber).isNotEmpty();
     }
 }

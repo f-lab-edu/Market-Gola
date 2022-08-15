@@ -1,5 +1,6 @@
 package com.flab.marketgola.user.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -8,24 +9,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.marketgola.user.ValidUser;
-import com.flab.marketgola.user.dto.UserJoinDto;
-import com.flab.marketgola.user.service.JoinService;
-import java.util.ArrayList;
+import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
+import com.flab.marketgola.user.exception.NoSuchUserException;
+import com.flab.marketgola.user.service.UserService;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 @ActiveProfiles("unit")
 @WebMvcTest(UserController.class)
@@ -35,16 +34,16 @@ class UserControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private JoinService joinService;
+    private UserService userService;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @DisplayName("모든 정보가 다 있고 규격에 맞는 경우 가입에 성공한다.")
     @Test
-    void join() throws Exception {
+    void createUser() throws Exception {
         //given
-        UserJoinDto userJoinDto = UserJoinDto.builder()
+        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
                 .loginId(ValidUser.LOGIN_ID)
                 .email(ValidUser.EMAIL)
                 .name(ValidUser.NAME)
@@ -55,7 +54,7 @@ class UserControllerTest {
                 .address(ValidUser.ADDRESS)
                 .build();
 
-        String content = objectMapper.writeValueAsString(userJoinDto);
+        String content = objectMapper.writeValueAsString(createUserRequestDto);
 
         //then
         mockMvc.perform(post("/users")
@@ -69,9 +68,9 @@ class UserControllerTest {
 
     @DisplayName("패스워드를 입력하지 않았다면 가입에 실패한다.")
     @Test
-    void join_no_password_fail() throws Exception {
+    void createUser_no_password_fail() throws Exception {
         //given
-        UserJoinDto noPasswordUser = UserJoinDto.builder()
+        CreateUserRequestDto noPasswordUser = CreateUserRequestDto.builder()
                 .loginId(ValidUser.LOGIN_ID)
                 .email(ValidUser.EMAIL)
                 .name(ValidUser.NAME)
@@ -87,16 +86,16 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.subErrors[0].field").value("password"))
-                .andExpect(jsonPath("$.subErrors[0].rejectedValue").doesNotExist())
+                .andExpect(jsonPath("$.detail[0].field").value("password"))
+                .andExpect(jsonPath("$.detail[0].rejectedValue").doesNotExist())
                 .andDo(print());
     }
 
     @DisplayName("주소를 입력하지 않았다면 가입에 실패한다.")
     @Test
-    void join_no_address_fail() throws Exception {
+    void createUser_no_address_fail() throws Exception {
         //given
-        UserJoinDto noAddressUser = UserJoinDto.builder()
+        CreateUserRequestDto noAddressUser = CreateUserRequestDto.builder()
                 .loginId(ValidUser.LOGIN_ID)
                 .email(ValidUser.EMAIL)
                 .name(ValidUser.NAME)
@@ -112,14 +111,14 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.subErrors[0].field").value("address"))
-                .andExpect(jsonPath("$.subErrors[0].rejectedValue").doesNotExist())
+                .andExpect(jsonPath("$.detail[0].field").value("address"))
+                .andExpect(jsonPath("$.detail[0].rejectedValue").doesNotExist())
                 .andDo(print());
     }
 
     @DisplayName("성별 타입에 맞지 않는 값이 인풋으로 올 경우 가입에 실패한다.")
     @Test
-    void join_gender_strange_value_fail() throws Exception {
+    void createUser_gender_strange_value_fail() throws Exception {
         //given
         Map<String, String> map = new HashMap<>();
         map.put("gender", "hello world");
@@ -132,16 +131,16 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.subErrors[0].field").value("gender"))
+                .andExpect(jsonPath("$.detail.field").value("gender"))
                 .andDo(print());
     }
 
     @DisplayName("로그인 id가 형식에 어긋날 경우 가입에 실패한다.")
     @ParameterizedTest
     @ValueSource(strings = {"sgo", "한글아이디", "abc123!"})
-    void join_id_wrong_form(String loginId) throws Exception {
+    void createUser_id_wrong_form(String loginId) throws Exception {
         //given
-        UserJoinDto userJoinDto = UserJoinDto.builder()
+        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
                 .loginId(loginId)
                 .email(ValidUser.EMAIL)
                 .name(ValidUser.NAME)
@@ -150,7 +149,7 @@ class UserControllerTest {
                 .address(ValidUser.ADDRESS)
                 .build();
 
-        String content = objectMapper.writeValueAsString(userJoinDto);
+        String content = objectMapper.writeValueAsString(createUserRequestDto);
 
         //then
         mockMvc.perform(post("/users")
@@ -158,16 +157,16 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.subErrors[0].field").value("loginId"))
+                .andExpect(jsonPath("$.detail[0].field").value("loginId"))
                 .andDo(print());
     }
 
     @DisplayName("패스워드가 형식에 어긋날 경우 가입에 실패한다.")
     @ParameterizedTest
     @ValueSource(strings = {"short123", "onlyalphabet", "12345678910", "blank 123123!"})
-    void join_pw_wrong_form(String password) throws Exception {
+    void createUser_pw_wrong_form(String password) throws Exception {
         //given
-        UserJoinDto userJoinDto = UserJoinDto.builder()
+        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
                 .loginId(ValidUser.LOGIN_ID)
                 .email(ValidUser.EMAIL)
                 .name(ValidUser.NAME)
@@ -176,7 +175,7 @@ class UserControllerTest {
                 .address(ValidUser.ADDRESS)
                 .build();
 
-        String content = objectMapper.writeValueAsString(userJoinDto);
+        String content = objectMapper.writeValueAsString(createUserRequestDto);
 
         //then
         mockMvc.perform(post("/users")
@@ -184,16 +183,16 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.subErrors[0].field").value("password"))
+                .andExpect(jsonPath("$.detail[0].field").value("password"))
                 .andDo(print());
     }
 
     @DisplayName("이메일이 형식에 어긋날 경우 가입에 실패한다.")
     @ParameterizedTest
     @ValueSource(strings = {"justalpha", "abc123@@google.com"})
-    void join_email_wrong_form(String email) throws Exception {
+    void createUser_email_wrong_form(String email) throws Exception {
         //given
-        UserJoinDto userJoinDto = UserJoinDto.builder()
+        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
                 .loginId(ValidUser.LOGIN_ID)
                 .email(email)
                 .name(ValidUser.NAME)
@@ -202,7 +201,7 @@ class UserControllerTest {
                 .address(ValidUser.ADDRESS)
                 .build();
 
-        String content = objectMapper.writeValueAsString(userJoinDto);
+        String content = objectMapper.writeValueAsString(createUserRequestDto);
 
         //then
         mockMvc.perform(post("/users")
@@ -210,25 +209,35 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.subErrors[0].field").value("email"))
+                .andExpect(jsonPath("$.detail[0].field").value("email"))
                 .andDo(print());
     }
 
-    @DisplayName("정상적인 id 중복 확인 요청에 대해서 HTTPStatus OK를 반환한다.")
+    @DisplayName("검색 조건에 맞는 유저가 존재하면 HTTPStatus.OK를 반환한다.")
     @Test
-    void checkIdDuplication() throws Exception {
-        //given
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        List<String> values = new ArrayList<>();
-        values.add(ValidUser.LOGIN_ID);
-        map.put("loginId", values);
-
-        //then
-        mockMvc.perform(get("/users/id-exists")
-                        .params(map)
+    void getUser_ok() throws Exception {
+        mockMvc.perform(get("/users")
+                        .param("loginId", ValidUser.LOGIN_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+
+    @DisplayName("검색 조건에 맞지 않는 유저가 존재하면 HTTPStatus.NOT_FOUND를 반환한다.")
+    @Test
+    void getUser_not_found() throws Exception {
+        //given
+        Mockito.lenient().doThrow(new NoSuchUserException()).when(userService)
+                .getByCondition(any());
+
+        //then
+        mockMvc.perform(get("/users")
+                        .param("loginId", ValidUser.LOGIN_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
                 .andDo(print());
     }
 }
