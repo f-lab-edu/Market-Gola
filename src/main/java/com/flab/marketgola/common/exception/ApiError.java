@@ -19,8 +19,13 @@ public class ApiError {
     public ApiError(HttpStatus status, Exception exception, WebRequest request) {
         timestamp = LocalDateTime.now();
         this.status = status;
-        this.errorCode = exception.getClass().getSimpleName();
+        this.errorCode = parseErrorCode(exception);
         this.path = ((ServletWebRequest) request).getRequest().getRequestURI();
+    }
+
+    private String parseErrorCode(Exception exception) {
+        String className = exception.getClass().getSimpleName();
+        return className.substring(0, className.length() - "Exception".length());
     }
 
 }
