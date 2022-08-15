@@ -1,0 +1,88 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.0'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'jacoco'
+}
+
+group = 'com.flab'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'com.h2database:h2'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    //테스트에서 lombok 사용
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    testCompileOnly 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.2.2'
+}
+
+test {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacoco {
+	toolVersion = "0.8.8"
+}
+
+jacocoTestReport {
+    finalizedBy jacocoTestCoverageVerification
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    'com/flab/marketgola/*/mapper/*',
+                    'com/flab/marketgola/*/dto/*',
+                    'com/flab/marketgola/*/exception/*',
+                    'com/flab/marketgola/MarketGolaApplication.class'
+            ])
+        }))
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'CLASS' //각각의 클래스 파일이 이 기준을 넘어야 함
+
+            limit {
+                counter = 'INSTRUCTION'
+                value = 'COVEREDRATIO'
+                minimum = 0.60
+            }
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.60
+            }
+
+            excludes = [
+                    '*.exception.*',
+                    '*.mapper.*',
+                    '*.dto.*',
+                    'com.flab.marketgola.MarketGolaApplication'
+            ]
+        }
+    }
+}

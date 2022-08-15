@@ -1,0 +1,22 @@
+spring:
+  # Profile
+  config:
+    activate:
+      on-profile: unit
+
+  # Datasource
+  datasource:
+    # 어떤 환경에서도 테스트가 수행가능하고, 빠른 테스트, 테스트 격리 목적으로 메모리 DB사용
+    # 실제 DB는 MySQL을 사용하므로 H2를 MySQL 모드로 만들어 최대한 실제에 가깝게 구성
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MYSQL;
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
+
+# mybatis
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package:
+    'com.flab.marketgola.user.domain'

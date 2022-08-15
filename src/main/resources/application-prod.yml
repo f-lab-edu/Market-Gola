@@ -1,0 +1,11 @@
+# Profile
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+# logging
+logging:
+  file:
+    path: logs
+    name: market-gola-api

@@ -1,0 +1,16 @@
+<included>
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- 하루 단위 로그 남기기 -->
+      <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+      <!-- 30일동안 저장 이 후 오래된 파일부터 삭제-->
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+</included>
