@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.flab.marketgola.user.ValidUser;
 import com.flab.marketgola.user.domain.Gender;
 import com.flab.marketgola.user.domain.User;
-import com.flab.marketgola.user.dto.request.FindUserRequestDto;
+import com.flab.marketgola.user.dto.request.GetUserRequestDto;
 import com.flab.marketgola.user.dto.request.UserUpdateDto;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +45,7 @@ class UserMapperTest {
                 .build();
 
         //when
-        userMapper.create(user);
+        userMapper.insert(user);
 
         //then
         assertThat(userMapper.findByLoginId(loginId)).isPresent();
@@ -64,7 +64,7 @@ class UserMapperTest {
                 .gender(Gender.MALE)
                 .build();
 
-        userMapper.create(user);
+        userMapper.insert(user);
 
         //when
         User userInfo = userMapper.findByLoginId(ValidUser.LOGIN_ID).get();
@@ -86,7 +86,7 @@ class UserMapperTest {
                 .gender(Gender.MALE)
                 .build();
 
-        userMapper.create(user);
+        userMapper.insert(user);
         UserUpdateDto updateParam = new UserUpdateDto();
         updateParam.setName("김유미");
         updateParam.setGender(Gender.FEMALE);
@@ -112,7 +112,7 @@ class UserMapperTest {
                 .phoneNumber(ValidUser.PHONE_NUMBER)
                 .gender(Gender.MALE)
                 .build();
-        userMapper.create(user);
+        userMapper.insert(user);
 
         //when
         userMapper.delete(user.getId());
@@ -136,15 +136,15 @@ class UserMapperTest {
                 .gender(Gender.MALE)
                 .build();
 
-        userMapper.create(user);
+        userMapper.insert(user);
 
         //when
         Optional<User> userFoundByLoginId = userMapper.findByCondition(
-                FindUserRequestDto.builder().loginId(ValidUser.LOGIN_ID).build());
+                GetUserRequestDto.builder().loginId(ValidUser.LOGIN_ID).build());
         Optional<User> userFoundByEmail = userMapper.findByCondition(
-                FindUserRequestDto.builder().email(ValidUser.EMAIL).build());
+                GetUserRequestDto.builder().email(ValidUser.EMAIL).build());
         Optional<User> userFoundByPhoneNumber = userMapper.findByCondition(
-                FindUserRequestDto.builder().phoneNumber(ValidUser.PHONE_NUMBER).build());
+                GetUserRequestDto.builder().phoneNumber(ValidUser.PHONE_NUMBER).build());
 
         //then
         assertThat(userFoundByLoginId).isNotEmpty();

@@ -37,7 +37,7 @@ class ShippingAddressMapperTest {
                 .gender(Gender.MALE)
                 .build();
 
-        userMapper.create(user);
+        userMapper.insert(user);
 
         ShippingAddress shippingAddress = ShippingAddress.builder()
                 .address(addressString)

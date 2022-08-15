@@ -53,7 +53,7 @@
     </where>
   </select>
 
-  <insert id="create" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
     insert into `USER` (login_id, password, name, email, phone_number, gender, birth)
     values (#{loginId}, #{password}, #{name}, #{email}, #{phoneNumber}, #{gender}, #{birth})
   </insert>

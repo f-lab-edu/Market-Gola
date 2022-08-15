@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class JoinUserRequestDto {
+public class CreateUserRequestDto {
 
     @Pattern(regexp = "[A-Za-z]+[A-Za-z0-9]{5,15}", message = "6자 이상 16자 이하의 영문 또는 영문 숫자 조합만 가능합니다.")
 
@@ -37,7 +37,7 @@ public class JoinUserRequestDto {
     private String address;
 
     @Builder
-    public JoinUserRequestDto(String loginId, String password, String name, String email,
+    public CreateUserRequestDto(String loginId, String password, String name, String email,
             String phoneNumber,
             Gender gender, LocalDate birth, String address) {
         this.loginId = loginId;

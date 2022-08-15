@@ -2,8 +2,8 @@ package com.flab.marketgola.user.service;
 
 import com.flab.marketgola.user.domain.ShippingAddress;
 import com.flab.marketgola.user.domain.User;
-import com.flab.marketgola.user.dto.request.FindUserRequestDto;
-import com.flab.marketgola.user.dto.request.JoinUserRequestDto;
+import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
+import com.flab.marketgola.user.dto.request.GetUserRequestDto;
 import com.flab.marketgola.user.dto.response.UserResponseDto;
 import com.flab.marketgola.user.exception.DuplicatedEmailExcepiton;
 import com.flab.marketgola.user.exception.DuplicatedLoginIdExcepiton;
@@ -28,15 +28,15 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto join(JoinUserRequestDto joinUserRequestDto) throws Exception {
-        validateDuplication(joinUserRequestDto);
+    public UserResponseDto create(CreateUserRequestDto createUserRequestDto) throws Exception {
+        validateDuplication(createUserRequestDto);
 
-        User user = joinUserRequestDto.toUser();
-        ShippingAddress shippingAddress = joinUserRequestDto.toShippingAddress(user);
+        User user = createUserRequestDto.toUser();
+        ShippingAddress shippingAddress = createUserRequestDto.toShippingAddress(user);
 
         user.encryptPassword();
 
-        userRepository.create(user);
+        userRepository.insert(user);
         addressRepository.create(shippingAddress);
 
         return UserResponseDto.builder()
@@ -47,10 +47,10 @@ public class UserService {
                 .build();
     }
 
-    private void validateDuplication(JoinUserRequestDto joinUserRequestDto) {
-        validateLoginId(joinUserRequestDto.getLoginId());
-        validateEmail(joinUserRequestDto.getEmail());
-        validatePhoneNumber(joinUserRequestDto.getPhoneNumber());
+    private void validateDuplication(CreateUserRequestDto createUserRequestDto) {
+        validateLoginId(createUserRequestDto.getLoginId());
+        validateEmail(createUserRequestDto.getEmail());
+        validatePhoneNumber(createUserRequestDto.getPhoneNumber());
     }
 
     private void validateLoginId(String loginId) {
@@ -71,8 +71,8 @@ public class UserService {
         }
     }
 
-    public UserResponseDto findByCondition(FindUserRequestDto findUserRequestDto) {
-        User user = userRepository.findByCondition(findUserRequestDto)
+    public UserResponseDto getByCondition(GetUserRequestDto getUserRequestDto) {
+        User user = userRepository.findByCondition(getUserRequestDto)
                 .orElseThrow(NoSuchUserException::new);
 
         return UserResponseDto.builder()

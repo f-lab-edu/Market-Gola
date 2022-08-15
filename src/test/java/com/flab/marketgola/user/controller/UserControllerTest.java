@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.marketgola.user.ValidUser;
-import com.flab.marketgola.user.dto.request.JoinUserRequestDto;
+import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
 import com.flab.marketgola.user.exception.NoSuchUserException;
 import com.flab.marketgola.user.service.UserService;
 import java.util.HashMap;
@@ -41,9 +41,9 @@ class UserControllerTest {
 
     @DisplayName("모든 정보가 다 있고 규격에 맞는 경우 가입에 성공한다.")
     @Test
-    void joinUser() throws Exception {
+    void createUser() throws Exception {
         //given
-        JoinUserRequestDto joinUserRequestDto = JoinUserRequestDto.builder()
+        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
                 .loginId(ValidUser.LOGIN_ID)
                 .email(ValidUser.EMAIL)
                 .name(ValidUser.NAME)
@@ -54,7 +54,7 @@ class UserControllerTest {
                 .address(ValidUser.ADDRESS)
                 .build();
 
-        String content = objectMapper.writeValueAsString(joinUserRequestDto);
+        String content = objectMapper.writeValueAsString(createUserRequestDto);
 
         //then
         mockMvc.perform(post("/users")
@@ -68,9 +68,9 @@ class UserControllerTest {
 
     @DisplayName("패스워드를 입력하지 않았다면 가입에 실패한다.")
     @Test
-    void joinUser_no_password_fail() throws Exception {
+    void createUser_no_password_fail() throws Exception {
         //given
-        JoinUserRequestDto noPasswordUser = JoinUserRequestDto.builder()
+        CreateUserRequestDto noPasswordUser = CreateUserRequestDto.builder()
                 .loginId(ValidUser.LOGIN_ID)
                 .email(ValidUser.EMAIL)
                 .name(ValidUser.NAME)
@@ -93,9 +93,9 @@ class UserControllerTest {
 
     @DisplayName("주소를 입력하지 않았다면 가입에 실패한다.")
     @Test
-    void joinUser_no_address_fail() throws Exception {
+    void createUser_no_address_fail() throws Exception {
         //given
-        JoinUserRequestDto noAddressUser = JoinUserRequestDto.builder()
+        CreateUserRequestDto noAddressUser = CreateUserRequestDto.builder()
                 .loginId(ValidUser.LOGIN_ID)
                 .email(ValidUser.EMAIL)
                 .name(ValidUser.NAME)
@@ -118,7 +118,7 @@ class UserControllerTest {
 
     @DisplayName("성별 타입에 맞지 않는 값이 인풋으로 올 경우 가입에 실패한다.")
     @Test
-    void joinUser_gender_strange_value_fail() throws Exception {
+    void createUser_gender_strange_value_fail() throws Exception {
         //given
         Map<String, String> map = new HashMap<>();
         map.put("gender", "hello world");
@@ -138,9 +138,9 @@ class UserControllerTest {
     @DisplayName("로그인 id가 형식에 어긋날 경우 가입에 실패한다.")
     @ParameterizedTest
     @ValueSource(strings = {"sgo", "한글아이디", "abc123!"})
-    void joinUser_id_wrong_form(String loginId) throws Exception {
+    void createUser_id_wrong_form(String loginId) throws Exception {
         //given
-        JoinUserRequestDto joinUserRequestDto = JoinUserRequestDto.builder()
+        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
                 .loginId(loginId)
                 .email(ValidUser.EMAIL)
                 .name(ValidUser.NAME)
@@ -149,7 +149,7 @@ class UserControllerTest {
                 .address(ValidUser.ADDRESS)
                 .build();
 
-        String content = objectMapper.writeValueAsString(joinUserRequestDto);
+        String content = objectMapper.writeValueAsString(createUserRequestDto);
 
         //then
         mockMvc.perform(post("/users")
@@ -164,9 +164,9 @@ class UserControllerTest {
     @DisplayName("패스워드가 형식에 어긋날 경우 가입에 실패한다.")
     @ParameterizedTest
     @ValueSource(strings = {"short123", "onlyalphabet", "12345678910", "blank 123123!"})
-    void joinUser_pw_wrong_form(String password) throws Exception {
+    void createUser_pw_wrong_form(String password) throws Exception {
         //given
-        JoinUserRequestDto joinUserRequestDto = JoinUserRequestDto.builder()
+        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
                 .loginId(ValidUser.LOGIN_ID)
                 .email(ValidUser.EMAIL)
                 .name(ValidUser.NAME)
@@ -175,7 +175,7 @@ class UserControllerTest {
                 .address(ValidUser.ADDRESS)
                 .build();
 
-        String content = objectMapper.writeValueAsString(joinUserRequestDto);
+        String content = objectMapper.writeValueAsString(createUserRequestDto);
 
         //then
         mockMvc.perform(post("/users")
@@ -190,9 +190,9 @@ class UserControllerTest {
     @DisplayName("이메일이 형식에 어긋날 경우 가입에 실패한다.")
     @ParameterizedTest
     @ValueSource(strings = {"justalpha", "abc123@@google.com"})
-    void joinUser_email_wrong_form(String email) throws Exception {
+    void createUser_email_wrong_form(String email) throws Exception {
         //given
-        JoinUserRequestDto joinUserRequestDto = JoinUserRequestDto.builder()
+        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
                 .loginId(ValidUser.LOGIN_ID)
                 .email(email)
                 .name(ValidUser.NAME)
@@ -201,7 +201,7 @@ class UserControllerTest {
                 .address(ValidUser.ADDRESS)
                 .build();
 
-        String content = objectMapper.writeValueAsString(joinUserRequestDto);
+        String content = objectMapper.writeValueAsString(createUserRequestDto);
 
         //then
         mockMvc.perform(post("/users")
@@ -215,7 +215,7 @@ class UserControllerTest {
 
     @DisplayName("검색 조건에 맞는 유저가 존재하면 HTTPStatus.OK를 반환한다.")
     @Test
-    void findUser_ok() throws Exception {
+    void getUser_ok() throws Exception {
         mockMvc.perform(get("/users")
                         .param("loginId", ValidUser.LOGIN_ID)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -227,10 +227,10 @@ class UserControllerTest {
 
     @DisplayName("검색 조건에 맞지 않는 유저가 존재하면 HTTPStatus.NOT_FOUND를 반환한다.")
     @Test
-    void findUser_not_found() throws Exception {
+    void getUser_not_found() throws Exception {
         //given
         Mockito.lenient().doThrow(new NoSuchUserException()).when(userService)
-                .findByCondition(any());
+                .getByCondition(any());
 
         //then
         mockMvc.perform(get("/users")

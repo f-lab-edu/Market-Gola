@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class FindUserRequestDto {
+public class GetUserRequestDto {
 
     private String loginId;
     private String email;
@@ -14,7 +14,7 @@ public class FindUserRequestDto {
 
 
     @Builder
-    public FindUserRequestDto(String loginId, String email, String phoneNumber) {
+    public GetUserRequestDto(String loginId, String email, String phoneNumber) {
         this.loginId = loginId;
         this.email = email;
         this.phoneNumber = phoneNumber;
