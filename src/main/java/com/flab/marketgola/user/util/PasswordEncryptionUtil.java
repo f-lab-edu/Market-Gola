@@ -33,10 +33,10 @@ public class PasswordEncryptionUtil {
         }
     }
 
-    private static byte[] makeDijest(int iteration, char[] chars, byte[] salt)
+    private static byte[] makeDijest(int iteration, char[] password, byte[] salt)
             throws InvalidKeySpecException, NoSuchAlgorithmException {
 
-        PBEKeySpec spec = new PBEKeySpec(chars, salt, iteration,
+        PBEKeySpec spec = new PBEKeySpec(password, salt, iteration,
                 KEY_LENGTH); //다이제스트(Password-Based-Encryption Key)에 대한 스펙 정의하기
         SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         return secretKeyFactory.generateSecret(spec).getEncoded();
@@ -51,7 +51,14 @@ public class PasswordEncryptionUtil {
 
     private static String toHex(byte[] array) {
         BigInteger bi = new BigInteger(1, array);
-        return bi.toString(16);
+        String hex = bi.toString(16);
+
+        int paddingLength = (array.length * 2) - hex.length();
+        if (paddingLength > 0) {
+            return String.format("%0" + paddingLength + "d", 0) + hex;
+        } else {
+            return hex;
+        }
     }
 
     public static boolean validatePassword(String storedPasswordCombi, String comparedPassword) {
