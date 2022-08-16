@@ -15,6 +15,9 @@ public class PasswordEncryptionUtil {
     public static final int ENOUGH_ITERATION_COUNT = 1000;
     public static final int KEY_LENGTH = 256;
     public static final String SEPERATION = ":";
+    public static final int SALT_SIZE = 16;
+    public static final String DIJEST_GENERATION_ALGORHYTHM = "PBKDF2WithHmacSHA256";
+    public static final String RANDOM_NUMBER_GENERATOR_ALGORHYTHM = "SHA1PRNG";
 
     private PasswordEncryptionUtil() {
     }
@@ -38,13 +41,14 @@ public class PasswordEncryptionUtil {
 
         PBEKeySpec spec = new PBEKeySpec(password, salt, iteration,
                 KEY_LENGTH); //다이제스트(Password-Based-Encryption Key)에 대한 스펙 정의하기
-        SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+        SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(
+                DIJEST_GENERATION_ALGORHYTHM);
         return secretKeyFactory.generateSecret(spec).getEncoded();
     }
 
     private static byte[] getSalt() throws NoSuchAlgorithmException {
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-        byte[] salt = new byte[16];
+        SecureRandom sr = SecureRandom.getInstance(RANDOM_NUMBER_GENERATOR_ALGORHYTHM);
+        byte[] salt = new byte[SALT_SIZE];
         sr.nextBytes(salt);
         return salt;
     }
