@@ -9,7 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.marketgola.common.controller.SessionConst;
 import com.flab.marketgola.user.ValidUser;
-import com.flab.marketgola.user.dto.UserLoginDto;
+import com.flab.marketgola.user.domain.LoginUser;
+import com.flab.marketgola.user.dto.request.LoginRequestDto;
 import com.flab.marketgola.user.service.LoginService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,14 +36,14 @@ class LoginControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @DisplayName("로그인에 성공하면 OK를 내려보내고 세션에 로그인한 유저의 이름을 등록한다.")
+    @DisplayName("로그인에 성공하면 OK를 내려보내고 세션에 로그인한 유저 객체를 등록한다.")
     @Test
     void login() throws Exception {
         //given
-        Mockito.when(loginService.login(any())).thenReturn(ValidUser.NAME);
+        Mockito.when(loginService.login(any())).thenReturn(new LoginUser(1L, ValidUser.NAME));
 
         String content = objectMapper.writeValueAsString(
-                new UserLoginDto(ValidUser.LOGIN_ID, ValidUser.PASSWORD));
+                new LoginRequestDto(ValidUser.LOGIN_ID, ValidUser.PASSWORD));
 
         MockHttpSession session = new MockHttpSession();
 
@@ -63,7 +64,7 @@ class LoginControllerTest {
     void logout() throws Exception {
         //given
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute(SessionConst.LOGIN_KEY, ValidUser.NAME);
+        session.setAttribute(SessionConst.LOGIN_KEY, new LoginUser(1L, ValidUser.NAME));
 
         //then
         mockMvc.perform(post(LoginController.LOGOUT_PATH)

@@ -1,6 +1,8 @@
 package com.flab.marketgola.user.service;
 
-import com.flab.marketgola.user.dto.UserLoginDto;
+import com.flab.marketgola.user.domain.LoginUser;
+import com.flab.marketgola.user.domain.User;
+import com.flab.marketgola.user.dto.request.LoginRequestDto;
 import com.flab.marketgola.user.exception.LoginFailException;
 import com.flab.marketgola.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +14,11 @@ public class LoginService {
 
     private final UserMapper userRepository;
 
-    public String login(UserLoginDto userLoginDTO) {
-        return userRepository.findByLoginId(userLoginDTO.getLoginId())
-                .filter(user -> user.isPasswordEqual(userLoginDTO.getPassword()))
-                .orElseThrow(LoginFailException::new)
-                .getName();
+    public LoginUser login(LoginRequestDto loginRequestDTO) {
+        User loginUser = userRepository.findByLoginId(loginRequestDTO.getLoginId())
+                .filter(user -> user.isPasswordEqual(loginRequestDTO.getPassword()))
+                .orElseThrow(LoginFailException::new);
+
+        return new LoginUser(loginUser.getId(), loginUser.getName());
     }
 }

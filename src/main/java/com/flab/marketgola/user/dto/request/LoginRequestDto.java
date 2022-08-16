@@ -1,4 +1,4 @@
-package com.flab.marketgola.user.dto;
+package com.flab.marketgola.user.dto.request;
 
 import javax.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserLoginDto {
+public class LoginRequestDto {
 
     @NotBlank(message = "아이디를 입력하지 않았습니다.")
     private String loginId;
@@ -16,7 +16,7 @@ public class UserLoginDto {
     private String password;
 
     @Builder
-    public UserLoginDto(String loginId, String password) {
+    public LoginRequestDto(String loginId, String password) {
         this.loginId = loginId;
         this.password = password;
     }

@@ -4,8 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.flab.marketgola.user.ValidUser;
+import com.flab.marketgola.user.domain.LoginUser;
 import com.flab.marketgola.user.domain.User;
-import com.flab.marketgola.user.dto.UserLoginDto;
+import com.flab.marketgola.user.dto.request.LoginRequestDto;
 import com.flab.marketgola.user.exception.LoginFailException;
 import com.flab.marketgola.user.mapper.UserMapper;
 import com.flab.marketgola.user.util.PasswordEncryptionUtil;
@@ -42,11 +43,12 @@ class LoginServiceTest {
                 .thenReturn(Optional.ofNullable(user));
 
         //when
-        UserLoginDto userLoginDto = new UserLoginDto(ValidUser.LOGIN_ID, ValidUser.PASSWORD);
-        String loginUserName = loginService.login(userLoginDto);
+        LoginRequestDto loginRequestDto = new LoginRequestDto(ValidUser.LOGIN_ID,
+                ValidUser.PASSWORD);
+        LoginUser loginUser = loginService.login(loginRequestDto);
 
         //then
-        assertThat(loginUserName).isEqualTo(ValidUser.NAME);
+        assertThat(loginUser.getName()).isEqualTo(ValidUser.NAME);
     }
 
     @DisplayName("아이디가 존재하지 않으면 로그인에 실패한다.")
@@ -56,10 +58,11 @@ class LoginServiceTest {
         Mockito.when(userRepository.findByLoginId(ValidUser.LOGIN_ID)).thenReturn(Optional.empty());
 
         //when
-        UserLoginDto userLoginDto = new UserLoginDto(ValidUser.LOGIN_ID, ValidUser.PASSWORD);
+        LoginRequestDto loginRequestDto = new LoginRequestDto(ValidUser.LOGIN_ID,
+                ValidUser.PASSWORD);
 
         //then
-        assertThatThrownBy(() -> loginService.login(userLoginDto))
+        assertThatThrownBy(() -> loginService.login(loginRequestDto))
                 .isInstanceOf(LoginFailException.class);
     }
 
@@ -76,10 +79,11 @@ class LoginServiceTest {
                 .thenReturn(Optional.ofNullable(user));
 
         //when
-        UserLoginDto userLoginDto = new UserLoginDto(ValidUser.LOGIN_ID, "wrongpassword123!");
+        LoginRequestDto loginRequestDto = new LoginRequestDto(ValidUser.LOGIN_ID,
+                "wrongpassword123!");
 
         //then
-        assertThatThrownBy(() -> loginService.login(userLoginDto))
+        assertThatThrownBy(() -> loginService.login(loginRequestDto))
                 .isInstanceOf(LoginFailException.class);
     }
 }

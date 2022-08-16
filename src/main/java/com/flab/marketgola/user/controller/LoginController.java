@@ -3,7 +3,8 @@ package com.flab.marketgola.user.controller;
 import static com.flab.marketgola.common.controller.SessionConst.CREATE_WHEN_NOT_EXIST;
 import static com.flab.marketgola.common.controller.SessionConst.LOGIN_KEY;
 
-import com.flab.marketgola.user.dto.UserLoginDto;
+import com.flab.marketgola.user.domain.LoginUser;
+import com.flab.marketgola.user.dto.request.LoginRequestDto;
 import com.flab.marketgola.user.service.LoginService;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +22,10 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping(LOGIN_PATH)
-    public void login(@Validated @RequestBody UserLoginDto userLoginDto,
+    public void login(@Validated @RequestBody LoginRequestDto loginRequestDto,
             HttpServletRequest request) {
-        String name = loginService.login(userLoginDto);
-        request.getSession(CREATE_WHEN_NOT_EXIST).setAttribute(LOGIN_KEY, name);
+        LoginUser loginUser = loginService.login(loginRequestDto);
+        request.getSession(CREATE_WHEN_NOT_EXIST).setAttribute(LOGIN_KEY, loginUser);
     }
 
     @PostMapping(LOGOUT_PATH)
