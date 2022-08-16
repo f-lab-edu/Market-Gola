@@ -9,7 +9,7 @@
     where user_id = #{id}
   </select>
 
-  <insert id="create" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
     insert into shipping_address (user_id, address, is_default)
     values (#{user.id}, #{address}, #{isDefault})
   </insert>
