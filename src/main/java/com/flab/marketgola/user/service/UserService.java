@@ -4,7 +4,8 @@ import com.flab.marketgola.user.domain.ShippingAddress;
 import com.flab.marketgola.user.domain.User;
 import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
 import com.flab.marketgola.user.dto.request.GetUserRequestDto;
-import com.flab.marketgola.user.dto.response.UserResponseDto;
+import com.flab.marketgola.user.dto.response.UserPrivateInfoResponseDto;
+import com.flab.marketgola.user.dto.response.UserPublicInfoResponseDto;
 import com.flab.marketgola.user.exception.DuplicatedEmailExcepiton;
 import com.flab.marketgola.user.exception.DuplicatedLoginIdException;
 import com.flab.marketgola.user.exception.DuplicatedPhoneNumberException;
@@ -28,7 +29,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto create(CreateUserRequestDto createUserRequestDto) {
+    public UserPrivateInfoResponseDto createUser(CreateUserRequestDto createUserRequestDto) {
         validateDuplication(createUserRequestDto);
 
         User user = createUserRequestDto.toUser();
@@ -39,7 +40,7 @@ public class UserService {
         userRepository.insert(user);
         addressRepository.create(shippingAddress);
 
-        return UserResponseDto.builder()
+        return UserPrivateInfoResponseDto.builder()
                 .id(user.getId())
                 .loginId(user.getLoginId())
                 .email(user.getEmail())
@@ -71,16 +72,22 @@ public class UserService {
         }
     }
 
-    public UserResponseDto getByCondition(GetUserRequestDto getUserRequestDto) {
+    public UserPublicInfoResponseDto getUser(GetUserRequestDto getUserRequestDto) {
         User user = userRepository.findByCondition(getUserRequestDto)
                 .orElseThrow(NoSuchUserException::new);
 
-        return UserResponseDto.builder()
+        return new UserPublicInfoResponseDto(user.getLoginId(), user.getName());
+    }
+
+    public UserPrivateInfoResponseDto getMyInfo(Long id) {
+        User user = userRepository.findById(id).orElseThrow(NoSuchUserException::new);
+
+        return UserPrivateInfoResponseDto.builder()
                 .id(user.getId())
-                .name(user.getName())
                 .loginId(user.getLoginId())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
+                .name(user.getName())
                 .build();
     }
 }

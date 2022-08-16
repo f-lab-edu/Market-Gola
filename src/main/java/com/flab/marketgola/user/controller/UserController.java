@@ -1,8 +1,11 @@
 package com.flab.marketgola.user.controller;
 
+import com.flab.marketgola.user.argumentresolver.Login;
+import com.flab.marketgola.user.domain.LoginUser;
 import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
 import com.flab.marketgola.user.dto.request.GetUserRequestDto;
-import com.flab.marketgola.user.dto.response.UserResponseDto;
+import com.flab.marketgola.user.dto.response.UserPrivateInfoResponseDto;
+import com.flab.marketgola.user.dto.response.UserPublicInfoResponseDto;
 import com.flab.marketgola.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,18 +27,25 @@ public class UserController {
 
 
     public static final String BASE_PATH = "/users";
+    public static final String GET_MY_INFO_PATH = "/me";
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(
+    public ResponseEntity<UserPrivateInfoResponseDto> createUser(
             @Validated @RequestBody CreateUserRequestDto createUserRequestDto) {
-        return new ResponseEntity<>(userService.create(createUserRequestDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.createUser(createUserRequestDto),
+                HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<UserResponseDto> getUser(
+    public ResponseEntity<UserPublicInfoResponseDto> getUser(
             @ModelAttribute GetUserRequestDto getUserRequestDto) {
-        return new ResponseEntity<>(userService.getByCondition(getUserRequestDto), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUser(getUserRequestDto), HttpStatus.OK);
     }
 
+    @GetMapping(GET_MY_INFO_PATH)
+    public ResponseEntity<UserPrivateInfoResponseDto> getMyInfo(@Login LoginUser loginUser,
+            @ModelAttribute GetUserRequestDto getUserRequestDto) {
+        return new ResponseEntity<>(userService.getMyInfo(loginUser.getId()), HttpStatus.OK);
+    }
 }

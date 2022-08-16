@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserResponseDto {
+public class UserPrivateInfoResponseDto {
 
     private Long id;
     private String loginId;
@@ -16,7 +16,8 @@ public class UserResponseDto {
 
 
     @Builder
-    public UserResponseDto(Long id, String loginId, String email, String phoneNumber, String name) {
+    public UserPrivateInfoResponseDto(Long id, String loginId, String email, String phoneNumber,
+            String name) {
         this.id = id;
         this.loginId = loginId;
         this.email = email;

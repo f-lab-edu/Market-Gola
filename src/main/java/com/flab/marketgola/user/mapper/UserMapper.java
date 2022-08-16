@@ -14,6 +14,8 @@ public interface UserMapper {
 
     void insert(User user);
 
+    Optional<User> findById(Long id);
+
     Optional<User> findByLoginId(String loginId);
 
     Optional<User> findByEmail(String email);
