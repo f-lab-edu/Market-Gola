@@ -38,7 +38,7 @@ public class UserService {
         user.encryptPassword();
 
         userRepository.insert(user);
-        addressRepository.create(shippingAddress);
+        addressRepository.insert(shippingAddress);
 
         return UserPrivateInfoResponseDto.builder()
                 .id(user.getId())

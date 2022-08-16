@@ -25,7 +25,7 @@ class ShippingAddressMapperTest {
 
     @DisplayName("정상적으로 주소가 저장된다.")
     @Test
-    void create() {
+    void insert() {
         //given
         String addressString = ValidUser.ADDRESS;
         User user = User.builder()
@@ -46,7 +46,7 @@ class ShippingAddressMapperTest {
                 .build();
 
         //when
-        shippingAddressMapper.create(shippingAddress);
+        shippingAddressMapper.insert(shippingAddress);
 
         //then
         assertThat(shippingAddressMapper.findAllByUser(user)).hasSize(1);
