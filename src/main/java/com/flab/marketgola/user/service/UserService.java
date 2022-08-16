@@ -28,7 +28,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto create(CreateUserRequestDto createUserRequestDto) throws Exception {
+    public UserResponseDto create(CreateUserRequestDto createUserRequestDto) {
         validateDuplication(createUserRequestDto);
 
         User user = createUserRequestDto.toUser();
