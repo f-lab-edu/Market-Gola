@@ -1,4 +1,4 @@
-package com.flab.marketgola.user.intercepter;
+package com.flab.marketgola.user.interceptor;
 
 import static com.flab.marketgola.common.controller.SessionConst.LOGIN_KEY;
 import static com.flab.marketgola.common.controller.SessionConst.NOT_CREATE_WHEN_NOT_EXIST;
