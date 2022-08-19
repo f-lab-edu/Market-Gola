@@ -40,12 +40,7 @@ public class UserService {
         userRepository.insert(user);
         addressRepository.insert(shippingAddress);
 
-        return UserPrivateInfoResponseDto.builder()
-                .id(user.getId())
-                .loginId(user.getLoginId())
-                .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
-                .build();
+        return UserPrivateInfoResponseDto.of(user);
     }
 
     private void validateDuplication(CreateUserRequestDto createUserRequestDto) {
@@ -82,12 +77,6 @@ public class UserService {
     public UserPrivateInfoResponseDto getMyInfo(Long id) {
         User user = userRepository.findById(id).orElseThrow(NoSuchUserException::new);
 
-        return UserPrivateInfoResponseDto.builder()
-                .id(user.getId())
-                .loginId(user.getLoginId())
-                .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
-                .name(user.getName())
-                .build();
+        return UserPrivateInfoResponseDto.of(user);
     }
 }

@@ -1,5 +1,6 @@
 package com.flab.marketgola.user.dto.response;
 
+import com.flab.marketgola.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,15 @@ public class UserPrivateInfoResponseDto {
     private String phoneNumber;
     private String name;
 
+    public static UserPrivateInfoResponseDto of(User user) {
+        return UserPrivateInfoResponseDto.builder()
+                .id(user.getId())
+                .loginId(user.getLoginId())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .name(user.getName())
+                .build();
+    }
 
     @Builder
     public UserPrivateInfoResponseDto(Long id, String loginId, String email, String phoneNumber,
