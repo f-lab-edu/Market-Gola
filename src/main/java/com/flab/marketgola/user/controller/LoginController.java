@@ -1,7 +1,7 @@
 package com.flab.marketgola.user.controller;
 
-import static com.flab.marketgola.common.controller.SessionConst.CREATE_WHEN_NOT_EXIST;
-import static com.flab.marketgola.common.controller.SessionConst.LOGIN_KEY;
+import static com.flab.marketgola.common.constant.SessionConstant.CREATE_WHEN_NOT_EXIST;
+import static com.flab.marketgola.common.constant.SessionConstant.LOGIN_KEY;
 
 import com.flab.marketgola.user.domain.LoginUser;
 import com.flab.marketgola.user.dto.request.LoginRequestDto;

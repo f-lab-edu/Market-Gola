@@ -1,8 +1,8 @@
-package com.flab.marketgola.common.controller;
+package com.flab.marketgola.common.constant;
 
-public class SessionConst {
+public class SessionConstant {
 
-    private SessionConst() {
+    private SessionConstant() {
     }
 
     public static final String LOGIN_KEY = "name";

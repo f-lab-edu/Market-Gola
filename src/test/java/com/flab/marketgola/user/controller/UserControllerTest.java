@@ -1,6 +1,6 @@
 package com.flab.marketgola.user.controller;
 
-import static com.flab.marketgola.common.controller.SessionConst.LOGIN_KEY;
+import static com.flab.marketgola.common.constant.SessionConstant.LOGIN_KEY;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

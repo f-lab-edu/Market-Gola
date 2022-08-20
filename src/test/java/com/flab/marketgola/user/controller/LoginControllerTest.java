@@ -1,5 +1,6 @@
 package com.flab.marketgola.user.controller;
 
+import static com.flab.marketgola.common.constant.SessionConstant.LOGIN_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -7,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flab.marketgola.common.controller.SessionConst;
 import com.flab.marketgola.user.ValidUser;
 import com.flab.marketgola.user.domain.LoginUser;
 import com.flab.marketgola.user.dto.request.LoginRequestDto;
@@ -56,7 +56,7 @@ class LoginControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        assertThat(session.getAttribute(SessionConst.LOGIN_KEY)).isNotNull();
+        assertThat(session.getAttribute(LOGIN_KEY)).isNotNull();
     }
 
     @DisplayName("로그아웃에 성공하면 OK를 내려보내고 세션을 만료시킨다.")
@@ -64,7 +64,7 @@ class LoginControllerTest {
     void logout() throws Exception {
         //given
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute(SessionConst.LOGIN_KEY, new LoginUser(1L, ValidUser.NAME));
+        session.setAttribute(LOGIN_KEY, new LoginUser(1L, ValidUser.NAME));
 
         //then
         mockMvc.perform(post(LoginController.LOGOUT_PATH)

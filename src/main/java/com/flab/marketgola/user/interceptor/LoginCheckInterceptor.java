@@ -1,7 +1,7 @@
 package com.flab.marketgola.user.interceptor;
 
-import static com.flab.marketgola.common.controller.SessionConst.LOGIN_KEY;
-import static com.flab.marketgola.common.controller.SessionConst.NOT_CREATE_WHEN_NOT_EXIST;
+import static com.flab.marketgola.common.constant.SessionConstant.LOGIN_KEY;
+import static com.flab.marketgola.common.constant.SessionConstant.NOT_CREATE_WHEN_NOT_EXIST;
 
 import com.flab.marketgola.user.exception.UnauthorizedException;
 import javax.servlet.http.HttpServletRequest;
