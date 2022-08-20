@@ -1,6 +1,6 @@
 package com.flab.marketgola.user.controller;
 
-import com.flab.marketgola.user.argumentresolver.Login;
+import com.flab.marketgola.user.argumentresolver.AuthenticatedUser;
 import com.flab.marketgola.user.domain.LoginUser;
 import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
 import com.flab.marketgola.user.dto.request.GetUserRequestDto;
@@ -44,7 +44,8 @@ public class UserController {
     }
 
     @GetMapping(GET_MY_INFO_PATH)
-    public ResponseEntity<UserPrivateInfoResponseDto> getMyInfo(@Login LoginUser loginUser,
+    public ResponseEntity<UserPrivateInfoResponseDto> getMyInfo(
+            @AuthenticatedUser LoginUser loginUser,
             @ModelAttribute GetUserRequestDto getUserRequestDto) {
         return new ResponseEntity<>(userService.getMyInfo(loginUser.getId()), HttpStatus.OK);
     }

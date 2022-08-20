@@ -9,7 +9,7 @@ import org.springframework.core.MethodParameter;
 
 class LoginArgumentResolverTest {
 
-    void testMethod(@Login String notLoginUser) {
+    void testMethod(@AuthenticatedUser String notLoginUser) {
     }
 
     @DisplayName("LoginUser 클래스가 아니라면 지원하지 않는다.")
