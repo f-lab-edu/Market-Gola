@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ShippingAddressMapper {
 
-    void create(ShippingAddress shippingAddress);
+    void insert(ShippingAddress shippingAddress);
 
     List<ShippingAddress> findAllByUser(User user);
 }

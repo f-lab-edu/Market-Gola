@@ -45,4 +45,9 @@ public class User {
     public void encryptPassword() throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.password = PasswordEncryptionUtil.encrypt(password);
     }
+
+    public boolean isPasswordEqual(String password)
+            throws InvalidKeySpecException, NoSuchAlgorithmException {
+        return PasswordEncryptionUtil.validatePassword(this.password, password);
+    }
 }

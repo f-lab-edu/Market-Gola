@@ -4,6 +4,19 @@
 
 <mapper namespace="com.flab.marketgola.user.mapper.UserMapper">
 
+  <select id="findById" resultType="User">
+    select id,
+           name,
+           login_id,
+           password,
+           email,
+           phone_number,
+           birth,
+           gender
+    from `USER`
+    where id = #{id}
+  </select>
+
   <select id="findByLoginId" resultType="User">
     select id,
            name,
@@ -44,7 +57,12 @@
   </select>
 
   <select id="findByCondition" resultType="User">
-    select id
+    select id,
+    name,
+    login_id,
+    password,
+    email,
+    phone_number
     from `USER`
     <where>
       <if test="loginId != null">and login_id = #{loginId}</if>

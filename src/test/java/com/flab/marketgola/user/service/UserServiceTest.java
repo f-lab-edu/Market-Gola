@@ -52,7 +52,7 @@ class UserServiceTest {
                 .build();
 
         //when
-        userService.create(createUserRequestDto);
+        userService.createUser(createUserRequestDto);
     }
 
     @DisplayName("아이디가 중복될 경우 가입에 실패한다.")
@@ -72,7 +72,7 @@ class UserServiceTest {
                 .build();
 
         //when
-        assertThatThrownBy(() -> userService.create(createUserRequestDto))
+        assertThatThrownBy(() -> userService.createUser(createUserRequestDto))
                 .isInstanceOf(DuplicatedLoginIdException.class);
     }
 
@@ -94,7 +94,7 @@ class UserServiceTest {
                 .build();
 
         //when
-        assertThatThrownBy(() -> userService.create(createUserRequestDto))
+        assertThatThrownBy(() -> userService.createUser(createUserRequestDto))
                 .isInstanceOf(DuplicatedEmailExcepiton.class);
     }
 
@@ -116,7 +116,7 @@ class UserServiceTest {
                 .build();
 
         //when
-        assertThatThrownBy(() -> userService.create(createUserRequestDto))
+        assertThatThrownBy(() -> userService.createUser(createUserRequestDto))
                 .isInstanceOf(DuplicatedPhoneNumberException.class);
     }
 
@@ -127,7 +127,7 @@ class UserServiceTest {
         Mockito.when(userRepository.findByCondition(any())).thenReturn(Optional.empty());
 
         //then
-        assertThatThrownBy(() -> userService.getByCondition(new GetUserRequestDto()))
+        assertThatThrownBy(() -> userService.getUser(new GetUserRequestDto()))
                 .isInstanceOf(NoSuchUserException.class);
     }
 }

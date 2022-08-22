@@ -1,5 +1,6 @@
 package com.flab.marketgola.user.controller;
 
+import static com.flab.marketgola.common.constant.SessionConstant.LOGIN_KEY;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -9,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.marketgola.user.ValidUser;
+import com.flab.marketgola.user.domain.LoginUser;
 import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
 import com.flab.marketgola.user.exception.NoSuchUserException;
 import com.flab.marketgola.user.service.UserService;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -57,7 +60,7 @@ class UserControllerTest {
         String content = objectMapper.writeValueAsString(createUserRequestDto);
 
         //then
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post(UserController.BASE_PATH)
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -81,7 +84,7 @@ class UserControllerTest {
         String content = objectMapper.writeValueAsString(noPasswordUser);
 
         //then
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post(UserController.BASE_PATH)
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -106,7 +109,7 @@ class UserControllerTest {
         String content = objectMapper.writeValueAsString(noAddressUser);
 
         //then
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post(UserController.BASE_PATH)
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -126,7 +129,7 @@ class UserControllerTest {
         String content = objectMapper.writeValueAsString(map);
 
         //then
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post(UserController.BASE_PATH)
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -152,7 +155,7 @@ class UserControllerTest {
         String content = objectMapper.writeValueAsString(createUserRequestDto);
 
         //then
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post(UserController.BASE_PATH)
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -178,7 +181,7 @@ class UserControllerTest {
         String content = objectMapper.writeValueAsString(createUserRequestDto);
 
         //then
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post(UserController.BASE_PATH)
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -204,7 +207,7 @@ class UserControllerTest {
         String content = objectMapper.writeValueAsString(createUserRequestDto);
 
         //then
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post(UserController.BASE_PATH)
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -216,7 +219,7 @@ class UserControllerTest {
     @DisplayName("검색 조건에 맞는 유저가 존재하면 HTTPStatus.OK를 반환한다.")
     @Test
     void getUser_ok() throws Exception {
-        mockMvc.perform(get("/users")
+        mockMvc.perform(get(UserController.BASE_PATH)
                         .param("loginId", ValidUser.LOGIN_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -230,14 +233,41 @@ class UserControllerTest {
     void getUser_not_found() throws Exception {
         //given
         Mockito.lenient().doThrow(new NoSuchUserException()).when(userService)
-                .getByCondition(any());
+                .getUser(any());
 
         //then
-        mockMvc.perform(get("/users")
+        mockMvc.perform(get(UserController.BASE_PATH)
                         .param("loginId", ValidUser.LOGIN_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+
+    @DisplayName("로그인 했다면 자신의 정보를 볼 수 있다.")
+    @Test
+    void getMyInfo_login_success() throws Exception {
+        //given
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute(LOGIN_KEY, new LoginUser(1L, ValidUser.NAME));
+
+        //then
+        mockMvc.perform(get(UserController.BASE_PATH + UserController.GET_MY_INFO_PATH)
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @DisplayName("로그인하지 않았다면 자신의 정보를 볼 수 없다.")
+    @Test
+    void getMyInfo_not_login_fail() throws Exception {
+        mockMvc.perform(get(UserController.BASE_PATH + UserController.GET_MY_INFO_PATH)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
                 .andDo(print());
     }
 }
