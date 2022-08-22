@@ -1,7 +1,5 @@
 package com.flab.marketgola.user.util;
 
-import com.flab.marketgola.user.exception.PasswordEncryptionFailException;
-import com.flab.marketgola.user.exception.PasswordValidationFailException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -22,18 +20,15 @@ public class PasswordEncryptionUtil {
     private PasswordEncryptionUtil() {
     }
 
-    public static String encrypt(String password) {
-        try {
-            char[] chars = password.toCharArray();
-            byte[] salt = getSalt();
-            byte[] digest = makeDijest(ENOUGH_ITERATION_COUNT, chars, salt);
+    public static String encrypt(String password)
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
+        char[] chars = password.toCharArray();
+        byte[] salt = getSalt();
+        byte[] digest = makeDijest(ENOUGH_ITERATION_COUNT, chars, salt);
 
-            // 추후 하드웨어 성능 향상으로 인해 iteration이 더 커지더라도
-            // 이전 iteration으로 암호화된 비밀번호를 알아내기 위하여 iteration과 digest를 같이 보관
-            return ENOUGH_ITERATION_COUNT + SEPERATION + toHex(salt) + SEPERATION + toHex(digest);
-        } catch (Exception e) {
-            throw new PasswordEncryptionFailException(e);
-        }
+        // 추후 하드웨어 성능 향상으로 인해 iteration이 더 커지더라도
+        // 이전 iteration으로 암호화된 비밀번호를 알아내기 위하여 iteration과 digest를 같이 보관
+        return ENOUGH_ITERATION_COUNT + SEPERATION + toHex(salt) + SEPERATION + toHex(digest);
     }
 
     private static byte[] makeDijest(int iteration, char[] password, byte[] salt)
@@ -65,21 +60,18 @@ public class PasswordEncryptionUtil {
         }
     }
 
-    public static boolean validatePassword(String storedPasswordCombi, String comparedPassword) {
-        try {
-            String[] parts = storedPasswordCombi.split(SEPERATION);
+    public static boolean validatePassword(String storedPasswordCombi, String comparedPassword)
+            throws InvalidKeySpecException, NoSuchAlgorithmException {
+        String[] parts = storedPasswordCombi.split(SEPERATION);
 
-            int iteration = Integer.parseInt(parts[0]);
-            byte[] salt = fromHex(parts[1]);
-            byte[] storedPasswordDijest = fromHex(parts[2]);
+        int iteration = Integer.parseInt(parts[0]);
+        byte[] salt = fromHex(parts[1]);
+        byte[] storedPasswordDijest = fromHex(parts[2]);
 
-            byte[] comparingPasswordDijest = makeDijest(iteration, comparedPassword.toCharArray(),
-                    salt);
+        byte[] comparingPasswordDijest = makeDijest(iteration, comparedPassword.toCharArray(),
+                salt);
 
-            return MessageDigest.isEqual(storedPasswordDijest, comparingPasswordDijest);
-        } catch (Exception e) {
-            throw new PasswordValidationFailException(e);
-        }
+        return MessageDigest.isEqual(storedPasswordDijest, comparingPasswordDijest);
     }
 
     private static byte[] fromHex(String hex) {

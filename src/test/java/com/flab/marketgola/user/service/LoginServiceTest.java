@@ -10,6 +10,8 @@ import com.flab.marketgola.user.dto.request.LoginRequestDto;
 import com.flab.marketgola.user.exception.LoginFailException;
 import com.flab.marketgola.user.mapper.UserMapper;
 import com.flab.marketgola.user.util.PasswordEncryptionUtil;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +33,7 @@ class LoginServiceTest {
 
     @DisplayName("아이디가 존재하고 비밀번호가 일치하면 로그인에 성공한다.")
     @Test
-    void login() {
+    void login() throws NoSuchAlgorithmException, InvalidKeySpecException {
         //given
         User user = User.builder()
                 .loginId(ValidUser.LOGIN_ID)
@@ -68,7 +70,7 @@ class LoginServiceTest {
 
     @DisplayName("비밀번호가 틀리면 로그인에 실패한다.")
     @Test
-    void login_password_no_match_fail() {
+    void login_password_no_match_fail() throws NoSuchAlgorithmException, InvalidKeySpecException {
         //given
         User user = User.builder()
                 .loginId(ValidUser.LOGIN_ID)

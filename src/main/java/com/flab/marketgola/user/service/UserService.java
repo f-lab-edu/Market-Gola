@@ -12,6 +12,8 @@ import com.flab.marketgola.user.exception.DuplicatedPhoneNumberException;
 import com.flab.marketgola.user.exception.NoSuchUserException;
 import com.flab.marketgola.user.mapper.ShippingAddressMapper;
 import com.flab.marketgola.user.mapper.UserMapper;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +31,8 @@ public class UserService {
     }
 
     @Transactional
-    public UserPrivateInfoResponseDto createUser(CreateUserRequestDto createUserRequestDto) {
+    public UserPrivateInfoResponseDto createUser(CreateUserRequestDto createUserRequestDto)
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
         validateDuplication(createUserRequestDto);
 
         User user = createUserRequestDto.toUser();
