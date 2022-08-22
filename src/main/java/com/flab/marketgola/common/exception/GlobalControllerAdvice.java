@@ -26,7 +26,8 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUnExpectedException(Exception e, WebRequest request) {
-        return handleExceptionInternal(e, null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR,
+        return handleExceptionInternal(new UnExpectedException(e), null, new HttpHeaders(),
+                HttpStatus.INTERNAL_SERVER_ERROR,
                 request);
     }
 
@@ -109,7 +110,10 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
 
         if (e instanceof BaseException) {
             logLevel = ((BaseException) e).getLogLevel();
+        } else if (e instanceof UnExpectedException) {
+            logLevel = LogLevel.ERROR;
         }
+
         return logLevel;
     }
 }
