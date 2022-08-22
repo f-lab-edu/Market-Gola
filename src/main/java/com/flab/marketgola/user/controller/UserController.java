@@ -7,6 +7,8 @@ import com.flab.marketgola.user.dto.request.GetUserRequestDto;
 import com.flab.marketgola.user.dto.response.UserPrivateInfoResponseDto;
 import com.flab.marketgola.user.dto.response.UserPublicInfoResponseDto;
 import com.flab.marketgola.user.service.UserService;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,7 +34,8 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserPrivateInfoResponseDto> createUser(
-            @Validated @RequestBody CreateUserRequestDto createUserRequestDto) {
+            @Validated @RequestBody CreateUserRequestDto createUserRequestDto)
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
         return new ResponseEntity<>(userService.createUser(createUserRequestDto),
                 HttpStatus.CREATED);
     }
