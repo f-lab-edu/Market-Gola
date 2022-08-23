@@ -1,12 +1,11 @@
 package com.flab.marketgola.user.domain;
 
-import java.io.Serializable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class LoginUser implements Serializable {
+public class LoginUser {
 
     private Long id;
     private String name;
