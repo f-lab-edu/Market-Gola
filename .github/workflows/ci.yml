@@ -27,9 +27,6 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-        env:
-          spring.redis.host: ${{secrets.REDIS_HOST}}
-          spring.redis.password: ${{secrets.REDIS_PASSWORD}}
         with:
           arguments: build
           cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
