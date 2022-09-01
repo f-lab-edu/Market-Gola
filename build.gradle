@@ -37,6 +37,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     testCompileOnly 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.2.2'
+    testImplementation('it.ozimov:embedded-redis:0.7.3') { exclude group: "org.slf4j", module: "slf4j-simple" }
 }
 
 test {
