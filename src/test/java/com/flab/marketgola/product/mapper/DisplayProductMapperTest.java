@@ -22,9 +22,6 @@ public class DisplayProductMapperTest {
     DisplayProductMapper displayProductRepository;
 
     @Autowired
-    ProductCategoryMapper categoryMapper;
-
-    @Autowired
     ProductMapper productMapper;
 
     @DisplayName("정상적으로 전시용 상품을 추가할 수 있다")
