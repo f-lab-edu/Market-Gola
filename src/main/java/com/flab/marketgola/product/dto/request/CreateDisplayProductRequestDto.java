@@ -62,7 +62,7 @@ public class CreateDisplayProductRequestDto {
                 .mainImageName(mainImageName)
                 .descriptionImageName(descriptionImageName)
                 .category(ProductCategory.builder().id(productCategoryId).build())
-                .products(products)
+                .products(productList)
                 .build();
     }
 
