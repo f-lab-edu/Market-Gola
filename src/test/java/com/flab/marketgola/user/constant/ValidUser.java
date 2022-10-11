@@ -1,6 +1,7 @@
-package com.flab.marketgola.user;
+package com.flab.marketgola.user.constant;
 
 import com.flab.marketgola.user.domain.Gender;
+import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
 import java.time.LocalDate;
 
 /**
@@ -16,4 +17,18 @@ public class ValidUser {
     public static final String ADDRESS = "서울 성북구 길음동 530-17 길음래미안 아파트 111동 111호";
     public static final Gender GENDER = Gender.MALE;
     public static final LocalDate BIRTH = LocalDate.of(1994, 1, 11);
+
+    public static CreateUserRequestDto getCreateUserRequestDto() {
+        return CreateUserRequestDto.builder()
+                .loginId(LOGIN_ID)
+                .email(EMAIL)
+                .name(NAME)
+                .password(PASSWORD)
+                .phoneNumber(PHONE_NUMBER)
+                .address(ADDRESS)
+                .gender(GENDER)
+                .birth(BIRTH)
+                .build();
+    }
+
 }

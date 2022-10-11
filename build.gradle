@@ -43,6 +43,12 @@ dependencies {
 test {
 	useJUnitPlatform()
 	finalizedBy jacocoTestReport
+
+    filter{
+        //h2 mysql mode에서 이해하지 못하는 쿼리(insert into ... on duplicate key 에서 row alias 사용)가 있어서 테스트에서 제외
+        excludeTestsMatching "*.ProductServiceTest.updateDisplayProductByIdWithProducts*"
+        excludeTestsMatching "*.learning.*"
+    }
 }
 
 jacoco {
@@ -53,11 +59,10 @@ jacocoTestReport {
     finalizedBy jacocoTestCoverageVerification
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [
-                    'com/flab/marketgola/*/mapper/*',
-                    'com/flab/marketgola/*/dto/*',
-                    'com/flab/marketgola/*/exception/*',
-                    'com/flab/marketgola/MarketGolaApplication.class'
+            fileTree(dir: it, include: [
+                    'com/flab/marketgola/*/controller/*',
+                    'com/flab/marketgola/*/service/*',
+                    'com/flab/marketgola/*/domain/*',
             ])
         }))
     }
@@ -80,11 +85,10 @@ jacocoTestCoverageVerification {
                 minimum = 0.60
             }
 
-            excludes = [
-                    '*.exception.*',
-                    '*.mapper.*',
-                    '*.dto.*',
-                    'com.flab.marketgola.MarketGolaApplication'
+            includes = [
+                   '*.controller.*',
+                   '*.service.*',
+                   '*.domain.*'
             ]
         }
     }
