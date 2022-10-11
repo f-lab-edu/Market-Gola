@@ -2,6 +2,7 @@ package com.flab.marketgola.user.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.flab.marketgola.TestRedisConfiguration;
 import com.flab.marketgola.user.ValidUser;
 import com.flab.marketgola.user.domain.Gender;
 import com.flab.marketgola.user.domain.ShippingAddress;
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @ActiveProfiles("unit")
 @Transactional
-@SpringBootTest
+@SpringBootTest(classes = TestRedisConfiguration.class)
 class ShippingAddressMapperTest {
 
     @Autowired
