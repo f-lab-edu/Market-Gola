@@ -19,4 +19,4 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   type-aliases-package:
-    'com.flab.marketgola.user.domain'
+    com.flab.marketgola.user.domain,com.flab.marketgola.product.domain,

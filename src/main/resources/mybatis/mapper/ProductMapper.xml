@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flab.marketgola.product.mapper.ProductMapper">
+
+  <select id="findById" resultType="Product">
+    select id, name, price, stock, is_deleted
+    from product
+    where id = #{id}
+  </select>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into product (name, price, stock, is_deleted, display_product_id)
+    values (#{name}, #{price}, #{stock}, #{isDeleted}, #{displayProduct.id})
+  </insert>
+
+</mapper>
+
