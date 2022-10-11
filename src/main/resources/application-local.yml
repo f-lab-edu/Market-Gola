@@ -4,6 +4,16 @@ spring:
     activate:
       on-profile: local
 
+  # session
+  session:
+    store-type: redis
+
+  # redis
+  redis:
+    host:
+    password:
+    port: 6379
+
   # Datasource
   datasource:
     url: jdbc:mysql://localhost:3306/marketgola

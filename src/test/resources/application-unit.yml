@@ -4,6 +4,10 @@ spring:
     activate:
       on-profile: unit
 
+  # session
+  session:
+    store-type: redis
+
   # Datasource
   datasource:
     # 어떤 환경에서도 테스트가 수행가능하고, 빠른 테스트, 테스트 격리 목적으로 메모리 DB사용
