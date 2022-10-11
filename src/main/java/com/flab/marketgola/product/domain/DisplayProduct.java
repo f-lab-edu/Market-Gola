@@ -35,4 +35,18 @@ public class DisplayProduct {
         this.products = products;
     }
 
+    public int setPrice() {
+        return products.stream()
+                .mapToInt(Product::getPrice)
+                .min()
+                .orElse(0);
+    }
+
+    public String getDescriptionImageUrl() {
+        return ImageUrlUtil.generateUrl(ServiceType.PRODUCT, descriptionImageName);
+    }
+
+    public String getMainImageUrl() {
+        return ImageUrlUtil.generateUrl(ServiceType.PRODUCT, mainImageName);
+    }
 }

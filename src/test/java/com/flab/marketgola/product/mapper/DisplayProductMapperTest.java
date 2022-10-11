@@ -42,6 +42,16 @@ public class DisplayProductMapperTest {
         assertThat(displayProductRepository.findById(displayProduct.getId())).isNotEmpty();
     }
 
+    @DisplayName("전시용 상품을 찾으면 관련된 실제 삭제되지 않은 상품이 모두 포함된다.")
+    @Test
+    void findById() {
+        //when
+        DisplayProduct displayProduct = displayProductRepository.findById(1L).get();
+
+        //then
+        assertThat(displayProduct.getProducts()).hasSize(2);
+    }
+
     private DisplayProduct createDisplayProduct() {
         return DisplayProduct.builder()
                 .name(TestDisplayProductFactory.DISPLAY_PRODUCT_NAME)

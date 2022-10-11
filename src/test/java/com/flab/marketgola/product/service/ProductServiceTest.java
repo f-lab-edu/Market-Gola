@@ -77,4 +77,27 @@ class ProductServiceTest {
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
+    @DisplayName("정상적으로 전시용 상품을 찾을 수 있다.")
+    @Test
+    void getDisplayProductById() {
+        //when
+        DisplayProductResponseDto responseDto = productService.getDisplayProductById(
+                PRE_INSERTED_DISPLAY_PRODUCT_ID);
+
+        //then
+        assertThat(responseDto.getId()).isNotNull();
+        assertThat(responseDto.getName()).isNotNull();
+        assertThat(responseDto.getProducts()).isNotEmpty();
+    }
+
+    @DisplayName("전시용 상품의 가격은 관련된 상품 가격 중 최소값이다.")
+    @Test
+    void getDisplayProductById_price() {
+        //when
+        DisplayProductResponseDto responseDto = productService.getDisplayProductById(
+                PRE_INSERTED_DISPLAY_PRODUCT_ID);
+
+        //then
+        assertThat(responseDto.getPrice()).isEqualTo(1000);
+    }
 }

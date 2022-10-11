@@ -1,6 +1,6 @@
 package com.flab.marketgola.product.mapper;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.flab.marketgola.product.constant.TestProductFactory;
 import com.flab.marketgola.product.domain.DisplayProduct;

@@ -40,4 +40,9 @@ public class ProductController {
         return new ResponseEntity<>(responseDto, headers, HttpStatus.CREATED);
     }
 
+    @GetMapping("/{id}")
+    ResponseEntity<DisplayProductResponseDto> getDisplayProduct(@PathVariable Long id) {
+        return new ResponseEntity<>(productService.getDisplayProductById(id), HttpStatus.OK);
+    }
+
 }
