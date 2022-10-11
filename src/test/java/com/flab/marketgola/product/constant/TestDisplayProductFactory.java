@@ -29,4 +29,16 @@ public class TestDisplayProductFactory {
                 .build();
     }
 
+    public static UpdateDisplayProductWithProductsRequestDto generateUpdateDisplayProductRequestDto(
+            List<UpdateProductRequestDto> productRequestDto) {
+        return UpdateDisplayProductWithProductsRequestDto.builder()
+                .id(PRE_INSERTED_DISPLAY_PRODUCT_ID)
+                .name(DISPLAY_PRODUCT_NAME)
+                .mainImageName(MAIN_IMAGE_NAME)
+                .descriptionImageName(DESCRIPTION_IMAGE_NAME)
+                .productCategoryId(CATEGORY_ID)
+                .products(productRequestDto)
+                .build();
+    }
+
 }

@@ -46,4 +46,17 @@ public class ProductService {
         return getDisplayProductById(displayProduct.getId());
     }
 
+    @Transactional
+    public DisplayProductResponseDto updateDisplayProductByIdWithProducts(
+            UpdateDisplayProductWithProductsRequestDto requestDto) {
+
+        DisplayProduct displayProduct = requestDto.toDisplayProduct();
+        displayProductRepository.update(displayProduct);
+
+        List<Product> products = requestDto.toProducts(displayProduct);
+        productRepository.insertOrUpdate(products);
+
+        return getDisplayProductById(displayProduct.getId());
+    }
+
 }

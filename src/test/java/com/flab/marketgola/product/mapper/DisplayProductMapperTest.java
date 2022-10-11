@@ -52,6 +52,27 @@ public class DisplayProductMapperTest {
         assertThat(displayProduct.getProducts()).hasSize(2);
     }
 
+    @DisplayName("정상적으로 전시용 상품을 업데이트 할 수 있다.")
+    @Test
+    void update() {
+        //when
+        Long updateId = 1L;
+        String updateName = "업데이트";
+        String updateMainImageName = "업데이트 이미지 이름";
+        DisplayProduct updateDisplayProduct = DisplayProduct.builder()
+                .id(updateId)
+                .name(updateName)
+                .mainImageName(updateMainImageName)
+                .build();
+
+        displayProductRepository.update(updateDisplayProduct);
+
+        //then
+        DisplayProduct findDisplayProduct = displayProductRepository.findById(updateId).get();
+        assertThat(findDisplayProduct.getName()).isEqualTo(updateName);
+        assertThat(findDisplayProduct.getMainImageName()).isEqualTo(updateMainImageName);
+    }
+
     private DisplayProduct createDisplayProduct() {
         return DisplayProduct.builder()
                 .name(TestDisplayProductFactory.DISPLAY_PRODUCT_NAME)

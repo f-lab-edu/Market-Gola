@@ -45,4 +45,12 @@ public class ProductController {
         return new ResponseEntity<>(productService.getDisplayProductById(id), HttpStatus.OK);
     }
 
+    @PutMapping
+    ResponseEntity<DisplayProductResponseDto> updateDisplayProduct(
+            @RequestBody @Validated UpdateDisplayProductWithProductsRequestDto requestDto) {
+
+        return new ResponseEntity<>(productService.updateDisplayProductByIdWithProducts(requestDto),
+                HttpStatus.OK);
+    }
+
 }

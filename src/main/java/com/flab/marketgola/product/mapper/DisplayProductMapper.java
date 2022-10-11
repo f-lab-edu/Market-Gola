@@ -13,4 +13,5 @@ public interface DisplayProductMapper {
 
     Optional<DisplayProduct> findById(Long id);
 
+    void update(DisplayProduct displayProduct);
 }

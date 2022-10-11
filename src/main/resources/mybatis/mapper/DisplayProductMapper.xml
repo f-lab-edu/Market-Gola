@@ -51,4 +51,19 @@
     insert into display_product (name, description_image_name, main_image_name, product_category_id)
     values (#{name}, #{descriptionImageName}, #{mainImageName}, #{category.id})
   </insert>
+
+  <update id="update">
+    update display_product dp
+    <set>
+      <if test="name != null">dp.name=#{name},</if>
+      <if test="mainImageName != null">dp.main_image_name=#{mainImageName},</if>
+      <if test="descriptionImageName != null">dp.description_image_name=#{descriptionImageName},
+      </if>
+      <if test="category != null">dp.product_category_id=#{category.id},</if>
+    </set>
+    where dp.id = #{id}
+    and exists
+    (select p.id from product p where p.display_product_id = dp.id and p.is_deleted != true)
+  </update>
+
 </mapper>
