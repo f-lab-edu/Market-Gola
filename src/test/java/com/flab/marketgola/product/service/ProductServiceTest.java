@@ -183,4 +183,50 @@ class ProductServiceTest {
                 .isInstanceOf(NoSuchProductException.class);
     }
 
+    @DisplayName("관련된 실제 상품이 모두 삭제되면 전시용 상품도 삭제된다.")
+    @Test
+    void updateDisplayProductByIdWithProducts_delete_displayProduct_when_all_products_deleted() {
+        //when
+        UpdateProductRequestDto productRequestDto1 = generateUpdateProductRequestDto();
+        productRequestDto1.setId(PRE_INSERTED_PRODUCT_ID_1);
+        productRequestDto1.setDeleted(true);
+
+        UpdateProductRequestDto productRequestDto2 = generateUpdateProductRequestDto();
+        productRequestDto2.setId(PRE_INSERTED_PRODUCT_ID_2);
+        productRequestDto2.setDeleted(true);
+
+        UpdateDisplayProductWithProductsRequestDto displayProductRequestDto = generateUpdateDisplayProductRequestDto(
+                List.of(productRequestDto1, productRequestDto2));
+
+        productService.updateDisplayProductByIdWithProducts(displayProductRequestDto);
+
+        //then
+        assertThatThrownBy(
+                () -> productService.getDisplayProductById(PRE_INSERTED_DISPLAY_PRODUCT_ID))
+                .isInstanceOf(NoSuchProductException.class);
+    }
+
+    @DisplayName("정상적으로 전시용 상품을 삭제할 수 있다.")
+    @Test
+    void deleteDisplayProductById() {
+        //when
+        productService.deleteDisplayProductById(PRE_INSERTED_DISPLAY_PRODUCT_ID);
+
+        //then
+        assertThatThrownBy(
+                () -> productService.getDisplayProductById(PRE_INSERTED_DISPLAY_PRODUCT_ID))
+                .isInstanceOf(NoSuchProductException.class);
+    }
+
+    @DisplayName("존재하지 않는 전시용 상품을 삭제할 수는 없다.")
+    @Test
+    void deleteDisplayProductById_cant_delete_not_exist_display_product() {
+        //when
+        Long notExistId = 100000L;
+
+        //then
+        assertThatThrownBy(
+                () -> productService.deleteDisplayProductById(notExistId))
+                .isInstanceOf(NoSuchProductException.class);
+    }
 }

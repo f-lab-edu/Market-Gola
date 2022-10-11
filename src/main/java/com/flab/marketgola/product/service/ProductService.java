@@ -59,4 +59,14 @@ public class ProductService {
         return getDisplayProductById(displayProduct.getId());
     }
 
+    public void deleteDisplayProductById(Long id) {
+        Product product = Product.builder()
+                .isDeleted(true)
+                .build();
+
+        int deleteCount = productRepository.updateStatusByDisplayProductId(id, product);
+        if (deleteCount == 0) {
+            throw new NoSuchProductException();
+        }
+    }
 }

@@ -53,4 +53,8 @@ public class ProductController {
                 HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    void deleteDisplayProduct(@PathVariable Long id) {
+        productService.deleteDisplayProductById(id);
+    }
 }
