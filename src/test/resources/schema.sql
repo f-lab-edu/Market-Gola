@@ -46,4 +46,53 @@ CREATE TABLE `shipping_address`
     CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci COMMENT ='배송지 주소를 저장하는 테이블'
+  COLLATE = utf8mb4_0900_ai_ci COMMENT ='배송지 주소를 저장하는 테이블';
+
+CREATE TABLE `product_category`
+(
+    `id`        int unsigned NOT NULL AUTO_INCREMENT,
+    `name`      varchar(30)  NOT NULL,
+    `parent_id` int unsigned DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `name_UNIQUE` (`name`),
+    KEY `product_category_product_category_id_idx` (`parent_id`),
+    CONSTRAINT `product_category_product_category_id` FOREIGN KEY (`parent_id`) REFERENCES `product_category` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT ='카테고리 테이블';
+
+CREATE TABLE `display_product`
+(
+    `id`                     bigint unsigned NOT NULL AUTO_INCREMENT,
+    `name`                   varchar(100)    NOT NULL,
+    `description_image_name` varchar(300)    NOT NULL,
+    `main_image_name`        varchar(300)    NOT NULL,
+    `created_at`             datetime        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`             datetime        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `product_category_id`    int unsigned    NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `display_product_product_category_id_idx` (`product_category_id`),
+    CONSTRAINT `display_product_product_category_id` FOREIGN KEY (`product_category_id`) REFERENCES `product_category` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT ='전시용 상품 테이블';
+
+CREATE TABLE `product`
+(
+    `id`                 bigint unsigned   NOT NULL AUTO_INCREMENT,
+    `name`               varchar(256)      NOT NULL,
+    `price`              int unsigned      NOT NULL,
+    `stock`              smallint unsigned NOT NULL,
+    `created_at`         datetime          NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`         datetime          NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `is_deleted`         tinyint           NOT NULL DEFAULT '0',
+    `display_product_id` bigint unsigned   NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `display_product_id_idx` (`display_product_id`),
+    CONSTRAINT `product_display_product_id` FOREIGN KEY (`display_product_id`) REFERENCES `display_product` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 14
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT ='상품 테이블'
+
+
