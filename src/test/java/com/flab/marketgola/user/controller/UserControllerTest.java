@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flab.marketgola.user.ValidUser;
+import com.flab.marketgola.user.constant.TestUserFactory;
 import com.flab.marketgola.user.domain.LoginUser;
 import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
 import com.flab.marketgola.user.exception.NoSuchUserException;
@@ -46,16 +46,7 @@ class UserControllerTest {
     @Test
     void createUser() throws Exception {
         //given
-        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .password(ValidUser.PASSWORD)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .gender(ValidUser.GENDER)
-                .birth(ValidUser.BIRTH)
-                .address(ValidUser.ADDRESS)
-                .build();
+        CreateUserRequestDto createUserRequestDto = TestUserFactory.generalCreateRequest().build();
 
         String content = objectMapper.writeValueAsString(createUserRequestDto);
 
@@ -73,12 +64,7 @@ class UserControllerTest {
     @Test
     void createUser_no_password_fail() throws Exception {
         //given
-        CreateUserRequestDto noPasswordUser = CreateUserRequestDto.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .address(ValidUser.ADDRESS)
+        CreateUserRequestDto noPasswordUser = TestUserFactory.generalCreateRequest().password(null)
                 .build();
 
         String content = objectMapper.writeValueAsString(noPasswordUser);
@@ -98,12 +84,7 @@ class UserControllerTest {
     @Test
     void createUser_no_address_fail() throws Exception {
         //given
-        CreateUserRequestDto noAddressUser = CreateUserRequestDto.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .password(ValidUser.PASSWORD)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
+        CreateUserRequestDto noAddressUser = TestUserFactory.generalCreateRequest().address(null)
                 .build();
 
         String content = objectMapper.writeValueAsString(noAddressUser);
@@ -143,13 +124,7 @@ class UserControllerTest {
     @ValueSource(strings = {"sgo", "한글아이디", "abc123!"})
     void createUser_id_wrong_form(String loginId) throws Exception {
         //given
-        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
-                .loginId(loginId)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .password(ValidUser.PASSWORD)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .address(ValidUser.ADDRESS)
+        CreateUserRequestDto createUserRequestDto = TestUserFactory.generalCreateRequest().loginId(loginId)
                 .build();
 
         String content = objectMapper.writeValueAsString(createUserRequestDto);
@@ -169,13 +144,7 @@ class UserControllerTest {
     @ValueSource(strings = {"short123", "onlyalphabet", "12345678910", "blank 123123!"})
     void createUser_pw_wrong_form(String password) throws Exception {
         //given
-        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .password(password)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .address(ValidUser.ADDRESS)
+        CreateUserRequestDto createUserRequestDto = TestUserFactory.generalCreateRequest().password(password)
                 .build();
 
         String content = objectMapper.writeValueAsString(createUserRequestDto);
@@ -195,13 +164,7 @@ class UserControllerTest {
     @ValueSource(strings = {"justalpha", "abc123@@google.com"})
     void createUser_email_wrong_form(String email) throws Exception {
         //given
-        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .email(email)
-                .name(ValidUser.NAME)
-                .password("abc123123123!")
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .address(ValidUser.ADDRESS)
+        CreateUserRequestDto createUserRequestDto = TestUserFactory.generalCreateRequest().email(email)
                 .build();
 
         String content = objectMapper.writeValueAsString(createUserRequestDto);
@@ -220,7 +183,7 @@ class UserControllerTest {
     @Test
     void getUser_ok() throws Exception {
         mockMvc.perform(get(UserController.BASE_PATH)
-                        .param("loginId", ValidUser.LOGIN_ID)
+                        .param("loginId", TestUserFactory.LOGIN_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -237,20 +200,19 @@ class UserControllerTest {
 
         //then
         mockMvc.perform(get(UserController.BASE_PATH)
-                        .param("loginId", ValidUser.LOGIN_ID)
+                        .param("loginId", TestUserFactory.LOGIN_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }
 
-
     @DisplayName("로그인 했다면 자신의 정보를 볼 수 있다.")
     @Test
     void getMyInfo_login_success() throws Exception {
         //given
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute(LOGIN_KEY, new LoginUser(1L, ValidUser.NAME));
+        session.setAttribute(LOGIN_KEY, new LoginUser(1L, TestUserFactory.NAME));
 
         //then
         mockMvc.perform(get(UserController.BASE_PATH + UserController.GET_MY_INFO_PATH)

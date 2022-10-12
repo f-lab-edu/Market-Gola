@@ -1,13 +1,14 @@
 package com.flab.marketgola.user.constant;
 
 import com.flab.marketgola.user.domain.Gender;
+import com.flab.marketgola.user.domain.User;
 import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
 import java.time.LocalDate;
 
 /**
  * 유효한 입력값을 가진 테스트용 유저 데이터
  */
-public class ValidUser {
+public class TestUserFactory {
 
     public static final String LOGIN_ID = "abc123";
     public static final String EMAIL = "abc123@naver.com";
@@ -18,7 +19,30 @@ public class ValidUser {
     public static final Gender GENDER = Gender.MALE;
     public static final LocalDate BIRTH = LocalDate.of(1994, 1, 11);
 
-    public static CreateUserRequestDto getCreateUserRequestDto() {
+    public static User.UserBuilder generalUser(){
+        return User.builder()
+                .loginId(LOGIN_ID)
+                .email(EMAIL)
+                .name(NAME)
+                .password(PASSWORD)
+                .phoneNumber(PHONE_NUMBER)
+                .gender(GENDER)
+                .birth(BIRTH);
+    }
+
+    public static CreateUserRequestDto.CreateUserRequestDtoBuilder generalCreateRequest() {
+        return CreateUserRequestDto.builder()
+                .loginId(LOGIN_ID)
+                .email(EMAIL)
+                .name(NAME)
+                .password(PASSWORD)
+                .phoneNumber(PHONE_NUMBER)
+                .address(ADDRESS)
+                .gender(GENDER)
+                .birth(BIRTH);
+    }
+
+    public static CreateUserRequestDto buildGeneralCreateRequest() {
         return CreateUserRequestDto.builder()
                 .loginId(LOGIN_ID)
                 .email(EMAIL)

@@ -3,7 +3,7 @@ package com.flab.marketgola.user.mapper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.flab.marketgola.TestRedisConfiguration;
-import com.flab.marketgola.user.ValidUser;
+import com.flab.marketgola.user.constant.TestUserFactory;
 import com.flab.marketgola.user.domain.Gender;
 import com.flab.marketgola.user.domain.User;
 import com.flab.marketgola.user.dto.request.GetUserRequestDto;
@@ -34,60 +34,36 @@ class UserMapperTest {
     @DisplayName("유저를 등록할 수 있다.")
     void create() {
         //given
-        String loginId = ValidUser.LOGIN_ID;
-
-        User user = User.builder()
-                .loginId(loginId)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .password(ValidUser.PASSWORD)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .gender(Gender.MALE)
-                .build();
+        User user = TestUserFactory.generalUser().build();
 
         //when
         userMapper.insert(user);
 
         //then
-        assertThat(userMapper.findByLoginId(loginId)).isPresent();
+        assertThat(userMapper.findByLoginId(TestUserFactory.LOGIN_ID)).isPresent();
     }
 
     @Test
     @DisplayName("로그인 아이디로 유저를 찾을 수 있다.")
     void findByLoginId() {
         //given
-        User user = User.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .password(ValidUser.PASSWORD)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .gender(Gender.MALE)
-                .build();
-
+        User user = TestUserFactory.generalUser().build();
         userMapper.insert(user);
 
         //when
-        User userInfo = userMapper.findByLoginId(ValidUser.LOGIN_ID).get();
-        System.out.println(userInfo);
+        User userInfo = userMapper.findByLoginId(TestUserFactory.LOGIN_ID).get();
+
         //then
-        assertThat(userInfo.getLoginId()).isEqualTo(ValidUser.LOGIN_ID);
+        assertThat(userInfo.getLoginId()).isEqualTo(TestUserFactory.LOGIN_ID);
     }
 
     @Test
     @DisplayName("유저 정보 업데이트를 할 수 있다.")
     void update() {
         //given
-        User user = User.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .password(ValidUser.PASSWORD)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .gender(Gender.MALE)
-                .build();
-
+        User user = TestUserFactory.generalUser().build();
         userMapper.insert(user);
+
         UserUpdateDto updateParam = new UserUpdateDto();
         updateParam.setName("김유미");
         updateParam.setGender(Gender.FEMALE);
@@ -105,14 +81,7 @@ class UserMapperTest {
     @DisplayName("유저를 삭제할 수 있다.")
     void delete() {
         //given
-        User user = User.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .password(ValidUser.PASSWORD)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .gender(Gender.MALE)
-                .build();
+        User user = TestUserFactory.generalUser().build();
         userMapper.insert(user);
 
         //when
@@ -128,24 +97,16 @@ class UserMapperTest {
     @DisplayName("아이디 또는 이메일 또는 전화번호로 유저를 찾을 수 있다.")
     void findByCondition() {
         //given
-        User user = User.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .password(ValidUser.PASSWORD)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .gender(Gender.MALE)
-                .build();
-
+        User user = TestUserFactory.generalUser().build();
         userMapper.insert(user);
 
         //when
         Optional<User> userFoundByLoginId = userMapper.findByCondition(
-                GetUserRequestDto.builder().loginId(ValidUser.LOGIN_ID).build());
+                GetUserRequestDto.builder().loginId(TestUserFactory.LOGIN_ID).build());
         Optional<User> userFoundByEmail = userMapper.findByCondition(
-                GetUserRequestDto.builder().email(ValidUser.EMAIL).build());
+                GetUserRequestDto.builder().email(TestUserFactory.EMAIL).build());
         Optional<User> userFoundByPhoneNumber = userMapper.findByCondition(
-                GetUserRequestDto.builder().phoneNumber(ValidUser.PHONE_NUMBER).build());
+                GetUserRequestDto.builder().phoneNumber(TestUserFactory.PHONE_NUMBER).build());
 
         //then
         assertThat(userFoundByLoginId).isNotEmpty();

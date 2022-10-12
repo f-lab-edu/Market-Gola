@@ -3,7 +3,8 @@ package com.flab.marketgola.user.mapper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.flab.marketgola.TestRedisConfiguration;
-import com.flab.marketgola.user.ValidUser;
+import com.flab.marketgola.user.constant.TestShippingAddressFactory;
+import com.flab.marketgola.user.constant.TestUserFactory;
 import com.flab.marketgola.user.domain.Gender;
 import com.flab.marketgola.user.domain.ShippingAddress;
 import com.flab.marketgola.user.domain.User;
@@ -28,21 +29,12 @@ class ShippingAddressMapperTest {
     @Test
     void insert() {
         //given
-        String addressString = ValidUser.ADDRESS;
-        User user = User.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .password(ValidUser.PASSWORD)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .gender(Gender.MALE)
-                .build();
+        String addressString = TestUserFactory.ADDRESS;
+        User user = TestUserFactory.generalUser().build();
 
         userMapper.insert(user);
 
-        ShippingAddress shippingAddress = ShippingAddress.builder()
-                .address(addressString)
-                .isDefault(true)
+        ShippingAddress shippingAddress = TestShippingAddressFactory.generalShippingAddress()
                 .user(user)
                 .build();
 

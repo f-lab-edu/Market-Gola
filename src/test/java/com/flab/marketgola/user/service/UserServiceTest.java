@@ -3,7 +3,7 @@ package com.flab.marketgola.user.service;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 
-import com.flab.marketgola.user.ValidUser;
+import com.flab.marketgola.user.constant.TestUserFactory;
 import com.flab.marketgola.user.domain.User;
 import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
 import com.flab.marketgola.user.dto.request.GetUserRequestDto;
@@ -40,16 +40,7 @@ class UserServiceTest {
     @Test
     void create() throws Exception {
         //given
-        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .password(ValidUser.PASSWORD)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .gender(ValidUser.GENDER)
-                .birth(ValidUser.BIRTH)
-                .address(ValidUser.ADDRESS)
-                .build();
+        CreateUserRequestDto createUserRequestDto = TestUserFactory.generalCreateRequest().build();
 
         //when
         userService.createUser(createUserRequestDto);
@@ -59,17 +50,10 @@ class UserServiceTest {
     @Test
     void create_id_duplication() {
         //given
-        Mockito.when(userRepository.findByLoginId(ValidUser.LOGIN_ID))
+        Mockito.when(userRepository.findByLoginId(TestUserFactory.LOGIN_ID))
                 .thenReturn(Optional.of(new User()));
 
-        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .password(ValidUser.PASSWORD)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .address(ValidUser.ADDRESS)
-                .build();
+        CreateUserRequestDto createUserRequestDto = TestUserFactory.generalCreateRequest().build();
 
         //when
         assertThatThrownBy(() -> userService.createUser(createUserRequestDto))
@@ -81,17 +65,10 @@ class UserServiceTest {
     @Test
     void create_email_duplication() {
         //given
-        Mockito.when(userRepository.findByEmail(ValidUser.EMAIL))
+        Mockito.when(userRepository.findByEmail(TestUserFactory.EMAIL))
                 .thenReturn(Optional.of(new User()));
 
-        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .password(ValidUser.PASSWORD)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .address(ValidUser.ADDRESS)
-                .build();
+        CreateUserRequestDto createUserRequestDto = TestUserFactory.generalCreateRequest().build();
 
         //when
         assertThatThrownBy(() -> userService.createUser(createUserRequestDto))
@@ -103,17 +80,10 @@ class UserServiceTest {
     @Test
     void create_phone_number_duplication() {
         //given
-        Mockito.when(userRepository.findByPhoneNumber(ValidUser.PHONE_NUMBER))
+        Mockito.when(userRepository.findByPhoneNumber(TestUserFactory.PHONE_NUMBER))
                 .thenReturn(Optional.of(new User()));
 
-        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .email(ValidUser.EMAIL)
-                .name(ValidUser.NAME)
-                .password(ValidUser.PASSWORD)
-                .phoneNumber(ValidUser.PHONE_NUMBER)
-                .address(ValidUser.ADDRESS)
-                .build();
+        CreateUserRequestDto createUserRequestDto = TestUserFactory.generalCreateRequest().build();
 
         //when
         assertThatThrownBy(() -> userService.createUser(createUserRequestDto))
