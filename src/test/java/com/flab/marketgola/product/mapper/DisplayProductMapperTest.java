@@ -2,6 +2,7 @@ package com.flab.marketgola.product.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.flab.marketgola.TestRedisConfiguration;
 import com.flab.marketgola.product.constant.TestDisplayProductFactory;
 import com.flab.marketgola.product.constant.TestProductFactory;
 import com.flab.marketgola.product.domain.DisplayProduct;
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @ActiveProfiles("unit")
-@SpringBootTest
+@SpringBootTest(classes = TestRedisConfiguration.class)
 public class DisplayProductMapperTest {
 
     @Autowired
