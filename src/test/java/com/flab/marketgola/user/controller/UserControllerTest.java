@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.marketgola.user.constant.TestUserFactory;
 import com.flab.marketgola.user.domain.LoginUser;
 import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
+import com.flab.marketgola.user.dto.response.UserPrivateInfoResponseDto;
 import com.flab.marketgola.user.exception.NoSuchUserException;
 import com.flab.marketgola.user.service.UserService;
 import java.util.HashMap;
@@ -46,6 +47,9 @@ class UserControllerTest {
     @Test
     void createUser() throws Exception {
         //given
+        Mockito.when(userService.createUser(any()))
+                .thenReturn(UserPrivateInfoResponseDto.builder().id(1L).build());
+
         CreateUserRequestDto createUserRequestDto = TestUserFactory.generalCreateRequest().build();
 
         String content = objectMapper.writeValueAsString(createUserRequestDto);
@@ -124,7 +128,8 @@ class UserControllerTest {
     @ValueSource(strings = {"sgo", "한글아이디", "abc123!"})
     void createUser_id_wrong_form(String loginId) throws Exception {
         //given
-        CreateUserRequestDto createUserRequestDto = TestUserFactory.generalCreateRequest().loginId(loginId)
+        CreateUserRequestDto createUserRequestDto = TestUserFactory.generalCreateRequest()
+                .loginId(loginId)
                 .build();
 
         String content = objectMapper.writeValueAsString(createUserRequestDto);
@@ -144,7 +149,8 @@ class UserControllerTest {
     @ValueSource(strings = {"short123", "onlyalphabet", "12345678910", "blank 123123!"})
     void createUser_pw_wrong_form(String password) throws Exception {
         //given
-        CreateUserRequestDto createUserRequestDto = TestUserFactory.generalCreateRequest().password(password)
+        CreateUserRequestDto createUserRequestDto = TestUserFactory.generalCreateRequest()
+                .password(password)
                 .build();
 
         String content = objectMapper.writeValueAsString(createUserRequestDto);
@@ -164,7 +170,8 @@ class UserControllerTest {
     @ValueSource(strings = {"justalpha", "abc123@@google.com"})
     void createUser_email_wrong_form(String email) throws Exception {
         //given
-        CreateUserRequestDto createUserRequestDto = TestUserFactory.generalCreateRequest().email(email)
+        CreateUserRequestDto createUserRequestDto = TestUserFactory.generalCreateRequest()
+                .email(email)
                 .build();
 
         String content = objectMapper.writeValueAsString(createUserRequestDto);
