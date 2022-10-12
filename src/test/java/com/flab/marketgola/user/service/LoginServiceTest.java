@@ -3,7 +3,7 @@ package com.flab.marketgola.user.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.flab.marketgola.user.ValidUser;
+import com.flab.marketgola.user.constant.TestUserFactory;
 import com.flab.marketgola.user.domain.LoginUser;
 import com.flab.marketgola.user.domain.User;
 import com.flab.marketgola.user.dto.request.LoginRequestDto;
@@ -35,33 +35,32 @@ class LoginServiceTest {
     @Test
     void login() throws NoSuchAlgorithmException, InvalidKeySpecException {
         //given
-        User user = User.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .password(PasswordEncryptionUtil.encrypt(ValidUser.PASSWORD))
-                .name(ValidUser.NAME)
+        User user = TestUserFactory.generalUser()
+                .password(PasswordEncryptionUtil.encrypt(TestUserFactory.PASSWORD))
                 .build();
 
-        Mockito.when(userRepository.findByLoginId(ValidUser.LOGIN_ID))
+        Mockito.when(userRepository.findByLoginId(TestUserFactory.LOGIN_ID))
                 .thenReturn(Optional.ofNullable(user));
 
         //when
-        LoginRequestDto loginRequestDto = new LoginRequestDto(ValidUser.LOGIN_ID,
-                ValidUser.PASSWORD);
+        LoginRequestDto loginRequestDto = new LoginRequestDto(TestUserFactory.LOGIN_ID,
+                TestUserFactory.PASSWORD);
         LoginUser loginUser = loginService.login(loginRequestDto);
 
         //then
-        assertThat(loginUser.getName()).isEqualTo(ValidUser.NAME);
+        assertThat(loginUser.getName()).isEqualTo(TestUserFactory.NAME);
     }
 
     @DisplayName("아이디가 존재하지 않으면 로그인에 실패한다.")
     @Test
     void login_no_id_fail() {
         //given
-        Mockito.when(userRepository.findByLoginId(ValidUser.LOGIN_ID)).thenReturn(Optional.empty());
+        Mockito.when(userRepository.findByLoginId(TestUserFactory.LOGIN_ID))
+                .thenReturn(Optional.empty());
 
         //when
-        LoginRequestDto loginRequestDto = new LoginRequestDto(ValidUser.LOGIN_ID,
-                ValidUser.PASSWORD);
+        LoginRequestDto loginRequestDto = new LoginRequestDto(TestUserFactory.LOGIN_ID,
+                TestUserFactory.PASSWORD);
 
         //then
         assertThatThrownBy(() -> loginService.login(loginRequestDto))
@@ -72,16 +71,16 @@ class LoginServiceTest {
     @Test
     void login_password_no_match_fail() throws NoSuchAlgorithmException, InvalidKeySpecException {
         //given
-        User user = User.builder()
-                .loginId(ValidUser.LOGIN_ID)
-                .password(PasswordEncryptionUtil.encrypt(ValidUser.PASSWORD))
+        User user = TestUserFactory.generalUser()
+                .password(PasswordEncryptionUtil.encrypt(TestUserFactory.PASSWORD))
                 .build();
 
-        Mockito.when(userRepository.findByLoginId(ValidUser.LOGIN_ID))
+
+        Mockito.when(userRepository.findByLoginId(TestUserFactory.LOGIN_ID))
                 .thenReturn(Optional.ofNullable(user));
 
         //when
-        LoginRequestDto loginRequestDto = new LoginRequestDto(ValidUser.LOGIN_ID,
+        LoginRequestDto loginRequestDto = new LoginRequestDto(TestUserFactory.LOGIN_ID,
                 "wrongpassword123!");
 
         //then

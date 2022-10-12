@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flab.marketgola.user.ValidUser;
+import com.flab.marketgola.user.constant.TestUserFactory;
 import com.flab.marketgola.user.domain.LoginUser;
 import com.flab.marketgola.user.dto.request.LoginRequestDto;
 import com.flab.marketgola.user.service.LoginService;
@@ -40,10 +40,10 @@ class LoginControllerTest {
     @Test
     void login() throws Exception {
         //given
-        Mockito.when(loginService.login(any())).thenReturn(new LoginUser(1L, ValidUser.NAME));
+        Mockito.when(loginService.login(any())).thenReturn(new LoginUser(1L, TestUserFactory.NAME));
 
         String content = objectMapper.writeValueAsString(
-                new LoginRequestDto(ValidUser.LOGIN_ID, ValidUser.PASSWORD));
+                new LoginRequestDto(TestUserFactory.LOGIN_ID, TestUserFactory.PASSWORD));
 
         MockHttpSession session = new MockHttpSession();
 
@@ -64,7 +64,7 @@ class LoginControllerTest {
     void logout() throws Exception {
         //given
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute(LOGIN_KEY, new LoginUser(1L, ValidUser.NAME));
+        session.setAttribute(LOGIN_KEY, new LoginUser(1L, TestUserFactory.NAME));
 
         //then
         mockMvc.perform(post(LoginController.LOGOUT_PATH)

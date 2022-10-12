@@ -28,7 +28,7 @@ import com.flab.marketgola.product.dto.request.UpdateDisplayProductWithProductsR
 import com.flab.marketgola.product.dto.request.UpdateProductRequestDto;
 import com.flab.marketgola.product.dto.response.DisplayProductResponseDto;
 import com.flab.marketgola.product.service.ProductService;
-import com.flab.marketgola.user.constant.ValidUser;
+import com.flab.marketgola.user.constant.TestUserFactory;
 import com.flab.marketgola.user.domain.LoginUser;
 import java.util.Arrays;
 import java.util.List;
@@ -282,7 +282,7 @@ class ProductControllerTest {
 
     private void setUpMockUserLogin() {
         session = new MockHttpSession();
-        LoginUser loginUser = new LoginUser(1L, ValidUser.NAME);
+        LoginUser loginUser = new LoginUser(1L, TestUserFactory.NAME);
         session.setAttribute(LOGIN_KEY, loginUser);
     }
 }
