@@ -5,6 +5,7 @@ import static com.flab.marketgola.product.constant.TestProductFactory.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.flab.marketgola.TestRedisConfiguration;
 import com.flab.marketgola.product.dto.request.CreateDisplayProductRequestDto;
 import com.flab.marketgola.product.dto.request.UpdateDisplayProductWithProductsRequestDto;
 import com.flab.marketgola.product.dto.request.UpdateProductRequestDto;
@@ -22,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @ActiveProfiles("unit")
-@SpringBootTest
+@SpringBootTest(classes = TestRedisConfiguration.class)
 class ProductServiceTest {
 
     @Autowired
