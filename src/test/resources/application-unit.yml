@@ -4,6 +4,11 @@ spring:
     activate:
       on-profile: unit
 
+  # file
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
   # session
   session:
     store-type: redis
@@ -24,3 +29,14 @@ mybatis:
     map-underscore-to-camel-case: true
   type-aliases-package:
     com.flab.marketgola.user.domain,com.flab.marketgola.product.domain,
+
+# AWS
+cloud:
+  aws:
+    credentials:
+      accessKey:
+      secretKey:
+    s3:
+      bucket: market-gola
+      region:
+      endpoint:

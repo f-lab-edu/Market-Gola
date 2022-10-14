@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
@@ -38,6 +39,14 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleBaseException(BaseException e, WebRequest request) {
         return handleExceptionInternal(e, null, new HttpHeaders(), e.getResponseHttpStatus(),
                 request);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<Object> handleMaxUploadSizeExceededException(
+            MaxUploadSizeExceededException e, WebRequest request) {
+
+        return handleExceptionInternal(e, null, new HttpHeaders(),
+                HttpStatus.BAD_REQUEST, request);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.flab.marketgola.product.domain;
 
-import com.flab.marketgola.common.domain.ServiceType;
-import com.flab.marketgola.common.util.ImageUrlUtil;
+import com.flab.marketgola.image.domain.DescriptionImage;
+import com.flab.marketgola.image.domain.MainImage;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -43,10 +43,10 @@ public class DisplayProduct {
     }
 
     public String getDescriptionImageUrl() {
-        return ImageUrlUtil.generateUrl(ServiceType.PRODUCT, descriptionImageName);
+        return DescriptionImage.generateUrl(descriptionImageName);
     }
 
     public String getMainImageUrl() {
-        return ImageUrlUtil.generateUrl(ServiceType.PRODUCT, mainImageName);
+        return MainImage.generateUrl(mainImageName);
     }
 }

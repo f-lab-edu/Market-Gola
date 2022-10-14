@@ -25,6 +25,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.session:spring-session-data-redis'
+    implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.1'
 
     runtimeOnly 'mysql:mysql-connector-java'
     runtimeOnly 'com.h2database:h2'
@@ -38,6 +39,7 @@ dependencies {
 
     testCompileOnly 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.2.2'
     testImplementation('it.ozimov:embedded-redis:0.7.3') { exclude group: "org.slf4j", module: "slf4j-simple" }
+    testImplementation 'io.findify:s3mock_2.13:0.2.6'
 }
 
 test {
