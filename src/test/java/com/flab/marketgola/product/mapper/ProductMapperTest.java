@@ -3,8 +3,8 @@ package com.flab.marketgola.product.mapper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.flab.marketgola.TestRedisConfiguration;
+import com.flab.marketgola.product.constant.TestDisplayProductFactory;
 import com.flab.marketgola.product.constant.TestProductFactory;
-import com.flab.marketgola.product.domain.DisplayProduct;
 import com.flab.marketgola.product.domain.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,12 +25,8 @@ class ProductMapperTest {
     @Test
     void insert() {
         //given
-        Product product = Product.builder()
-                .name(TestProductFactory.PRODUCT_NAME)
-                .price(TestProductFactory.PRICE)
-                .stock(TestProductFactory.STOCK)
-                .isDeleted(true)
-                .displayProduct(DisplayProduct.builder().id(1L).build())
+        Product product = TestProductFactory.generalProduct()
+                .displayProduct(TestDisplayProductFactory.generalDisplayProduct().id(1L).build())
                 .build();
 
         //when

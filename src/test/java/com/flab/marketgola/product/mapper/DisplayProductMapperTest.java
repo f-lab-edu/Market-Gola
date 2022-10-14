@@ -29,11 +29,15 @@ public class DisplayProductMapperTest {
     @Test
     void insert() {
         //given
-        DisplayProduct displayProduct = createDisplayProduct();
+        DisplayProduct displayProduct = TestDisplayProductFactory.generalDisplayProduct().build();
 
         //when
         displayProductRepository.insert(displayProduct);
-        Product product = createRelatedProduct(displayProduct);
+
+        Product product = TestProductFactory.generalProduct()
+                .displayProduct(displayProduct)
+                .build();
+
         productMapper.insert(product);
 
         //then
@@ -69,24 +73,5 @@ public class DisplayProductMapperTest {
         DisplayProduct findDisplayProduct = displayProductRepository.findById(updateId).get();
         assertThat(findDisplayProduct.getName()).isEqualTo(updateName);
         assertThat(findDisplayProduct.getMainImageName()).isEqualTo(updateMainImageName);
-    }
-
-    private DisplayProduct createDisplayProduct() {
-        return DisplayProduct.builder()
-                .name(TestDisplayProductFactory.DISPLAY_PRODUCT_NAME)
-                .descriptionImageName(TestDisplayProductFactory.DESCRIPTION_IMAGE_NAME)
-                .category(TestDisplayProductFactory.CATEGORY)
-                .mainImageName(TestDisplayProductFactory.MAIN_IMAGE_NAME)
-                .build();
-    }
-
-    private Product createRelatedProduct(DisplayProduct displayProduct) {
-        return Product.builder()
-                .name(TestProductFactory.PRODUCT_NAME)
-                .price(TestProductFactory.PRICE)
-                .stock(TestProductFactory.STOCK)
-                .isDeleted(TestProductFactory.IS_DELETED)
-                .displayProduct(displayProduct)
-                .build();
     }
 }
