@@ -29,7 +29,11 @@ public class ApiError<T> {
 
     private String parseErrorCode(Exception exception) {
         String className = exception.getClass().getSimpleName();
-        return className.substring(0, className.length() - "Exception".length());
+        if (className.contains("Exception")) {
+            return className.substring(0, className.indexOf("Exception"));
+        }
+
+        return "Unknown";
     }
 
 }
