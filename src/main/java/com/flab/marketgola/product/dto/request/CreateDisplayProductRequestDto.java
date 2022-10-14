@@ -1,5 +1,6 @@
 package com.flab.marketgola.product.dto.request;
 
+import com.flab.marketgola.image.domain.Image;
 import com.flab.marketgola.product.domain.DisplayProduct;
 import com.flab.marketgola.product.domain.Product;
 import com.flab.marketgola.product.domain.ProductCategory;
@@ -24,10 +25,10 @@ public class CreateDisplayProductRequestDto {
     @NotBlank(message = "전시용 상품의 이름을 입력하지 않았습니다.")
     @Size(min = 1, max = 100, message = "전시용 상품의 이름은 1자 이상 100자 이하로 입력해주세요.")
     private String name;
-    @NotBlank(message = "저장된 메인 이미지의 이름을 입력하지 않았습니다.")
-    private String mainImageName;
-    @NotBlank(message = "저장된 상세 설명 이미지의 이름을 입력하지 않았습니다.")
-    private String descriptionImageName;
+    @NotBlank(message = "저장된 메인 이미지의 URL을 입력하지 않았습니다.")
+    private String mainImageUrl;
+    @NotBlank(message = "저장된 상세 설명 이미지의 URL을 입력하지 않았습니다.")
+    private String descriptionImageUrl;
     @Min(value = 1, message = "상품 카테고리를 입력하지 않았습니다.")
     private int productCategoryId;
     @Size(min = 1, message = "최소 1개의 관련된 실제 상품을 등록해야 합니다.")
@@ -40,8 +41,8 @@ public class CreateDisplayProductRequestDto {
             String descriptionImageUrl,
             int productCategoryId, @Singular List<CreateProductRequestDto> products) {
         this.name = name;
-        this.mainImageName = mainImageName;
-        this.descriptionImageName = descriptionImageName;
+        this.mainImageUrl = mainImageUrl;
+        this.descriptionImageUrl = descriptionImageUrl;
         this.productCategoryId = productCategoryId;
         this.products = products;
     }
@@ -60,8 +61,8 @@ public class CreateDisplayProductRequestDto {
 
         return DisplayProduct.builder()
                 .name(name)
-                .mainImageName(mainImageName)
-                .descriptionImageName(descriptionImageName)
+                .mainImageName(Image.parseImageName(mainImageUrl))
+                .descriptionImageName(Image.parseImageName(descriptionImageUrl))
                 .category(ProductCategory.builder().id(productCategoryId).build())
                 .products(productList)
                 .build();

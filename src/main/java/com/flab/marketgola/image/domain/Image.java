@@ -2,6 +2,8 @@ package com.flab.marketgola.image.domain;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.nio.file.Paths;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,11 +25,11 @@ public abstract class Image {
         this.storedName = createStoredName(originalFileName);
     }
 
-    public abstract String getStoreKey();
-
-    private String createStoredName(String originalFileName) {
-        return UUID.randomUUID() + "." + originalFileName.split("\\.")[1];
+    public static String parseImageName(String url) {
+        return Paths.get(URI.create(url).getPath()).getFileName().toString();
     }
+
+    public abstract String getStoreKey();
 
     public void closeInputStream() {
         try {
@@ -35,6 +37,10 @@ public abstract class Image {
         } catch (IOException ex) {
             log.warn("파일 InputStream Close IOException", ex);
         }
+    }
+
+    private String createStoredName(String originalFileName) {
+        return UUID.randomUUID() + "." + originalFileName.split("\\.")[1];
     }
 }
 
