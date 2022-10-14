@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.flab.marketgola.TestRedisConfiguration;
 import com.flab.marketgola.product.constant.TestDisplayProductFactory;
 import com.flab.marketgola.product.constant.TestProductFactory;
+import com.flab.marketgola.product.domain.DisplayProduct;
 import com.flab.marketgola.product.domain.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,12 +22,18 @@ class ProductMapperTest {
     @Autowired
     ProductMapper productRepository;
 
+    @Autowired
+    DisplayProductMapper displayProductRepository;
+
     @DisplayName("정상적으로 상품을 추가할 수 있다")
     @Test
     void insert() {
         //given
+        DisplayProduct displayProduct = TestDisplayProductFactory.generalDisplayProduct().build();
+        displayProductRepository.insert(displayProduct);
+
         Product product = TestProductFactory.generalProduct()
-                .displayProduct(TestDisplayProductFactory.generalDisplayProduct().id(1L).build())
+                .displayProduct(displayProduct)
                 .build();
 
         //when
