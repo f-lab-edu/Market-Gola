@@ -9,7 +9,8 @@ public class TestDisplayProductFactory {
     public static final long PRE_INSERTED_DISPLAY_PRODUCT_ID = 1L;
 
     public static final String DISPLAY_PRODUCT_NAME = "친환경 손질 유러피안 샐러드 6종";
-    //TODO 이거 URL로 바꾸고 관련된 테스트 다 바꾸기
+    public static final String DESCRIPTION_IMAGE_URL = "https://image-gola.com/products/e662963a-42dc-11ed-b878-0242ac120002.jpg";
+    public static final String MAIN_IMAGE_URL = "https://image-gola.com/products/eed16cce-42dc-11ed-b878-0242ac120002.jpg";
     public static final String DESCRIPTION_IMAGE_NAME = "e662963a-42dc-11ed-b878-0242ac120002.jpg";
     public static final String MAIN_IMAGE_NAME = "eed16cce-42dc-11ed-b878-0242ac120002.jpg";
     public static final ProductCategory CATEGORY = new ProductCategory(1, "과일", null);
@@ -19,8 +20,8 @@ public class TestDisplayProductFactory {
 
         return CreateDisplayProductRequestDto.builder()
                 .name(DISPLAY_PRODUCT_NAME)
-                .mainImageUrl(MAIN_IMAGE_NAME)
-                .descriptionImageUrl(DESCRIPTION_IMAGE_NAME)
+                .mainImageUrl(MAIN_IMAGE_URL)
+                .descriptionImageUrl(DESCRIPTION_IMAGE_URL)
                 .productCategoryId(CATEGORY_ID);
     }
 
@@ -29,8 +30,8 @@ public class TestDisplayProductFactory {
         return UpdateDisplayProductWithProductsRequestDto.builder()
                 .id(PRE_INSERTED_DISPLAY_PRODUCT_ID)
                 .name(DISPLAY_PRODUCT_NAME)
-                .mainImageUrl(MAIN_IMAGE_NAME)
-                .descriptionImageUrl(DESCRIPTION_IMAGE_NAME)
+                .mainImageUrl(MAIN_IMAGE_URL)
+                .descriptionImageUrl(DESCRIPTION_IMAGE_URL)
                 .productCategoryId(CATEGORY_ID);
     }
 }
