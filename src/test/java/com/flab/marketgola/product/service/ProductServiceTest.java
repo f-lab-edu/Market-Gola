@@ -1,9 +1,5 @@
 package com.flab.marketgola.product.service;
 
-import static com.flab.marketgola.product.constant.TestDisplayProductFactory.PRE_INSERTED_DISPLAY_PRODUCT_ID;
-import static com.flab.marketgola.product.constant.TestProductFactory.PRE_INSERTED_PRODUCT_ID_1;
-import static com.flab.marketgola.product.constant.TestProductFactory.PRE_INSERTED_PRODUCT_ID_2;
-import static com.flab.marketgola.product.constant.TestProductFactory.PRODUCT_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -11,6 +7,7 @@ import com.flab.marketgola.TestRedisConfiguration;
 import com.flab.marketgola.product.constant.TestDisplayProductFactory;
 import com.flab.marketgola.product.constant.TestProductFactory;
 import com.flab.marketgola.product.dto.request.CreateDisplayProductRequestDto;
+import com.flab.marketgola.product.dto.request.CreateProductRequestDto;
 import com.flab.marketgola.product.dto.request.UpdateDisplayProductWithProductsRequestDto;
 import com.flab.marketgola.product.dto.request.UpdateProductRequestDto;
 import com.flab.marketgola.product.dto.response.DisplayProductResponseDto;
@@ -87,9 +84,17 @@ class ProductServiceTest {
     @DisplayName("정상적으로 전시용 상품을 찾을 수 있다.")
     @Test
     void getDisplayProductById() {
+        //given
+        CreateDisplayProductRequestDto requestDto = TestDisplayProductFactory.generalCreateRequest()
+                .product(TestProductFactory.generalCreateRequest().build())
+                .build();
+
+        DisplayProductResponseDto createResponseDto = productService.createDisplayProductWithProducts(
+                requestDto);
+
         //when
         DisplayProductResponseDto responseDto = productService.getDisplayProductById(
-                PRE_INSERTED_DISPLAY_PRODUCT_ID);
+                createResponseDto.getId());
 
         //then
         assertThat(responseDto.getId()).isNotNull();
@@ -100,9 +105,25 @@ class ProductServiceTest {
     @DisplayName("전시용 상품의 가격은 관련된 상품 가격 중 최소값이다.")
     @Test
     void getDisplayProductById_price() {
+        //given
+        CreateProductRequestDto cheapProduct = TestProductFactory.generalCreateRequest()
+                .price(1000)
+                .build();
+
+        CreateProductRequestDto expensiveProduct = TestProductFactory.generalCreateRequest()
+                .price(2000)
+                .build();
+
+        CreateDisplayProductRequestDto requestDto = TestDisplayProductFactory.generalCreateRequest()
+                .products(List.of(cheapProduct, expensiveProduct))
+                .build();
+
+        DisplayProductResponseDto createResponseDto = productService.createDisplayProductWithProducts(
+                requestDto);
+
         //when
         DisplayProductResponseDto responseDto = productService.getDisplayProductById(
-                PRE_INSERTED_DISPLAY_PRODUCT_ID);
+                createResponseDto.getId());
 
         //then
         assertThat(responseDto.getPrice()).isEqualTo(1000);
@@ -112,56 +133,62 @@ class ProductServiceTest {
     @Test
     void updateDisplayProductByIdWithProducts() {
         //given
-        UpdateProductRequestDto updateProductRequestDto1 = TestProductFactory.generalUpdateRequest()
-                .id(PRE_INSERTED_PRODUCT_ID_1)
-                .name("업데이트 상품 이름1")
+        CreateProductRequestDto createProductRequest = TestProductFactory.generalCreateRequest()
                 .build();
 
-        UpdateProductRequestDto updateProductRequestDto2 = TestProductFactory.generalUpdateRequest()
-                .id(PRE_INSERTED_PRODUCT_ID_2)
-                .name("업데이트 상품 이름2")
+        CreateDisplayProductRequestDto createDisplayProductRequest = TestDisplayProductFactory.generalCreateRequest()
+                .product(createProductRequest)
+                .build();
+
+        DisplayProductResponseDto createResponseDto = productService.createDisplayProductWithProducts(
+                createDisplayProductRequest);
+
+        Long storedProductId = createResponseDto.getProducts().get(0).getId();
+        UpdateProductRequestDto updateProductRequest = TestProductFactory.generalUpdateRequest()
+                .id(storedProductId)
+                .name("업데이트 상품 이름")
                 .build();
 
         UpdateDisplayProductWithProductsRequestDto requestDto = TestDisplayProductFactory.generalUpdateRequest()
-                .id(PRE_INSERTED_DISPLAY_PRODUCT_ID)
+                .id(createResponseDto.getId())
                 .name("업데이트 전시용 상품 이름")
-                .product(updateProductRequestDto1)
-                .product(updateProductRequestDto2)
+                .product(updateProductRequest)
                 .build();
 
         //when
-        productService.updateDisplayProductByIdWithProducts(requestDto);
+        DisplayProductResponseDto updateResponse = productService.updateDisplayProductByIdWithProducts(
+                requestDto);
 
         //then
-        DisplayProductResponseDto response = productService.getDisplayProductById(
-                PRE_INSERTED_DISPLAY_PRODUCT_ID);
-        List<ProductResponseDto> products = response.getProducts();
-        products.forEach(product -> {
-            assertThat(product.getName()).isNotEqualTo(PRODUCT_NAME);
-        });
-
-        assertThat(response.getName()).isEqualTo("업데이트 전시 상품 이름");
+        assertThat(updateResponse.getProducts().get(0).getName()).isEqualTo("업데이트 상품 이름");
+        assertThat(updateResponse.getName()).isEqualTo("업데이트 전시용 상품 이름");
     }
 
     @DisplayName("전시용 상품 수정 시 새로운 관련 상품이 추가될 수 있다.")
     @Test
     void updateDisplayProductByIdWithProducts_insert_new_product() {
         //given
-        UpdateProductRequestDto updateProduct1 = TestProductFactory.generalUpdateRequest()
-                .id(PRE_INSERTED_PRODUCT_ID_1)
+        CreateProductRequestDto createProductRequest = TestProductFactory.generalCreateRequest()
                 .build();
 
-        UpdateProductRequestDto updateProduct2 = TestProductFactory.generalUpdateRequest()
-                .id(PRE_INSERTED_PRODUCT_ID_2)
+        CreateDisplayProductRequestDto createDisplayProductRequest = TestDisplayProductFactory.generalCreateRequest()
+                .product(createProductRequest)
+                .build();
+
+        DisplayProductResponseDto createResponseDto = productService.createDisplayProductWithProducts(
+                createDisplayProductRequest);
+
+        Long storedProductId = createResponseDto.getProducts().get(0).getId();
+        UpdateProductRequestDto updateProduct = TestProductFactory.generalUpdateRequest()
+                .id(storedProductId)
                 .build();
 
         UpdateProductRequestDto updateProductNew = TestProductFactory.generalUpdateRequest()
                 .id(null)
-                .name("새로운 추가된 상품")
                 .build();
 
         UpdateDisplayProductWithProductsRequestDto requestDto = TestDisplayProductFactory.generalUpdateRequest()
-                .products(List.of(updateProduct1, updateProduct2, updateProductNew))
+                .products(List.of(updateProduct, updateProductNew))
                 .build();
 
         //when
@@ -169,28 +196,35 @@ class ProductServiceTest {
 
         //then
         DisplayProductResponseDto displayProductResponseDto = productService.getDisplayProductById(
-                PRE_INSERTED_DISPLAY_PRODUCT_ID);
+                createResponseDto.getId());
         List<ProductResponseDto> productResponseDtos = displayProductResponseDto.getProducts();
 
-        assertThat(productResponseDtos).hasSize(3);
+        assertThat(productResponseDtos).hasSize(2);
     }
 
     @DisplayName("수정하고자 하는 전시용 상품이 실제로 존재해야 한다.")
     @Test
     void updateDisplayProductByIdWithProducts_no_product_exception() {
         //given
-        UpdateProductRequestDto updateProduct1 = TestProductFactory.generalUpdateRequest()
-                .id(PRE_INSERTED_PRODUCT_ID_1)
+        CreateProductRequestDto createProductRequest = TestProductFactory.generalCreateRequest()
                 .build();
 
-        UpdateProductRequestDto updateProduct2 = TestProductFactory.generalUpdateRequest()
-                .id(PRE_INSERTED_PRODUCT_ID_2)
+        CreateDisplayProductRequestDto createDisplayProductRequest = TestDisplayProductFactory.generalCreateRequest()
+                .product(createProductRequest)
+                .build();
+
+        DisplayProductResponseDto createResponseDto = productService.createDisplayProductWithProducts(
+                createDisplayProductRequest);
+
+        Long storedProductId = createResponseDto.getProducts().get(0).getId();
+        UpdateProductRequestDto updateProduct = TestProductFactory.generalUpdateRequest()
+                .id(storedProductId)
                 .build();
 
         long notExistId = 100000L;
         UpdateDisplayProductWithProductsRequestDto reuqestDto = TestDisplayProductFactory.generalUpdateRequest()
                 .id(notExistId)
-                .products(List.of(updateProduct1, updateProduct2))
+                .product(updateProduct)
                 .build();
 
         //then
@@ -202,38 +236,56 @@ class ProductServiceTest {
     @DisplayName("관련된 실제 상품이 모두 삭제되면 전시용 상품도 삭제된다.")
     @Test
     void updateDisplayProductByIdWithProducts_delete_displayProduct_when_all_products_deleted() {
-        //when
-        UpdateProductRequestDto updateProduct1 = TestProductFactory.generalUpdateRequest()
-                .id(PRE_INSERTED_PRODUCT_ID_1)
-                .isDeleted(true)
+        //given
+        CreateProductRequestDto createProductRequest = TestProductFactory.generalCreateRequest()
                 .build();
 
-        UpdateProductRequestDto updateProduct2 = TestProductFactory.generalUpdateRequest()
-                .id(PRE_INSERTED_PRODUCT_ID_2)
+        CreateDisplayProductRequestDto createDisplayProductRequest = TestDisplayProductFactory.generalCreateRequest()
+                .product(createProductRequest)
+                .build();
+
+        DisplayProductResponseDto createResponseDto = productService.createDisplayProductWithProducts(
+                createDisplayProductRequest);
+
+        Long storedProductId = createResponseDto.getProducts().get(0).getId();
+        UpdateProductRequestDto updateProduct = TestProductFactory.generalUpdateRequest()
+                .id(storedProductId)
                 .isDeleted(true)
                 .build();
 
         UpdateDisplayProductWithProductsRequestDto requestDto = TestDisplayProductFactory.generalUpdateRequest()
-                .products(List.of(updateProduct1, updateProduct2))
+                .product(updateProduct)
                 .build();
 
+        //when
         productService.updateDisplayProductByIdWithProducts(requestDto);
 
         //then
         assertThatThrownBy(
-                () -> productService.getDisplayProductById(PRE_INSERTED_DISPLAY_PRODUCT_ID))
+                () -> productService.getDisplayProductById(createResponseDto.getId()))
                 .isInstanceOf(NoSuchProductException.class);
     }
 
     @DisplayName("정상적으로 전시용 상품을 삭제할 수 있다.")
     @Test
     void deleteDisplayProductById() {
+        //given
+        CreateProductRequestDto createProductRequest = TestProductFactory.generalCreateRequest()
+                .build();
+
+        CreateDisplayProductRequestDto createDisplayProductRequest = TestDisplayProductFactory.generalCreateRequest()
+                .product(createProductRequest)
+                .build();
+
+        DisplayProductResponseDto createResponseDto = productService.createDisplayProductWithProducts(
+                createDisplayProductRequest);
+
         //when
-        productService.deleteDisplayProductById(PRE_INSERTED_DISPLAY_PRODUCT_ID);
+        productService.deleteDisplayProductById(createResponseDto.getId());
 
         //then
         assertThatThrownBy(
-                () -> productService.getDisplayProductById(PRE_INSERTED_DISPLAY_PRODUCT_ID))
+                () -> productService.getDisplayProductById(createResponseDto.getId()))
                 .isInstanceOf(NoSuchProductException.class);
     }
 

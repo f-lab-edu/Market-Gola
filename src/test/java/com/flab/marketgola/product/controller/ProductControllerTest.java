@@ -3,11 +3,11 @@ package com.flab.marketgola.product.controller;
 import static com.flab.marketgola.common.constant.SessionConstant.LOGIN_KEY;
 import static com.flab.marketgola.product.constant.TestDisplayProductFactory.CATEGORY_ID;
 import static com.flab.marketgola.product.constant.TestDisplayProductFactory.DESCRIPTION_IMAGE_URL;
+import static com.flab.marketgola.product.constant.TestDisplayProductFactory.DISPLAY_PRODUCT_ID;
 import static com.flab.marketgola.product.constant.TestDisplayProductFactory.DISPLAY_PRODUCT_NAME;
 import static com.flab.marketgola.product.constant.TestDisplayProductFactory.MAIN_IMAGE_URL;
-import static com.flab.marketgola.product.constant.TestDisplayProductFactory.PRE_INSERTED_DISPLAY_PRODUCT_ID;
-import static com.flab.marketgola.product.constant.TestProductFactory.PRE_INSERTED_PRODUCT_ID_1;
 import static com.flab.marketgola.product.constant.TestProductFactory.PRICE;
+import static com.flab.marketgola.product.constant.TestProductFactory.PRODUCT_ID;
 import static com.flab.marketgola.product.constant.TestProductFactory.PRODUCT_NAME;
 import static com.flab.marketgola.product.constant.TestProductFactory.STOCK;
 import static org.mockito.Mockito.any;
@@ -234,16 +234,16 @@ class ProductControllerTest {
                 Arguments.of(null, DISPLAY_PRODUCT_NAME, MAIN_IMAGE_URL, DESCRIPTION_IMAGE_URL,
                         CATEGORY_ID),
 
-                Arguments.of(PRE_INSERTED_DISPLAY_PRODUCT_ID, null, MAIN_IMAGE_URL,
+                Arguments.of(DISPLAY_PRODUCT_ID, null, MAIN_IMAGE_URL,
                         DESCRIPTION_IMAGE_URL, CATEGORY_ID),
 
-                Arguments.of(PRE_INSERTED_DISPLAY_PRODUCT_ID, DISPLAY_PRODUCT_NAME, null,
+                Arguments.of(DISPLAY_PRODUCT_ID, DISPLAY_PRODUCT_NAME, null,
                         DESCRIPTION_IMAGE_URL, CATEGORY_ID),
 
-                Arguments.of(PRE_INSERTED_DISPLAY_PRODUCT_ID, DISPLAY_PRODUCT_NAME,
+                Arguments.of(DISPLAY_PRODUCT_ID, DISPLAY_PRODUCT_NAME,
                         MAIN_IMAGE_URL, null, CATEGORY_ID),
 
-                Arguments.of(PRE_INSERTED_DISPLAY_PRODUCT_ID, DISPLAY_PRODUCT_NAME, MAIN_IMAGE_URL,
+                Arguments.of(DISPLAY_PRODUCT_ID, DISPLAY_PRODUCT_NAME, MAIN_IMAGE_URL,
                         DESCRIPTION_IMAGE_URL, 0)
         );
     }
@@ -256,7 +256,7 @@ class ProductControllerTest {
 
         //given
         UpdateProductRequestDto productRequestDto = UpdateProductRequestDto.builder()
-                .id(PRE_INSERTED_PRODUCT_ID_1)
+                .id(PRODUCT_ID)
                 .name(name)
                 .price(price)
                 .stock(stock)
