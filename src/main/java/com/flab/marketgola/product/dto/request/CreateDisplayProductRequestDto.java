@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.Singular;
 
 @Getter
 @Setter
@@ -35,9 +36,9 @@ public class CreateDisplayProductRequestDto {
     private List<CreateProductRequestDto> products;
 
     @Builder
-    public CreateDisplayProductRequestDto(String name, String mainImageName,
-            String descriptionImageName,
-            int productCategoryId, List<CreateProductRequestDto> products) {
+    public CreateDisplayProductRequestDto(String name, String mainImageUrl,
+            String descriptionImageUrl,
+            int productCategoryId, @Singular List<CreateProductRequestDto> products) {
         this.name = name;
         this.mainImageName = mainImageName;
         this.descriptionImageName = descriptionImageName;

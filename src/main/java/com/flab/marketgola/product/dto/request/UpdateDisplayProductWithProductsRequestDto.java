@@ -14,7 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Range;
+import lombok.Singular;
 
 @Getter
 @Setter
@@ -38,8 +38,9 @@ public class UpdateDisplayProductWithProductsRequestDto {
 
 
     @Builder
-    public UpdateDisplayProductWithProductsRequestDto(Long id, String name, String mainImageName,
-            String descriptionImageName, int productCategoryId, List<UpdateProductRequestDto> products) {
+    public UpdateDisplayProductWithProductsRequestDto(Long id, String name, String mainImageUrl,
+            String descriptionImageUrl, int productCategoryId,
+            @Singular List<UpdateProductRequestDto> products) {
         this.id = id;
         this.name = name;
         this.mainImageName = mainImageName;
