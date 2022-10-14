@@ -37,6 +37,6 @@ cloud:
       accessKey:
       secretKey:
     s3:
-      bucket:
+      bucket: market-gola
       region:
       endpoint:
