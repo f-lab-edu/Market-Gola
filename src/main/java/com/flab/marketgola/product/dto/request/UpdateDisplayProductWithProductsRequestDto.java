@@ -14,11 +14,9 @@ import javax.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.Singular;
 
 @Getter
-@Setter
 @NoArgsConstructor
 public class UpdateDisplayProductWithProductsRequestDto {
 

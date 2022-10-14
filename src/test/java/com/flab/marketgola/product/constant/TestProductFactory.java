@@ -12,21 +12,19 @@ public class TestProductFactory {
     public static final int STOCK = 10;
     public static final boolean IS_DELETED = false;
 
-    public static CreateProductRequestDto generateCreateProductRequestDto() {
+    public static CreateProductRequestDto.CreateProductRequestDtoBuilder generalCreateRequest() {
         return CreateProductRequestDto.builder()
                 .name(PRODUCT_NAME)
                 .price(PRICE)
-                .stock(STOCK)
-                .build();
+                .stock(STOCK);
     }
 
-    public static UpdateProductRequestDto generateUpdateProductRequestDto() {
+    public static UpdateProductRequestDto.UpdateProductRequestDtoBuilder generalUpdateRequest() {
         return UpdateProductRequestDto.builder()
                 .id(PRE_INSERTED_PRODUCT_ID_1)
                 .name(PRODUCT_NAME)
                 .price(PRICE)
                 .stock(STOCK)
-                .isDeleted(IS_DELETED)
-                .build();
+                .isDeleted(IS_DELETED);
     }
 }

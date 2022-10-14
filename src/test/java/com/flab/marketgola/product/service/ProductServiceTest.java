@@ -1,11 +1,15 @@
 package com.flab.marketgola.product.service;
 
-import static com.flab.marketgola.product.constant.TestDisplayProductFactory.*;
-import static com.flab.marketgola.product.constant.TestProductFactory.*;
+import static com.flab.marketgola.product.constant.TestDisplayProductFactory.PRE_INSERTED_DISPLAY_PRODUCT_ID;
+import static com.flab.marketgola.product.constant.TestProductFactory.PRE_INSERTED_PRODUCT_ID_1;
+import static com.flab.marketgola.product.constant.TestProductFactory.PRE_INSERTED_PRODUCT_ID_2;
+import static com.flab.marketgola.product.constant.TestProductFactory.PRODUCT_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.flab.marketgola.TestRedisConfiguration;
+import com.flab.marketgola.product.constant.TestDisplayProductFactory;
+import com.flab.marketgola.product.constant.TestProductFactory;
 import com.flab.marketgola.product.dto.request.CreateDisplayProductRequestDto;
 import com.flab.marketgola.product.dto.request.UpdateDisplayProductWithProductsRequestDto;
 import com.flab.marketgola.product.dto.request.UpdateProductRequestDto;
@@ -33,8 +37,9 @@ class ProductServiceTest {
     @Test
     void createDisplayProduct() {
         //given
-        CreateDisplayProductRequestDto requestDto = generateCreateDisplayProductRequestDto(
-                List.of(generateCreateProductRequestDto()));
+        CreateDisplayProductRequestDto requestDto = TestDisplayProductFactory.generalCreateRequest()
+                .product(TestProductFactory.generalCreateRequest().build())
+                .build();
 
         //when
         DisplayProductResponseDto responseDto = productService.createDisplayProductWithProducts(
@@ -49,8 +54,9 @@ class ProductServiceTest {
     @Test
     void createDisplayProduct_insert_products() {
         //given
-        CreateDisplayProductRequestDto requestDto = generateCreateDisplayProductRequestDto(
-                List.of(generateCreateProductRequestDto()));
+        CreateDisplayProductRequestDto requestDto = TestDisplayProductFactory.generalCreateRequest()
+                .product(TestProductFactory.generalCreateRequest().build())
+                .build();
 
         //when
         DisplayProductResponseDto responseDto = productService.createDisplayProductWithProducts(
@@ -67,11 +73,11 @@ class ProductServiceTest {
     @Test
     void createDisplayProduct_need_right_category() {
         //given
-        CreateDisplayProductRequestDto requestDto = generateCreateDisplayProductRequestDto(
-                List.of(generateCreateProductRequestDto()));
-
-        int notExistCategory = 100;
-        requestDto.setProductCategoryId(notExistCategory);
+        int notExistCategoryId = 100;
+        CreateDisplayProductRequestDto requestDto = TestDisplayProductFactory.generalCreateRequest()
+                .product(TestProductFactory.generalCreateRequest().build())
+                .productCategoryId(notExistCategoryId)
+                .build();
 
         //then
         assertThatThrownBy(() -> productService.createDisplayProductWithProducts(requestDto))
@@ -106,18 +112,22 @@ class ProductServiceTest {
     @Test
     void updateDisplayProductByIdWithProducts() {
         //given
-        UpdateProductRequestDto updateProductRequestDto1 = generateUpdateProductRequestDto();
-        updateProductRequestDto1.setId(PRE_INSERTED_PRODUCT_ID_1);
-        updateProductRequestDto1.setName("업데이트 상품 이름1");
+        UpdateProductRequestDto updateProductRequestDto1 = TestProductFactory.generalUpdateRequest()
+                .id(PRE_INSERTED_PRODUCT_ID_1)
+                .name("업데이트 상품 이름1")
+                .build();
 
-        UpdateProductRequestDto updateProductRequestDto2 = generateUpdateProductRequestDto();
-        updateProductRequestDto2.setId(PRE_INSERTED_PRODUCT_ID_2);
-        updateProductRequestDto2.setName("업데이트 상품 이름2");
+        UpdateProductRequestDto updateProductRequestDto2 = TestProductFactory.generalUpdateRequest()
+                .id(PRE_INSERTED_PRODUCT_ID_2)
+                .name("업데이트 상품 이름2")
+                .build();
 
-        UpdateDisplayProductWithProductsRequestDto requestDto = generateUpdateDisplayProductRequestDto(
-                List.of(updateProductRequestDto1, updateProductRequestDto2));
-        requestDto.setId(PRE_INSERTED_DISPLAY_PRODUCT_ID);
-        requestDto.setName("업데이트 전시 상품 이름");
+        UpdateDisplayProductWithProductsRequestDto requestDto = TestDisplayProductFactory.generalUpdateRequest()
+                .id(PRE_INSERTED_DISPLAY_PRODUCT_ID)
+                .name("업데이트 전시용 상품 이름")
+                .product(updateProductRequestDto1)
+                .product(updateProductRequestDto2)
+                .build();
 
         //when
         productService.updateDisplayProductByIdWithProducts(requestDto);
@@ -137,19 +147,22 @@ class ProductServiceTest {
     @Test
     void updateDisplayProductByIdWithProducts_insert_new_product() {
         //given
-        UpdateProductRequestDto updateProductRequestDto1 = generateUpdateProductRequestDto();
-        updateProductRequestDto1.setId(PRE_INSERTED_PRODUCT_ID_1);
+        UpdateProductRequestDto updateProduct1 = TestProductFactory.generalUpdateRequest()
+                .id(PRE_INSERTED_PRODUCT_ID_1)
+                .build();
 
-        UpdateProductRequestDto updateProductRequestDto2 = generateUpdateProductRequestDto();
-        updateProductRequestDto1.setId(PRE_INSERTED_PRODUCT_ID_2);
+        UpdateProductRequestDto updateProduct2 = TestProductFactory.generalUpdateRequest()
+                .id(PRE_INSERTED_PRODUCT_ID_2)
+                .build();
 
-        UpdateProductRequestDto updateProductRequestDtoNew = generateUpdateProductRequestDto();
-        updateProductRequestDtoNew.setId(null);
-        updateProductRequestDtoNew.setName("새로 추가된 상품");
+        UpdateProductRequestDto updateProductNew = TestProductFactory.generalUpdateRequest()
+                .id(null)
+                .name("새로운 추가된 상품")
+                .build();
 
-        UpdateDisplayProductWithProductsRequestDto requestDto = generateUpdateDisplayProductRequestDto(
-                List.of(updateProductRequestDto1, updateProductRequestDto2,
-                        updateProductRequestDtoNew));
+        UpdateDisplayProductWithProductsRequestDto requestDto = TestDisplayProductFactory.generalUpdateRequest()
+                .products(List.of(updateProduct1, updateProduct2, updateProductNew))
+                .build();
 
         //when
         productService.updateDisplayProductByIdWithProducts(requestDto);
@@ -166,21 +179,23 @@ class ProductServiceTest {
     @Test
     void updateDisplayProductByIdWithProducts_no_product_exception() {
         //given
-        UpdateProductRequestDto updateProductRequestDto1 = generateUpdateProductRequestDto();
-        updateProductRequestDto1.setId(PRE_INSERTED_PRODUCT_ID_1);
+        UpdateProductRequestDto updateProduct1 = TestProductFactory.generalUpdateRequest()
+                .id(PRE_INSERTED_PRODUCT_ID_1)
+                .build();
 
-        UpdateProductRequestDto updateProductRequestDto2 = generateUpdateProductRequestDto();
-        updateProductRequestDto1.setId(PRE_INSERTED_PRODUCT_ID_2);
-
-        UpdateDisplayProductWithProductsRequestDto displayProductRequestDto = generateUpdateDisplayProductRequestDto(
-                List.of(updateProductRequestDto1, updateProductRequestDto2));
+        UpdateProductRequestDto updateProduct2 = TestProductFactory.generalUpdateRequest()
+                .id(PRE_INSERTED_PRODUCT_ID_2)
+                .build();
 
         long notExistId = 100000L;
-        displayProductRequestDto.setId(notExistId);
+        UpdateDisplayProductWithProductsRequestDto reuqestDto = TestDisplayProductFactory.generalUpdateRequest()
+                .id(notExistId)
+                .products(List.of(updateProduct1, updateProduct2))
+                .build();
 
         //then
         assertThatThrownBy(
-                () -> productService.updateDisplayProductByIdWithProducts(displayProductRequestDto))
+                () -> productService.updateDisplayProductByIdWithProducts(reuqestDto))
                 .isInstanceOf(NoSuchProductException.class);
     }
 
@@ -188,18 +203,21 @@ class ProductServiceTest {
     @Test
     void updateDisplayProductByIdWithProducts_delete_displayProduct_when_all_products_deleted() {
         //when
-        UpdateProductRequestDto productRequestDto1 = generateUpdateProductRequestDto();
-        productRequestDto1.setId(PRE_INSERTED_PRODUCT_ID_1);
-        productRequestDto1.setDeleted(true);
+        UpdateProductRequestDto updateProduct1 = TestProductFactory.generalUpdateRequest()
+                .id(PRE_INSERTED_PRODUCT_ID_1)
+                .isDeleted(true)
+                .build();
 
-        UpdateProductRequestDto productRequestDto2 = generateUpdateProductRequestDto();
-        productRequestDto2.setId(PRE_INSERTED_PRODUCT_ID_2);
-        productRequestDto2.setDeleted(true);
+        UpdateProductRequestDto updateProduct2 = TestProductFactory.generalUpdateRequest()
+                .id(PRE_INSERTED_PRODUCT_ID_2)
+                .isDeleted(true)
+                .build();
 
-        UpdateDisplayProductWithProductsRequestDto displayProductRequestDto = generateUpdateDisplayProductRequestDto(
-                List.of(productRequestDto1, productRequestDto2));
+        UpdateDisplayProductWithProductsRequestDto requestDto = TestDisplayProductFactory.generalUpdateRequest()
+                .products(List.of(updateProduct1, updateProduct2))
+                .build();
 
-        productService.updateDisplayProductByIdWithProducts(displayProductRequestDto);
+        productService.updateDisplayProductByIdWithProducts(requestDto);
 
         //then
         assertThatThrownBy(

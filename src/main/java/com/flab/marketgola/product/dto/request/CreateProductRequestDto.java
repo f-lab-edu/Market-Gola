@@ -8,10 +8,8 @@ import javax.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 public class CreateProductRequestDto {
     @NotBlank(message = "상품의 이름을 입력하지 않았습니다.")
