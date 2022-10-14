@@ -2,18 +2,14 @@ package com.flab.marketgola.product.controller;
 
 import static com.flab.marketgola.common.constant.SessionConstant.LOGIN_KEY;
 import static com.flab.marketgola.product.constant.TestDisplayProductFactory.CATEGORY_ID;
-import static com.flab.marketgola.product.constant.TestDisplayProductFactory.DESCRIPTION_IMAGE_NAME;
+import static com.flab.marketgola.product.constant.TestDisplayProductFactory.DESCRIPTION_IMAGE_URL;
+import static com.flab.marketgola.product.constant.TestDisplayProductFactory.DISPLAY_PRODUCT_ID;
 import static com.flab.marketgola.product.constant.TestDisplayProductFactory.DISPLAY_PRODUCT_NAME;
-import static com.flab.marketgola.product.constant.TestDisplayProductFactory.MAIN_IMAGE_NAME;
-import static com.flab.marketgola.product.constant.TestDisplayProductFactory.PRE_INSERTED_DISPLAY_PRODUCT_ID;
-import static com.flab.marketgola.product.constant.TestDisplayProductFactory.generateCreateDisplayProductRequestDto;
-import static com.flab.marketgola.product.constant.TestDisplayProductFactory.generateUpdateDisplayProductRequestDto;
-import static com.flab.marketgola.product.constant.TestProductFactory.PRE_INSERTED_PRODUCT_ID_1;
+import static com.flab.marketgola.product.constant.TestDisplayProductFactory.MAIN_IMAGE_URL;
 import static com.flab.marketgola.product.constant.TestProductFactory.PRICE;
+import static com.flab.marketgola.product.constant.TestProductFactory.PRODUCT_ID;
 import static com.flab.marketgola.product.constant.TestProductFactory.PRODUCT_NAME;
 import static com.flab.marketgola.product.constant.TestProductFactory.STOCK;
-import static com.flab.marketgola.product.constant.TestProductFactory.generateCreateProductRequestDto;
-import static com.flab.marketgola.product.constant.TestProductFactory.generateUpdateProductRequestDto;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -22,6 +18,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flab.marketgola.product.constant.TestDisplayProductFactory;
+import com.flab.marketgola.product.constant.TestProductFactory;
 import com.flab.marketgola.product.dto.request.CreateDisplayProductRequestDto;
 import com.flab.marketgola.product.dto.request.CreateProductRequestDto;
 import com.flab.marketgola.product.dto.request.UpdateDisplayProductWithProductsRequestDto;
@@ -30,8 +28,6 @@ import com.flab.marketgola.product.dto.response.DisplayProductResponseDto;
 import com.flab.marketgola.product.service.ProductService;
 import com.flab.marketgola.user.constant.TestUserFactory;
 import com.flab.marketgola.user.domain.LoginUser;
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -74,8 +70,9 @@ class ProductControllerTest {
         when(productService.createDisplayProductWithProducts(any()))
                 .thenReturn(DisplayProductResponseDto.builder().id(1L).build());
 
-        CreateDisplayProductRequestDto requestDto = generateCreateDisplayProductRequestDto(
-                List.of(generateCreateProductRequestDto()));
+        CreateDisplayProductRequestDto requestDto = TestDisplayProductFactory.generalCreateRequest()
+                .product(TestProductFactory.generalCreateRequest().build())
+                .build();
 
         String content = objectMapper.writeValueAsString(requestDto);
 
@@ -89,21 +86,40 @@ class ProductControllerTest {
                 .andDo(print());
     }
 
+    @DisplayName("상품 저장시 관련된 실제 상품을 최소 1개 이상 존재해야 한다.")
+    @Test
+    void createDisplayProduct_need_at_least_one_product() throws Exception {
+        //given
+        CreateDisplayProductRequestDto requestDto = TestDisplayProductFactory.generalCreateRequest()
+                .build();
+
+        String content = objectMapper.writeValueAsString(requestDto);
+
+        //then
+        mockMvc.perform(post(ProductController.BASE_PATH)
+                        .session(session)
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
     @DisplayName("상품 저장시 관련된 전시용 상품의 값이 유효해야 한다.")
     @ParameterizedTest
     @MethodSource("invalidCreateDisplayProductValues")
     void createDisplayProduct_invalid_values_bad_request(
-            String name, String mainImageName, String descriptionImageName,
-            int productCategoryId, List<CreateProductRequestDto> products)
+            String name, String mainImageUrl, String descriptionImageUrl,
+            int productCategoryId)
             throws Exception {
 
         //given
-        CreateDisplayProductRequestDto requestDto = CreateDisplayProductRequestDto.builder()
+        CreateDisplayProductRequestDto requestDto = TestDisplayProductFactory.generalCreateRequest()
                 .name(name)
-                .mainImageName(mainImageName)
-                .descriptionImageName(descriptionImageName)
+                .mainImageUrl(mainImageUrl)
+                .descriptionImageUrl(descriptionImageUrl)
                 .productCategoryId(productCategoryId)
-                .products(products)
+                .product(TestProductFactory.generalCreateRequest().build())
                 .build();
 
         String content = objectMapper.writeValueAsString(requestDto);
@@ -120,20 +136,13 @@ class ProductControllerTest {
 
     private static Stream<Arguments> invalidCreateDisplayProductValues() {
         return Stream.of(
-                Arguments.of(null, MAIN_IMAGE_NAME, DESCRIPTION_IMAGE_NAME, CATEGORY_ID,
-                        Arrays.asList(generateCreateProductRequestDto())),
+                Arguments.of(null, MAIN_IMAGE_URL, DESCRIPTION_IMAGE_URL, CATEGORY_ID),
 
-                Arguments.of(DISPLAY_PRODUCT_NAME, null, DESCRIPTION_IMAGE_NAME, CATEGORY_ID,
-                        Arrays.asList(generateCreateProductRequestDto())),
+                Arguments.of(DISPLAY_PRODUCT_NAME, null, DESCRIPTION_IMAGE_URL, CATEGORY_ID),
 
-                Arguments.of(DISPLAY_PRODUCT_NAME, DISPLAY_PRODUCT_NAME, null, CATEGORY_ID,
-                        Arrays.asList(generateCreateProductRequestDto())),
+                Arguments.of(DISPLAY_PRODUCT_NAME, MAIN_IMAGE_URL, null, CATEGORY_ID),
 
-                Arguments.of(DISPLAY_PRODUCT_NAME, MAIN_IMAGE_NAME, DESCRIPTION_IMAGE_NAME, 0,
-                        Arrays.asList(generateCreateProductRequestDto())),
-
-                Arguments.of(DISPLAY_PRODUCT_NAME, MAIN_IMAGE_NAME, DESCRIPTION_IMAGE_NAME,
-                        CATEGORY_ID, null)
+                Arguments.of(DISPLAY_PRODUCT_NAME, MAIN_IMAGE_URL, DESCRIPTION_IMAGE_URL, 0)
         );
     }
 
@@ -143,8 +152,9 @@ class ProductControllerTest {
     void createDisplayProduct_invalid_values_bad_request(String name, int price, int stock)
             throws Exception {
         //given
-        CreateDisplayProductRequestDto requestDto = generateCreateDisplayProductRequestDto(
-                Arrays.asList(new CreateProductRequestDto(name, price, stock)));
+        CreateDisplayProductRequestDto requestDto = TestDisplayProductFactory.generalCreateRequest()
+                .product(new CreateProductRequestDto(name, price, stock))
+                .build();
 
         String content = objectMapper.writeValueAsString(requestDto);
 
@@ -173,8 +183,9 @@ class ProductControllerTest {
         when(productService.updateDisplayProductByIdWithProducts(any()))
                 .thenReturn(DisplayProductResponseDto.builder().id(1L).build());
 
-        UpdateDisplayProductWithProductsRequestDto requestDto = generateUpdateDisplayProductRequestDto(
-                List.of(generateUpdateProductRequestDto()));
+        UpdateDisplayProductWithProductsRequestDto requestDto = TestDisplayProductFactory.generalUpdateRequest()
+                .product(TestProductFactory.generalUpdateRequest().build())
+                .build();
 
         String content = objectMapper.writeValueAsString(requestDto);
 
@@ -189,22 +200,21 @@ class ProductControllerTest {
     }
 
 
-    @DisplayName("상품 수정시 관련된 전시용 상품의 값이 유효 해야 한다.")
+    @DisplayName("상품 수정시 전시용 상품의 값이 유효 해야 한다.")
     @ParameterizedTest
     @MethodSource("invalidUpdateDisplayProductValues")
     void updateDisplayProduct_invalid_values_bad_request(
-            Long id, String name, String mainImageName, String descriptionImageName,
-            int productCategoryId, List<UpdateProductRequestDto> products)
+            Long id, String name, String mainImageUrl, String descriptionImageUrl,
+            int productCategoryId)
             throws Exception {
 
         //given
         UpdateDisplayProductWithProductsRequestDto requestDto = UpdateDisplayProductWithProductsRequestDto.builder()
                 .id(id)
                 .name(name)
-                .mainImageName(mainImageName)
-                .descriptionImageName(descriptionImageName)
+                .mainImageUrl(mainImageUrl)
+                .descriptionImageUrl(descriptionImageUrl)
                 .productCategoryId(productCategoryId)
-                .products(products)
                 .build();
 
         String content = objectMapper.writeValueAsString(requestDto);
@@ -221,24 +231,20 @@ class ProductControllerTest {
 
     private static Stream<Arguments> invalidUpdateDisplayProductValues() {
         return Stream.of(
-                Arguments.of(null, DISPLAY_PRODUCT_NAME, MAIN_IMAGE_NAME, DESCRIPTION_IMAGE_NAME,
-                        CATEGORY_ID, Arrays.asList(generateCreateProductRequestDto())),
+                Arguments.of(null, DISPLAY_PRODUCT_NAME, MAIN_IMAGE_URL, DESCRIPTION_IMAGE_URL,
+                        CATEGORY_ID),
 
-                Arguments.of(PRE_INSERTED_DISPLAY_PRODUCT_ID, null, MAIN_IMAGE_NAME,
-                        DESCRIPTION_IMAGE_NAME, CATEGORY_ID,
-                        Arrays.asList(generateCreateProductRequestDto())),
+                Arguments.of(DISPLAY_PRODUCT_ID, null, MAIN_IMAGE_URL,
+                        DESCRIPTION_IMAGE_URL, CATEGORY_ID),
 
-                Arguments.of(PRE_INSERTED_DISPLAY_PRODUCT_ID, DISPLAY_PRODUCT_NAME, null,
-                        DESCRIPTION_IMAGE_NAME, CATEGORY_ID,
-                        Arrays.asList(generateCreateProductRequestDto())),
+                Arguments.of(DISPLAY_PRODUCT_ID, DISPLAY_PRODUCT_NAME, null,
+                        DESCRIPTION_IMAGE_URL, CATEGORY_ID),
 
-                Arguments.of(PRE_INSERTED_DISPLAY_PRODUCT_ID, DISPLAY_PRODUCT_NAME,
-                        DISPLAY_PRODUCT_NAME, null, CATEGORY_ID,
-                        Arrays.asList(generateCreateProductRequestDto())),
+                Arguments.of(DISPLAY_PRODUCT_ID, DISPLAY_PRODUCT_NAME,
+                        MAIN_IMAGE_URL, null, CATEGORY_ID),
 
-                Arguments.of(PRE_INSERTED_DISPLAY_PRODUCT_ID, DISPLAY_PRODUCT_NAME, MAIN_IMAGE_NAME,
-                        DESCRIPTION_IMAGE_NAME, 0,
-                        Arrays.asList(generateCreateProductRequestDto()))
+                Arguments.of(DISPLAY_PRODUCT_ID, DISPLAY_PRODUCT_NAME, MAIN_IMAGE_URL,
+                        DESCRIPTION_IMAGE_URL, 0)
         );
     }
 
@@ -250,14 +256,15 @@ class ProductControllerTest {
 
         //given
         UpdateProductRequestDto productRequestDto = UpdateProductRequestDto.builder()
-                .id(PRE_INSERTED_PRODUCT_ID_1)
+                .id(PRODUCT_ID)
                 .name(name)
                 .price(price)
                 .stock(stock)
                 .build();
 
-        UpdateDisplayProductWithProductsRequestDto requestDto = generateUpdateDisplayProductRequestDto(
-                List.of(productRequestDto));
+        UpdateDisplayProductWithProductsRequestDto requestDto = TestDisplayProductFactory.generalUpdateRequest()
+                .product(productRequestDto)
+                .build();
 
         String content = objectMapper.writeValueAsString(requestDto);
 
