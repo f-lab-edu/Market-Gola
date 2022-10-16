@@ -1,4 +1,4 @@
-package com.flab.marketgola.user.argumentresolver;
+package com.flab.marketgola.user.controller.argumentresolver;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

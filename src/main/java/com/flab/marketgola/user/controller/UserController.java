@@ -1,6 +1,6 @@
 package com.flab.marketgola.user.controller;
 
-import com.flab.marketgola.user.argumentresolver.AuthenticatedUser;
+import com.flab.marketgola.user.controller.argumentresolver.AuthenticatedUser;
 import com.flab.marketgola.user.domain.LoginUser;
 import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
 import com.flab.marketgola.user.dto.request.GetUserRequestDto;

@@ -1,4 +1,4 @@
-package com.flab.marketgola.user.argumentresolver;
+package com.flab.marketgola.user.controller.argumentresolver;
 
 import static com.flab.marketgola.common.constant.SessionConstant.LOGIN_KEY;
 import static com.flab.marketgola.common.constant.SessionConstant.NOT_CREATE_WHEN_NOT_EXIST;

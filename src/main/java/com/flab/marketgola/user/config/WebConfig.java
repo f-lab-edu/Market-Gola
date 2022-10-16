@@ -1,9 +1,9 @@
 package com.flab.marketgola.user.config;
 
-import com.flab.marketgola.user.argumentresolver.LoginArgumentResolver;
 import com.flab.marketgola.user.controller.LoginController;
 import com.flab.marketgola.user.controller.UserController;
-import com.flab.marketgola.user.interceptor.LoginCheckInterceptor;
+import com.flab.marketgola.user.controller.argumentresolver.LoginArgumentResolver;
+import com.flab.marketgola.user.controller.interceptor.LoginCheckInterceptor;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
