@@ -1,9 +1,7 @@
-package com.flab.marketgola.user.argumentresolver;
+package com.flab.marketgola.user.controller.argumentresolver;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import com.flab.marketgola.user.controller.argumentresolver.AuthenticatedUser;
-import com.flab.marketgola.user.controller.argumentresolver.LoginArgumentResolver;
 import java.lang.reflect.Method;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
