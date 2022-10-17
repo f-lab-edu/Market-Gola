@@ -16,6 +16,7 @@ public class DisplayProduct {
     private String name;
     private String descriptionImageName;
     private String mainImageName;
+    private int price;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private ProductCategory category;
@@ -35,11 +36,15 @@ public class DisplayProduct {
         this.products = products;
     }
 
-    public int setPrice() {
-        return products.stream()
-                .mapToInt(Product::getPrice)
-                .min()
-                .orElse(0);
+    public int getPrice() {
+        if (price == 0) {
+            return products.stream()
+                    .mapToInt(Product::getPrice)
+                    .min()
+                    .orElse(0);
+        }
+
+        return price;
     }
 
     public String getDescriptionImageUrl() {
