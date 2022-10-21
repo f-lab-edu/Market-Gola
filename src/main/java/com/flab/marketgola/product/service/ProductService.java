@@ -3,12 +3,15 @@ package com.flab.marketgola.product.service;
 import com.flab.marketgola.product.domain.DisplayProduct;
 import com.flab.marketgola.product.domain.Product;
 import com.flab.marketgola.product.dto.request.CreateDisplayProductRequestDto;
+import com.flab.marketgola.product.dto.request.GetDisplayProductsCondition;
 import com.flab.marketgola.product.dto.request.UpdateDisplayProductWithProductsRequestDto;
+import com.flab.marketgola.product.dto.response.DisplayProductListResponseDto;
 import com.flab.marketgola.product.dto.response.DisplayProductResponseDto;
 import com.flab.marketgola.product.exception.NoSuchCategoryException;
 import com.flab.marketgola.product.exception.NoSuchProductException;
 import com.flab.marketgola.product.mapper.DisplayProductMapper;
 import com.flab.marketgola.product.mapper.ProductMapper;
+import com.flab.marketgola.product.mapper.dto.DisplayProductListDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -68,5 +71,14 @@ public class ProductService {
         if (deleteCount == 0) {
             throw new NoSuchProductException();
         }
+    }
+
+    public DisplayProductListResponseDto getDisplayProductListByCategory(int categoryId,
+            GetDisplayProductsCondition condition) {
+
+        DisplayProductListDto displayProductListDto = displayProductRepository.findByCategoryId(
+                categoryId, condition).orElse(new DisplayProductListDto());
+
+        return DisplayProductListResponseDto.of(displayProductListDto, condition);
     }
 }

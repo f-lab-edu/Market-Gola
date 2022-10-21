@@ -38,7 +38,7 @@ public class DisplayProductResponseDto {
         return DisplayProductResponseDto.builder()
                 .id(displayProduct.getId())
                 .name(displayProduct.getName())
-                .price(displayProduct.setPrice())
+                .price(displayProduct.getPrice())
                 .descriptionImageWebUrl(displayProduct.getDescriptionImageUrl())
                 .mainImageWebUrl(displayProduct.getMainImageUrl())
                 .category(displayProduct.getCategory())

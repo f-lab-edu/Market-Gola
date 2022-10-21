@@ -88,9 +88,15 @@ jacocoTestCoverageVerification {
             }
 
             includes = [
-                   '*.controller.*',
-                   '*.service.*',
-                   '*.domain.*'
+                    '*.controller.*',
+                    '*.service.*',
+                    '*.domain.*'
+            ]
+
+            excludes = [
+                    '*.controller.**.*',
+                    '*.service.**.*',
+                    '*.domain.**.*'
             ]
         }
     }

@@ -4,12 +4,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.flab.marketgola.TestRedisConfiguration;
+import com.flab.marketgola.product.constant.DisplayProductCreator;
 import com.flab.marketgola.product.constant.TestDisplayProductFactory;
+import com.flab.marketgola.product.constant.TestDisplayProductListFactory;
 import com.flab.marketgola.product.constant.TestProductFactory;
 import com.flab.marketgola.product.dto.request.CreateDisplayProductRequestDto;
 import com.flab.marketgola.product.dto.request.CreateProductRequestDto;
+import com.flab.marketgola.product.dto.request.GetDisplayProductsCondition;
 import com.flab.marketgola.product.dto.request.UpdateDisplayProductWithProductsRequestDto;
 import com.flab.marketgola.product.dto.request.UpdateProductRequestDto;
+import com.flab.marketgola.product.dto.response.DisplayProductListResponseDto;
 import com.flab.marketgola.product.dto.response.DisplayProductResponseDto;
 import com.flab.marketgola.product.dto.response.ProductResponseDto;
 import com.flab.marketgola.product.exception.NoSuchCategoryException;
@@ -17,6 +21,8 @@ import com.flab.marketgola.product.exception.NoSuchProductException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -299,5 +305,46 @@ class ProductServiceTest {
         assertThatThrownBy(
                 () -> productService.deleteDisplayProductById(notExistId))
                 .isInstanceOf(NoSuchProductException.class);
+    }
+
+    @DisplayName("카테고리로 상품 리스트 조회시 카테고리 내의 총 페이지 수를 알 수 있다.")
+    @ParameterizedTest
+    @CsvSource({"31,4", "30,3", "0,0"})
+    void getDisplayProductListByCategoryId_return_totalPages(int totalCount,
+            int expectedTotalPages) {
+        //given
+        DisplayProductCreator creator = new DisplayProductCreator(productService);
+
+        int categoryId = 1;
+        for (int i = 0; i < totalCount; i++) {
+            creator.categoryID(categoryId).create();
+        }
+
+        GetDisplayProductsCondition condition = TestDisplayProductListFactory.generalCondition()
+                .perPage(10)
+                .build();
+
+        //when
+        DisplayProductListResponseDto responseDto = productService.getDisplayProductListByCategory(
+                categoryId, condition);
+
+        //then
+        assertThat(responseDto.getMeta().getTotalPages()).isEqualTo(expectedTotalPages);
+    }
+
+    @DisplayName("존재하지 않는 카테고리에 속한 상품 리스트 조회는 빈 목록을 리턴한다.")
+    @Test
+    void getDisplayProductListByCategoryId_category_should_exist() {
+        //given
+        int notExistCategoryId = 10000;
+
+        GetDisplayProductsCondition condition = TestDisplayProductListFactory.generalCondition()
+                .build();
+        //when
+        DisplayProductListResponseDto responseDto = productService.getDisplayProductListByCategory(
+                notExistCategoryId, condition);
+
+        //then
+        assertThat(responseDto.getData().size()).isZero();
     }
 }

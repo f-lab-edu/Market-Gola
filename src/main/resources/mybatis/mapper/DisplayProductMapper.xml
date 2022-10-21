@@ -66,4 +66,30 @@
     (select p.id from product p where p.display_product_id = dp.id and p.is_deleted != true)
   </update>
 
+  <select id="findByCategoryId" resultMap="findByCategoryId">
+    select dp.id                                                                            as id,
+           dp.name                                                                          as name,
+           dp.main_image_name                                                               as mainImageName,
+           MIN(p.price)                                                                     as price,
+           dp.created_at                                                                    as created_at,
+           (select count(*) from display_product where product_category_id = #{categoryId}) as total
+    from display_product as dp
+           inner join product as p on dp.id = p.display_product_id
+    where dp.product_category_id = #{categoryId}
+      and p.is_deleted = false
+    group by dp.id
+    order by ${condition.sortType.sqlValue}
+    limit #{condition.perPage} offset #{condition.offset}
+  </select>
+
+  <resultMap id="findByCategoryId" type="DisplayProductListDto">
+    <result property="total" column="total"/>
+    <collection property="displayProducts" ofType="DisplayProduct">
+      <id property="id" column="id"/>
+      <result property="name" column="name"/>
+      <result property="mainImageName" column="mainImageName"/>
+      <result property="price" column="price"/>
+      <result property="createdAt" column="created_at"/>
+    </collection>
+  </resultMap>
 </mapper>
