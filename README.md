@@ -27,7 +27,7 @@
 # 프로젝트 구조
 ![프로젝트 구조도 1](https://user-images.githubusercontent.com/71138398/197139995-fd5ff6e3-1f9c-44df-866b-cb9290e780da.png)
 
-## 화면 설계
+# 화면 설계
 
 [kakao oven](https://ovenapp.io/view/pDhwkCQw9govPoESRQGitWNOUVO9zyaK/)
 
@@ -35,7 +35,7 @@
 ![화면 설계](https://user-images.githubusercontent.com/71138398/197139145-ac079914-830d-4cdf-a84c-643fb3238ce4.svg)
 
 
-## DB ERD
+# DB ERD
 [설계 과정](https://velog.io/@sontulip/how-to-db-design)
 
 
