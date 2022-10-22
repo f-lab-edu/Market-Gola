@@ -18,4 +18,9 @@ public class DescriptionImage extends Image {
     public DescriptionImage(InputStream imageInputStream, String originalFileName) {
         super(imageInputStream, originalFileName);
     }
+
+    @Override
+    public String getUrl() {
+        return generateUrl(storedName);
+    }
 }

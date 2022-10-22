@@ -15,6 +15,11 @@ public class MainImage extends Image {
         return STORE_PATH + "/" + storedName;
     }
 
+    @Override
+    public String getUrl() {
+        return generateUrl(storedName);
+    }
+
     public MainImage(InputStream imageInputStream, String originalFileName) {
         super(imageInputStream, originalFileName);
     }

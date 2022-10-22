@@ -27,6 +27,6 @@ public class S3ImageService implements ImageService {
 
         image.closeInputStream();
 
-        return image.getStoredName();
+        return image.getUrl();
     }
 }

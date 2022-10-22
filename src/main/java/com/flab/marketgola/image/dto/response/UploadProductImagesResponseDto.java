@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UploadProductImagesResponseDto {
 
-    String mainImageName;
-    String descriptionImageName;
+    String mainImageUrl;
+    String descriptionImageUrl;
 
-    public UploadProductImagesResponseDto(String mainImageName, String descriptionImageName) {
-        this.mainImageName = mainImageName;
-        this.descriptionImageName = descriptionImageName;
+    public UploadProductImagesResponseDto(String mainImageUrl, String descriptionImageUrl) {
+        this.mainImageUrl = mainImageUrl;
+        this.descriptionImageUrl = descriptionImageUrl;
     }
 }

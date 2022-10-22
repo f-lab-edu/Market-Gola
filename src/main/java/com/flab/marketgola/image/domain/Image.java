@@ -31,6 +31,8 @@ public abstract class Image {
 
     public abstract String getStoreKey();
 
+    public abstract String getUrl();
+
     public void closeInputStream() {
         try {
             imageInputStream.close();
