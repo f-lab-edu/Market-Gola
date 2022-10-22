@@ -112,7 +112,7 @@ class ProductServiceTest {
     @Test
     void getDisplayProductById_exist_url() {
         //given
-        String path = "https://www.image-gola.com/products/";
+        String path = "https://www.image.gola.com/products/";
         CreateDisplayProductRequestDto requestDto = TestDisplayProductFactory.generalCreateRequest()
                 .product(TestProductFactory.generalCreateRequest().build())
                 .mainImageUrl(path + "mainImage")
