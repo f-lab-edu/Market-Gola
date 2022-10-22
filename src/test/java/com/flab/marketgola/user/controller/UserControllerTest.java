@@ -236,7 +236,7 @@ class UserControllerTest {
         mockMvc.perform(get(UserController.BASE_PATH + UserController.GET_MY_INFO_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isUnauthorized())
                 .andDo(print());
     }
 }
