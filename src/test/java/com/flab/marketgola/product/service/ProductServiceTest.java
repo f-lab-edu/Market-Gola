@@ -108,6 +108,29 @@ class ProductServiceTest {
         assertThat(responseDto.getProducts()).isNotEmpty();
     }
 
+    @DisplayName("찾은 전시용 상품은 메인 이미지와 상세 내용 이미지의 URL을 갖고 있다.")
+    @Test
+    void getDisplayProductById_exist_url() {
+        //given
+        String path = "https://www.image-gola.com/products/";
+        CreateDisplayProductRequestDto requestDto = TestDisplayProductFactory.generalCreateRequest()
+                .product(TestProductFactory.generalCreateRequest().build())
+                .mainImageUrl(path + "mainImage")
+                .descriptionImageUrl(path + "description")
+                .build();
+
+        DisplayProductResponseDto createResponseDto = productService.createDisplayProductWithProducts(
+                requestDto);
+
+        //when
+        DisplayProductResponseDto responseDto = productService.getDisplayProductById(
+                createResponseDto.getId());
+
+        //then
+        assertThat(responseDto.getMainImageWebUrl()).isEqualTo(path + "mainImage");
+        assertThat(responseDto.getDescriptionImageWebUrl()).isEqualTo(path + "description");
+    }
+
     @DisplayName("전시용 상품의 가격은 관련된 상품 가격 중 최소값이다.")
     @Test
     void getDisplayProductById_price() {

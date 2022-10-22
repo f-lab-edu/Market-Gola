@@ -8,7 +8,7 @@ public class DescriptionImage extends Image {
     private static final String STORE_PATH = ProductController.BASE_PATH;
 
     public static String generateUrl(String storedName) {
-        return IMAGE_DOMAIN + "/" + STORE_PATH + "/" + storedName;
+        return IMAGE_DOMAIN + STORE_PATH + "/" + storedName;
     }
 
     public String getStoreKey() {
