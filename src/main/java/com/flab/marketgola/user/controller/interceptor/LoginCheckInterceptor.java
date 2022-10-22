@@ -3,7 +3,7 @@ package com.flab.marketgola.user.controller.interceptor;
 import static com.flab.marketgola.common.constant.SessionConstant.LOGIN_KEY;
 import static com.flab.marketgola.common.constant.SessionConstant.NOT_CREATE_WHEN_NOT_EXIST;
 
-import com.flab.marketgola.user.exception.UnauthorizedException;
+import com.flab.marketgola.user.exception.UnAuthenticatedException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,7 +21,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        throw new UnauthorizedException();
+        throw new UnAuthenticatedException();
     }
 
     private boolean isLogin(HttpSession session) {
