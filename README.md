@@ -34,7 +34,10 @@
 
 ![화면 설계](https://user-images.githubusercontent.com/71138398/197139145-ac079914-830d-4cdf-a84c-643fb3238ce4.svg)
 
+# API 문서
+[swagger](https://app.swaggerhub.com/apis-docs/sgo8308/market-gola2/1.0.0)
 
+![api doc](https://user-images.githubusercontent.com/71138398/197344447-b93a8eb9-ecac-4f4a-809e-ea99b8bce067.png)
 # DB ERD
 [설계 과정](https://velog.io/@sontulip/how-to-db-design)
 
