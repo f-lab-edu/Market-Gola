@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderMapper {
 
-    Long insert(Order order);
+    void insert(Order order);
 
     Optional<Order> findById(Long id);
 }
