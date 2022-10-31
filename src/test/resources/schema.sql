@@ -91,8 +91,25 @@ CREATE TABLE `product`
     KEY `display_product_id_idx` (`display_product_id`),
     CONSTRAINT `product_display_product_id` FOREIGN KEY (`display_product_id`) REFERENCES `display_product` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 14
   DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci COMMENT ='상품 테이블'
+  COLLATE = utf8mb4_0900_ai_ci COMMENT ='상품 테이블';
+
+CREATE TABLE `order`
+(
+    `id`               bigint unsigned                                         NOT NULL AUTO_INCREMENT,
+    `receiver_name`    varchar(30)                                             NOT NULL,
+    `receiver_phone`   varchar(11)                                             NOT NULL,
+    `receiver_address` varchar(100)                                            NOT NULL,
+    `order_status`     enum ('PROCESSING','DELIVERING','DELIVERED','CANCELED') NOT NULL DEFAULT 'PROCESSING',
+    `created_at`       datetime                                                NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`       datetime                                                NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `delivered_at`     datetime                                                         DEFAULT NULL,
+    `user_id`          int unsigned                                            NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `user_idx` (`user_id`),
+    CONSTRAINT `user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT ='주문 테이블';
 
 

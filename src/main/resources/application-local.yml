@@ -30,7 +30,8 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: 'true'
   type-aliases-package:
-    com.flab.marketgola.user.domain,com.flab.marketgola.product.domain,com.flab.marketgola.product.mapper.dto
+    com.flab.marketgola.user.domain,com.flab.marketgola.product.domain,com.flab.marketgola.product.mapper.dto,
+    com.flab.marketgola.order.domain
 
 # AWS
 cloud:
