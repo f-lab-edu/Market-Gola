@@ -112,4 +112,20 @@ CREATE TABLE `order`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci COMMENT ='주문 테이블';
 
+CREATE TABLE `order_product`
+(
+    `id`         bigint unsigned NOT NULL AUTO_INCREMENT,
+    `count`      int unsigned    NOT NULL,
+    `order_id`   bigint unsigned NOT NULL,
+    `product_id` bigint unsigned NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `product_idx` (`product_id`),
+    KEY `order_idx` (`order_id`),
+    CONSTRAINT `order` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT ='주문 상품 테이블';
+
+
 
