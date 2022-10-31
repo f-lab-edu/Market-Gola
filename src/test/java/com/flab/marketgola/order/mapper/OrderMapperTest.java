@@ -35,9 +35,9 @@ class OrderMapperTest {
         Order order = TestOrderFactory.generalOrder().user(user).build();
 
         //when
-        Long orderId = orderRepository.insert(order);
+        orderRepository.insert(order);
 
         //then
-        assertThat(orderRepository.findById(orderId)).isNotEmpty();
+        assertThat(orderRepository.findById(order.getId())).isNotEmpty();
     }
 }
