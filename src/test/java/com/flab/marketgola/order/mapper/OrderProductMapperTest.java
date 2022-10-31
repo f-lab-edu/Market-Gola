@@ -42,7 +42,7 @@ class OrderProductMapperTest {
     @Test
     void insert() {
         //given
-        //id 1인 상품 사전 등록
+        //상품 사전 등록
         DisplayProduct displayProduct = TestDisplayProductFactory.generalDisplayProduct().build();
         displayProductRepository.insert(displayProduct);
         Product product = TestProductFactory.generalProduct().displayProduct(displayProduct)
