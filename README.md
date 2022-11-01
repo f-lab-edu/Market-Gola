@@ -8,21 +8,23 @@
 # 사용 기술
 
 * Java 11
-* Spring
-* Spring Boot
-* Mysql
-* Mybatis
-* Redis
+* Spring 5.3
+* Spring Boot 2.7
+* Mysql 8
+* Mybatis 3
+* Redis 4
 * Github Actions
 * AWS S3
 
 # 프로젝트 중점 사항
 
 - 상황에 맞는 적절한 기술 선택
+- 서버 확장을 고려한 설계
 - 객체지향적이고 깔끔한 코드
 - 꼼꼼하고 가독성 높은 테스트 코드
-- 충분한 고민이 들어간 코드
+- 성능 튜닝
 - Restful한 API
+
 
 # 프로젝트 구조
 ![프로젝트 구조도 1](https://user-images.githubusercontent.com/71138398/197139995-fd5ff6e3-1f9c-44df-866b-cb9290e780da.png)
