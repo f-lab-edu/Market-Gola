@@ -3,22 +3,52 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.flab.marketgola.order.mapper.OrderMapper">
-  <select id="findById" resultType="Order">
-    select id,
-           receiver_name,
-           receiver_phone,
-           receiver_address,
-           order_status,
-           created_at,
-           updated_at,
-           delivered_at
-    from `ORDER`
-    where id = #{id}
+
+  <select id="findById" resultMap="findById">
+    select o.id               as o_id,
+           o.receiver_name    as o_receiver_name,
+           o.receiver_phone   as o_receiver_phone,
+           o.receiver_address as o_receiver_address,
+           o.order_status     as o_order_status,
+           p.id               as p_id,
+           p.name             as p_name,
+           p.price            as p_price,
+           op.count           as op_count,
+           u.name             as u_name
+    from `ORDER` as o
+           left outer join order_product op on o.id = op.order_id
+           left outer join product p on op.product_id = p.id
+           left outer join `USER` u on o.user_id = u.id
+    where o.id = #{id}
   </select>
+
+  <resultMap id="findById" type="Order">
+    <id property="id" column="o_id"/>
+    <result property="receiverName" column="o_receiver_name"/>
+    <result property="receiverPhone" column="o_receiver_phone"/>
+    <result property="receiverAddress" column="o_receiver_address"/>
+    <result property="orderStatus" column="o_order_status"/>
+    <association property="user" javaType="User">
+      <result property="name" column="u_name"/>
+    </association>
+    <collection property="orderProducts" ofType="OrderProduct">
+      <id property="id" column="op_id"/>
+      <result property="count" column="op_count"/>
+      <association property="product" javaType="Product">
+        <id property="id" column="p_id"/>
+        <result property="name" column="p_name"/>
+        <result property="price" column="p_price"/>
+      </association>
+    </collection>
+  </resultMap>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into `ORDER` (receiver_name, receiver_phone, receiver_address, user_id)
     values (#{receiverName}, #{receiverPhone}, #{receiverAddress}, #{user.id})
   </insert>
 
+  <delete id="deleteAll">
+    delete
+    from `ORDER`
+  </delete>
 </mapper>

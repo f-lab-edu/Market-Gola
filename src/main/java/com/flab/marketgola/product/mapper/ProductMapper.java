@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface ProductMapper {
+
     void insert(Product product);
 
     Optional<Product> findById(Long id);
@@ -17,4 +18,8 @@ public interface ProductMapper {
     int updateStatusByDisplayProductId(@Param("id") Long id, @Param("product") Product product);
 
     void insertOrUpdate(List<Product> products);
+
+    int updateStockOptimistic(Product product);
+
+    void deleteAll();
 }

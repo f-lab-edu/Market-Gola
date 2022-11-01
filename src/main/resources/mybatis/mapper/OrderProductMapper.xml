@@ -14,4 +14,9 @@
     values (#{count}, #{order.id}, #{product.id})
   </insert>
 
+  <delete id="deleteAll">
+    delete
+    from order_product
+  </delete>
+
 </mapper>

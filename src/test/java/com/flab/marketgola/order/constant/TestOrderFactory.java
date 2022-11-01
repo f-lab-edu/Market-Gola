@@ -2,7 +2,9 @@ package com.flab.marketgola.order.constant;
 
 import com.flab.marketgola.order.domain.Order;
 import com.flab.marketgola.order.domain.OrderStatus;
+import com.flab.marketgola.order.dto.request.CreateOrderRequestDto;
 import com.flab.marketgola.user.domain.User;
+import java.util.List;
 
 public class TestOrderFactory {
 
@@ -20,5 +22,14 @@ public class TestOrderFactory {
                 .receiverAddress(RECEIVER_ADDRESS)
                 .orderStatus(ORDER_STATUS)
                 .user(User.builder().id(USER_ID).build());
+    }
+
+    public static CreateOrderRequestDto.CreateOrderRequestDtoBuilder generalCreateRequest() {
+
+        return CreateOrderRequestDto.builder()
+                .receiverName(RECEIVER_NAME)
+                .receiverPhone(RECEIVER_PHONE)
+                .receiverAddress(RECEIVER_ADDRESS)
+                .products(List.of(TestOrderProductFactory.generalCreateRequest().build()));
     }
 }

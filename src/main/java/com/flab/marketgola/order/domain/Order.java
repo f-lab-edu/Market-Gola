@@ -2,6 +2,7 @@ package com.flab.marketgola.order.domain;
 
 import com.flab.marketgola.user.domain.User;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,11 +20,12 @@ public class Order {
     private LocalDateTime deliveredAt;
     private User user;
 
-    @Builder
+    private List<OrderProduct> orderProducts;
 
+    @Builder
     public Order(Long id, String receiverName, String receiverPhone, String receiverAddress,
-            OrderStatus orderStatus, LocalDateTime createdAt, LocalDateTime deliveredAt,
-            User user) {
+            OrderStatus orderStatus, LocalDateTime createdAt, LocalDateTime deliveredAt, User user,
+            List<OrderProduct> orderProducts) {
         this.id = id;
         this.receiverName = receiverName;
         this.receiverPhone = receiverPhone;
@@ -32,5 +34,6 @@ public class Order {
         this.createdAt = createdAt;
         this.deliveredAt = deliveredAt;
         this.user = user;
+        this.orderProducts = orderProducts;
     }
 }

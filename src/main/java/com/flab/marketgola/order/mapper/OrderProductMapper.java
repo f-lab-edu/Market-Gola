@@ -7,10 +7,11 @@ import org.springframework.stereotype.Repository;
 
 @Mapper
 @Repository
-interface OrderProductMapper {
+public interface OrderProductMapper {
 
     Long insert(OrderProduct orderProduct);
 
     Optional<OrderProduct> findById(Long id);
 
+    void deleteAll();
 }

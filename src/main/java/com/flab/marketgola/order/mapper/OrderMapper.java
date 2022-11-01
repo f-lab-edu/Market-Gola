@@ -12,4 +12,6 @@ public interface OrderMapper {
     void insert(Order order);
 
     Optional<Order> findById(Long id);
+
+    void deleteAll();
 }

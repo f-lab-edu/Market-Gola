@@ -20,4 +20,6 @@ public interface DisplayProductMapper {
 
     Optional<DisplayProductListDto> findByCategoryId(@Param("categoryId") int categoryId,
             @Param("condition") GetDisplayProductsCondition condition);
+
+    void deleteAll();
 }
