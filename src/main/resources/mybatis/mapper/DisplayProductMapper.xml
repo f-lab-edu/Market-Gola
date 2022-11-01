@@ -92,4 +92,9 @@
       <result property="createdAt" column="created_at"/>
     </collection>
   </resultMap>
+
+  <delete id="deleteAll">
+    delete
+    from display_product
+  </delete>
 </mapper>

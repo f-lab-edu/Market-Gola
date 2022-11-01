@@ -94,5 +94,10 @@
     from `USER`
     where id = #{id}
   </delete>
+
+  <delete id="deleteAll">
+    delete
+    from `USER`
+  </delete>
 </mapper>
 

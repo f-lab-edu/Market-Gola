@@ -5,7 +5,7 @@
 <mapper namespace="com.flab.marketgola.product.mapper.ProductMapper">
 
   <select id="findById" resultType="Product">
-    select id, name, price, stock, is_deleted
+    select id, name, price, stock, is_deleted, updated_at
     from product
     where id = #{id}
   </select>
@@ -38,5 +38,17 @@
     where display_product_id = #{id}
       and is_deleted = false
   </update>
+
+  <update id="updateStockOptimistic">
+    update product
+    set stock = #{stock}
+    where id = #{id}
+      and updated_at = #{updatedAt}
+  </update>
+
+  <delete id="deleteAll">
+    delete
+    from product
+  </delete>
 </mapper>
 

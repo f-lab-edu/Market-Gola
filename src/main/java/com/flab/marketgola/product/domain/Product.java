@@ -29,4 +29,8 @@ public class Product {
         this.displayProduct = displayProduct;
         this.isDeleted = isDeleted;
     }
+
+    public void subtractStock(int count) {
+        this.stock -= count;
+    }
 }
