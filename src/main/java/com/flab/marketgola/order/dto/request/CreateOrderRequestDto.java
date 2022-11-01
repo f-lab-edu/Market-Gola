@@ -6,6 +6,11 @@ import com.flab.marketgola.product.domain.Product;
 import com.flab.marketgola.user.domain.User;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,10 +19,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateOrderRequestDto {
 
+    @NotBlank(message = "수령인 이름을 입력해주세요.")
     private String receiverName;
+    @NotBlank(message = "수령인 연락처를 입력해주세요.")
     private String receiverPhone;
+    @NotBlank(message = "수령인 주소를 입력해주세요.")
     private String receiverAddress;
-
+    @Size(min = 1, message = "주문 상품을 최소 1개 이상 선택해주세요.")
+    @NotNull(message = "주문 상품을 최소 1개 이상 선택해주세요.")
+    @Valid
     private List<OrderProductDto> products;
 
     @Builder
@@ -53,6 +63,7 @@ public class CreateOrderRequestDto {
     public static class OrderProductDto {
 
         private Long productId;
+        @Min(value = 1, message = "주문 수량은 1개 이상이어야 합니다.")
         private int count;
 
         @Builder
