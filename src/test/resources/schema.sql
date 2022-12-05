@@ -102,7 +102,7 @@ CREATE TABLE `order`
     `receiver_address` varchar(100)                                            NOT NULL,
     `order_status`     enum ('PROCESSING','DELIVERING','DELIVERED','CANCELED') NOT NULL DEFAULT 'PROCESSING',
     `created_at`       datetime                                                NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at`       datetime                                                NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `updated_at`       datetime(6)                                             NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
     `delivered_at`     datetime                                                         DEFAULT NULL,
     `user_id`          int unsigned                                            NOT NULL,
     PRIMARY KEY (`id`),

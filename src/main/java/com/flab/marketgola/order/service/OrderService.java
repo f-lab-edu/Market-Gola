@@ -10,6 +10,7 @@ import com.flab.marketgola.order.mapper.OrderProductMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class OrderService {
     private final OrderProductMapper orderProductRepository;
     private final StockSubtractionStrategy stockSubtractionStrategy;
 
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public long createOrder(long userId, CreateOrderRequestDto request) {
         Order order = request.toOrder(userId);
         List<OrderProduct> orderProducts = request.toOrderProducts();

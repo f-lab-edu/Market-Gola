@@ -46,3 +46,5 @@
 
 ![ERD 최종](https://user-images.githubusercontent.com/71138398/172528406-28439eab-715b-4e8c-88ac-506709659d2f.png)
 
+# Issue Posting
+[낙관적 락 구현 도중 무한 루프 문제 해결기](https://velog.io/@sontulip/optimistic-lock-infinite-loop)
