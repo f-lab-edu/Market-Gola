@@ -10,8 +10,7 @@ public class TestShippingAddressFactory {
     public static ShippingAddress.ShippingAddressBuilder generalShippingAddress() {
         return ShippingAddress.builder()
                 .address(ADDRESS)
-                .isDefault(IS_DEFAULT)
-                .user(TestUserFactory.generalUser().build());
+                .isDefault(IS_DEFAULT);
     }
 
 }
