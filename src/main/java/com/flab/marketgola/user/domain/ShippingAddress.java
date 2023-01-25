@@ -1,5 +1,6 @@
 package com.flab.marketgola.user.domain;
 
+import com.flab.marketgola.common.domain.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +13,7 @@ import lombok.ToString;
 @Entity
 @ToString
 @NoArgsConstructor
-public class ShippingAddress {
+public class ShippingAddress extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
