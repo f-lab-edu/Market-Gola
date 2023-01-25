@@ -8,7 +8,7 @@ import com.flab.marketgola.user.domain.LoginUser;
 import com.flab.marketgola.user.domain.User;
 import com.flab.marketgola.user.dto.request.LoginRequestDto;
 import com.flab.marketgola.user.exception.LoginFailException;
-import com.flab.marketgola.user.mapper.UserMapper;
+import com.flab.marketgola.user.repository.UserRepository;
 import com.flab.marketgola.user.util.PasswordEncryptionUtil;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -29,7 +29,7 @@ class LoginServiceTest {
     @InjectMocks
     LoginService loginService;
     @Mock
-    UserMapper userRepository;
+    UserRepository userRepository;
 
     @DisplayName("아이디가 존재하고 비밀번호가 일치하면 로그인에 성공한다.")
     @Test
@@ -74,7 +74,6 @@ class LoginServiceTest {
         User user = TestUserFactory.generalUser()
                 .password(PasswordEncryptionUtil.encrypt(TestUserFactory.PASSWORD))
                 .build();
-
 
         Mockito.when(userRepository.findByLoginId(TestUserFactory.LOGIN_ID))
                 .thenReturn(Optional.ofNullable(user));

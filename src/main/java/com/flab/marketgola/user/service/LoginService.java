@@ -4,7 +4,7 @@ import com.flab.marketgola.user.domain.LoginUser;
 import com.flab.marketgola.user.domain.User;
 import com.flab.marketgola.user.dto.request.LoginRequestDto;
 import com.flab.marketgola.user.exception.LoginFailException;
-import com.flab.marketgola.user.mapper.UserMapper;
+import com.flab.marketgola.user.repository.UserRepository;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LoginService {
 
-    private final UserMapper userRepository;
+    private final UserRepository userRepository;
 
     public LoginUser login(LoginRequestDto loginRequestDTO)
             throws InvalidKeySpecException, NoSuchAlgorithmException {
