@@ -22,6 +22,18 @@ spring:
     username: sa
     password: ''
 
+  # jpa
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: true
+
 # mybatis
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml

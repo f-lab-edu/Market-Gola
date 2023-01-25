@@ -78,4 +78,8 @@ public class User extends BaseEntity {
             throws InvalidKeySpecException, NoSuchAlgorithmException {
         return PasswordEncryptionUtil.validatePassword(this.password, password);
     }
+
+    public void addShippingAddress(ShippingAddress shippingAddress) {
+        shippingAddresses.add(shippingAddress);
+    }
 }

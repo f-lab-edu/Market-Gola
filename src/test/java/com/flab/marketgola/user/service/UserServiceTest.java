@@ -11,8 +11,7 @@ import com.flab.marketgola.user.exception.DuplicatedEmailExcepiton;
 import com.flab.marketgola.user.exception.DuplicatedLoginIdException;
 import com.flab.marketgola.user.exception.DuplicatedPhoneNumberException;
 import com.flab.marketgola.user.exception.NoSuchUserException;
-import com.flab.marketgola.user.mapper.ShippingAddressMapper;
-import com.flab.marketgola.user.mapper.UserMapper;
+import com.flab.marketgola.user.repository.UserRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,10 +30,7 @@ class UserServiceTest {
     private UserService userService;
 
     @Mock
-    private UserMapper userRepository;
-
-    @Mock
-    private ShippingAddressMapper shippingAddressRepository;
+    private UserRepository userRepository;
 
     @DisplayName("유저가 정상적으로 가입할 수 있다.")
     @Test
