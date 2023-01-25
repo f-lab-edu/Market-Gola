@@ -3,6 +3,7 @@ package com.flab.marketgola.product.domain;
 import com.flab.marketgola.common.domain.BaseEntity;
 import com.flab.marketgola.image.domain.DescriptionImage;
 import com.flab.marketgola.image.domain.MainImage;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,7 +45,7 @@ public class DisplayProduct extends BaseEntity {
     private ProductCategory category;
 
     @OneToMany(mappedBy = "displayProduct")
-    private List<Product> products;
+    private List<Product> products = new ArrayList<>();
 
     @Builder
     public DisplayProduct(Long id, String name, String descriptionImageName, String mainImageName,
@@ -74,5 +75,13 @@ public class DisplayProduct extends BaseEntity {
 
     public String getMainImageUrl() {
         return MainImage.generateUrl(mainImageName);
+    }
+
+    public void changeName(String name) {
+        this.name = name;
+    }
+
+    public void changeCategory(ProductCategory category) {
+        this.category = category;
     }
 }
