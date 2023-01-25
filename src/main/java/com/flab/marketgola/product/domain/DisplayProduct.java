@@ -1,37 +1,58 @@
 package com.flab.marketgola.product.domain;
 
+import com.flab.marketgola.common.domain.BaseEntity;
 import com.flab.marketgola.image.domain.DescriptionImage;
 import com.flab.marketgola.image.domain.MainImage;
-import java.time.LocalDateTime;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Entity
 @NoArgsConstructor
 @Getter
-public class DisplayProduct {
+public class DisplayProduct extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(length = 100, nullable = false)
     private String name;
+
+    @Column(length = 300, nullable = false)
     private String descriptionImageName;
+
+    @Column(length = 300, nullable = false)
     private String mainImageName;
+
+    @Transient
     private int price;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_category_id", nullable = false)
     private ProductCategory category;
+
+    @OneToMany(mappedBy = "displayProduct")
     private List<Product> products;
 
     @Builder
     public DisplayProduct(Long id, String name, String descriptionImageName, String mainImageName,
-            LocalDateTime createdAt, LocalDateTime updatedAt,
             ProductCategory category, List<Product> products) {
         this.id = id;
         this.name = name;
         this.descriptionImageName = descriptionImageName;
         this.mainImageName = mainImageName;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.category = category;
         this.products = products;
     }
