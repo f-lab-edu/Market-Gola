@@ -48,10 +48,11 @@ public class DisplayProduct extends BaseEntity {
     private List<Product> products = new ArrayList<>();
 
     @Builder
-    public DisplayProduct(Long id, String name, String descriptionImageName, String mainImageName,
-            ProductCategory category, List<Product> products) {
+    public DisplayProduct(Long id, String name, int price, String descriptionImageName,
+            String mainImageName, ProductCategory category, List<Product> products) {
         this.id = id;
         this.name = name;
+        this.price = price;
         this.descriptionImageName = descriptionImageName;
         this.mainImageName = mainImageName;
         this.category = category;
