@@ -56,19 +56,4 @@ public class Product extends BaseEntity {
     public void subtractStock(int count) {
         this.stock -= count;
     }
-
-    //Builder에서도 연관관계를 양방향으로 맺어줄 수 있도록 커스텀, 롬복으로 생성된 빌더에 build() 메서드를 대체한다.
-    public static class ProductBuilder {
-
-        public Product build() {
-            Product product = new Product(this.id, this.name, this.price, this.stock,
-                    this.isDeleted, this.displayProduct);
-
-            if (this.displayProduct != null) {
-                this.displayProduct.getProducts().add(product);
-            }
-
-            return product;
-        }
-    }
 }
