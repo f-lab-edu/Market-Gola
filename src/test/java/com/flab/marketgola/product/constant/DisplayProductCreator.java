@@ -1,26 +1,31 @@
 package com.flab.marketgola.product.constant;
 
-import com.flab.marketgola.product.dto.request.CreateDisplayProductRequestDto;
-import com.flab.marketgola.product.dto.request.CreateProductRequestDto;
-import com.flab.marketgola.product.mapper.DisplayProductMapper;
-import com.flab.marketgola.product.mapper.ProductMapper;
+import com.flab.marketgola.product.domain.DisplayProduct;
+import com.flab.marketgola.product.domain.Product;
+import com.flab.marketgola.product.domain.ProductCategory;
+import com.flab.marketgola.product.repository.DisplayProductRepository;
+import com.flab.marketgola.product.repository.ProductRepository;
 import com.flab.marketgola.product.service.ProductService;
 
 public class DisplayProductCreator {
 
-    private DisplayProductMapper displayProductMapper;
-    private ProductMapper productMapper;
+    private DisplayProductRepository displayProductRepository;
+    private ProductRepository productRepository;
 
     private String name = TestDisplayProductFactory.DISPLAY_PRODUCT_NAME;
+
+    private String mainImageName = TestDisplayProductFactory.MAIN_IMAGE_NAME;
+
+    private String descriptionImageName = TestDisplayProductFactory.DESCRIPTION_IMAGE_NAME;
     private String descriptionUrl = TestDisplayProductFactory.DESCRIPTION_IMAGE_URL;
     private String mainImageUrl = TestDisplayProductFactory.MAIN_IMAGE_URL;
     private int price = TestProductFactory.PRICE;
     private int categoryId = TestDisplayProductFactory.CATEGORY_ID;
 
-    public DisplayProductCreator(DisplayProductMapper displayProductMapper,
-            ProductMapper productMapper) {
-        this.displayProductMapper = displayProductMapper;
-        this.productMapper = productMapper;
+    public DisplayProductCreator(DisplayProductRepository displayProductRepository,
+            ProductRepository productRepository) {
+        this.displayProductRepository = displayProductRepository;
+        this.productRepository = productRepository;
     }
 
     private ProductService productService;
@@ -55,18 +60,21 @@ public class DisplayProductCreator {
     }
 
     public void create() {
-        CreateProductRequestDto createProductRequest = TestProductFactory.generalCreateRequest()
-                .price(price)
-                .build();
-
-        CreateDisplayProductRequestDto createDisplayProductRequest = TestDisplayProductFactory.generalCreateRequest()
+        DisplayProduct displayProduct = TestDisplayProductFactory.generalDisplayProduct()
                 .name(name)
-                .mainImageUrl(mainImageUrl)
-                .descriptionImageUrl(descriptionUrl)
-                .product(createProductRequest)
-                .productCategoryId(categoryId)
+                .price(price)
+                .mainImageName(mainImageName)
+                .descriptionImageName(descriptionImageName)
+                .category(ProductCategory.builder().id(categoryId).build())
                 .build();
 
-        productService.createDisplayProductWithProducts(createDisplayProductRequest);
+        displayProductRepository.save(displayProduct);
+
+        Product product = TestProductFactory.generalProduct()
+                .price(price)
+                .displayProduct(displayProduct)
+                .build();
+
+        productRepository.save(product);
     }
 }
