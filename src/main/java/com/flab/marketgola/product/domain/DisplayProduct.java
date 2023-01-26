@@ -58,17 +58,6 @@ public class DisplayProduct extends BaseEntity {
         this.products = products;
     }
 
-    public int getPrice() {
-        if (price == 0) {
-            return products.stream()
-                    .mapToInt(Product::getPrice)
-                    .min()
-                    .orElse(0);
-        }
-
-        return price;
-    }
-
     public String getDescriptionImageUrl() {
         return DescriptionImage.generateUrl(descriptionImageName);
     }
