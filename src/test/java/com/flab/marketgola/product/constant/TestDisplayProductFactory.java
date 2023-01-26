@@ -16,9 +16,12 @@ public class TestDisplayProductFactory {
     public static final ProductCategory CATEGORY = new ProductCategory(1, "과일", null);
     public static final int CATEGORY_ID = 1;
 
+    public static final int PRICE = TestProductFactory.PRICE;
+
     public static DisplayProduct.DisplayProductBuilder generalDisplayProduct() {
         return DisplayProduct.builder()
                 .name(DISPLAY_PRODUCT_NAME)
+                .price(PRICE)
                 .descriptionImageName(DESCRIPTION_IMAGE_NAME)
                 .mainImageName(MAIN_IMAGE_NAME)
                 .category(CATEGORY);
