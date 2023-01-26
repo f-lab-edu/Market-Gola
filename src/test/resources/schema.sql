@@ -65,6 +65,7 @@ CREATE TABLE `display_product`
 (
     `id`                     bigint unsigned NOT NULL AUTO_INCREMENT,
     `name`                   varchar(100)    NOT NULL,
+    `price`                  int unsigned    NOT NULL,
     `description_image_name` varchar(300)    NOT NULL,
     `main_image_name`        varchar(300)    NOT NULL,
     `created_at`             datetime        NOT NULL DEFAULT CURRENT_TIMESTAMP,

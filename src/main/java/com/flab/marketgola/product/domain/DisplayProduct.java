@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,14 +30,15 @@ public class DisplayProduct extends BaseEntity {
     @Column(length = 100, nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private int price;
+
     @Column(length = 300, nullable = false)
     private String descriptionImageName;
 
     @Column(length = 300, nullable = false)
     private String mainImageName;
 
-    @Transient
-    private int price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_category_id", nullable = false)
