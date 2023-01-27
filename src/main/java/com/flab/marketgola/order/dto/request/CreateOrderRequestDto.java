@@ -57,7 +57,6 @@ public class CreateOrderRequestDto {
                 .collect(Collectors.toList());
     }
 
-
     @Getter
     @NoArgsConstructor
     public static class OrderProductDto {
