@@ -50,7 +50,9 @@ public class Product extends BaseEntity {
         this.stock = stock;
         this.displayProduct = displayProduct;
         this.isDeleted = isDeleted;
-        this.displayProduct.getProducts().add(this); // 양방향 연관 맺기
+        if (displayProduct != null) {
+            this.displayProduct.getProducts().add(this); // 양방향 연관 맺기
+        }
     }
 
     public void subtractStock(int count) {
