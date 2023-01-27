@@ -34,13 +34,13 @@ public class DisplayProductRepositoryCustomImpl implements DisplayProductReposit
     @Override
     public Optional<DisplayProduct> findByIdWithAll(Long id) {
         DisplayProduct result = queryFactory
-                .selectFrom(displayProduct)
+                .selectFrom(displayProduct).distinct()
                 .join(displayProduct.products, product).fetchJoin()
                 .join(displayProduct.category, productCategory).fetchJoin()
                 .where(displayProduct.id.eq(id), product.isDeleted.eq(false))
                 .fetchOne();
 
-        return Optional.of(result);
+        return Optional.ofNullable(result);
     }
 
     @Override
