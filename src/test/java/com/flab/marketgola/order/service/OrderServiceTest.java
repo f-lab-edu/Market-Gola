@@ -9,20 +9,22 @@ import com.flab.marketgola.order.dto.request.CreateOrderRequestDto;
 import com.flab.marketgola.order.dto.request.CreateOrderRequestDto.OrderProductDto;
 import com.flab.marketgola.order.dto.response.OrderResponseDto;
 import com.flab.marketgola.order.exception.OutOfStockException;
-import com.flab.marketgola.order.mapper.OrderMapper;
-import com.flab.marketgola.order.mapper.OrderProductMapper;
+import com.flab.marketgola.order.repository.OrderProductRepository;
+import com.flab.marketgola.order.repository.OrderRepository;
 import com.flab.marketgola.product.constant.TestDisplayProductFactory;
 import com.flab.marketgola.product.constant.TestProductFactory;
 import com.flab.marketgola.product.domain.DisplayProduct;
 import com.flab.marketgola.product.domain.Product;
 import com.flab.marketgola.product.exception.NoSuchProductException;
-import com.flab.marketgola.product.mapper.DisplayProductMapper;
-import com.flab.marketgola.product.mapper.ProductMapper;
+import com.flab.marketgola.product.repository.DisplayProductRepository;
+import com.flab.marketgola.product.repository.ProductRepository;
 import com.flab.marketgola.user.constant.TestUserFactory;
 import com.flab.marketgola.user.domain.User;
-import com.flab.marketgola.user.mapper.UserMapper;
+import com.flab.marketgola.user.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,15 +40,15 @@ class OrderServiceTest {
     @Autowired
     OrderService orderService;
     @Autowired
-    OrderMapper orderRepository;
+    OrderRepository orderRepository;
     @Autowired
-    OrderProductMapper orderProductRepository;
+    OrderProductRepository orderProductRepository;
     @Autowired
-    ProductMapper productRepository;
+    ProductRepository productRepository;
     @Autowired
-    DisplayProductMapper displayProductRepository;
+    DisplayProductRepository displayProductRepository;
     @Autowired
-    UserMapper userRepository;
+    UserRepository userRepository;
 
     @AfterEach
     void tearDown() {
@@ -84,6 +86,9 @@ class OrderServiceTest {
         assertThat(response.getProducts()).hasSize(1);
         assertThat(response.getReceiver()).isNotNull();
     }
+
+    @PersistenceContext
+    EntityManager em;
 
     @Transactional
     @DisplayName("주문을 할 경우 재고가 차감된다")
@@ -237,7 +242,7 @@ class OrderServiceTest {
 
     private User insertUser() {
         User user = TestUserFactory.generalUser().build();
-        userRepository.insert(user);
+        userRepository.save(user);
         return user;
     }
 
@@ -246,13 +251,13 @@ class OrderServiceTest {
                 .stock(stock)
                 .displayProduct(displayProduct)
                 .build();
-        productRepository.insert(product);
+        productRepository.save(product);
         return product;
     }
 
     private DisplayProduct insertDisplayProduct() {
         DisplayProduct displayProduct = TestDisplayProductFactory.generalDisplayProduct().build();
-        displayProductRepository.insert(displayProduct);
+        displayProductRepository.save(displayProduct);
         return displayProduct;
     }
 }

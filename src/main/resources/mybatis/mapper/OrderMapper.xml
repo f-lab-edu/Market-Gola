@@ -31,15 +31,6 @@
     <association property="user" javaType="User">
       <result property="name" column="u_name"/>
     </association>
-    <collection property="orderProducts" ofType="OrderProduct">
-      <id property="id" column="op_id"/>
-      <result property="count" column="op_count"/>
-      <association property="product" javaType="Product">
-        <id property="id" column="p_id"/>
-        <result property="name" column="p_name"/>
-        <result property="price" column="p_price"/>
-      </association>
-    </collection>
   </resultMap>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
