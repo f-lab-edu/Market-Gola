@@ -18,8 +18,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -46,7 +44,6 @@ class ProductListControllerTest {
         setUpMockUserLogin();
     }
 
-
     @DisplayName("정상적인 상품 페이지 조회 요청을 처리할 수 잇다. ")
     @Test
     void getDisplayProductsByCategory() throws Exception {
@@ -63,9 +60,9 @@ class ProductListControllerTest {
         //then
         mockMvc.perform(get("/categories/1/products")
                         .session(session)
-                        .param("sortType", "price_asc")
+                        .param("sort", "price,asc")
                         .param("page", "1")
-                        .param("perPage", "50")
+                        .param("size", "50")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -73,22 +70,6 @@ class ProductListControllerTest {
                 .andExpect(jsonPath("$.data[0].price").value(1000))
                 .andExpect(jsonPath("$.meta.total").value(1))
                 .andExpect(jsonPath("$.meta.totalPages").value(1))
-                .andDo(print());
-    }
-
-    @DisplayName("상품 페이지 조회시 페이지와 페이지 당 상품 수는 1 이상 이어야 한다.")
-    @ParameterizedTest
-    @CsvSource({"-1,50", "1,-1"})
-    void getDisplayProductsByCategory_page_and_perPage_at_least_1(String page, String perPage)
-            throws Exception {
-        mockMvc.perform(get("/categories/1/products")
-                        .session(session)
-                        .param("sortType", "price_asc")
-                        .param("page", page)
-                        .param("perPage", perPage)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 
