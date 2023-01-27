@@ -5,7 +5,6 @@ import com.flab.marketgola.product.domain.Product;
 import com.flab.marketgola.product.domain.ProductCategory;
 import com.flab.marketgola.product.repository.DisplayProductRepository;
 import com.flab.marketgola.product.repository.ProductRepository;
-import com.flab.marketgola.product.service.ProductService;
 
 public class DisplayProductCreator {
 
@@ -26,12 +25,6 @@ public class DisplayProductCreator {
             ProductRepository productRepository) {
         this.displayProductRepository = displayProductRepository;
         this.productRepository = productRepository;
-    }
-
-    private ProductService productService;
-
-    public DisplayProductCreator(ProductService productService) {
-        this.productService = productService;
     }
 
     public DisplayProductCreator name(String name) {

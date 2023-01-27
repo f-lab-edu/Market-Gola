@@ -74,4 +74,23 @@ public class DisplayProduct extends BaseEntity {
     public void changeCategory(ProductCategory category) {
         this.category = category;
     }
+
+    public void calculatePrice(List<Product> products) {
+        this.price = products.stream().mapToInt(Product::getPrice).min().getAsInt();
+    }
+
+    public void update(DisplayProduct updateDisplayProduct) {
+        this.name = updateDisplayProduct.name;
+        this.price = updateDisplayProduct.price;
+        this.descriptionImageName = updateDisplayProduct.descriptionImageName;
+        this.mainImageName = updateDisplayProduct.mainImageName;
+        this.category = updateDisplayProduct.category;
+        this.products = updateDisplayProduct.products;
+    }
+
+    //Builder로 생성되더라도 products는 초기화되어 있도록 추가, 아래 빌더는 @Builder로 만들어진 빌더와 합쳐진다
+    public static class DisplayProductBuilder {
+
+        private List<Product> products = new ArrayList<>();
+    }
 }

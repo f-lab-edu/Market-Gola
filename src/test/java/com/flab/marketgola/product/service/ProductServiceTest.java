@@ -6,11 +6,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.flab.marketgola.TestRedisConfiguration;
 import com.flab.marketgola.product.constant.DisplayProductCreator;
 import com.flab.marketgola.product.constant.TestDisplayProductFactory;
-import com.flab.marketgola.product.constant.TestDisplayProductListFactory;
 import com.flab.marketgola.product.constant.TestProductFactory;
 import com.flab.marketgola.product.dto.request.CreateDisplayProductRequestDto;
 import com.flab.marketgola.product.dto.request.CreateProductRequestDto;
-import com.flab.marketgola.product.dto.request.GetDisplayProductsCondition;
 import com.flab.marketgola.product.dto.request.UpdateDisplayProductWithProductsRequestDto;
 import com.flab.marketgola.product.dto.request.UpdateProductRequestDto;
 import com.flab.marketgola.product.dto.response.DisplayProductListResponseDto;
@@ -18,6 +16,8 @@ import com.flab.marketgola.product.dto.response.DisplayProductResponseDto;
 import com.flab.marketgola.product.dto.response.ProductResponseDto;
 import com.flab.marketgola.product.exception.NoSuchCategoryException;
 import com.flab.marketgola.product.exception.NoSuchProductException;
+import com.flab.marketgola.product.repository.DisplayProductRepository;
+import com.flab.marketgola.product.repository.ProductRepository;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,6 +25,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -217,6 +219,7 @@ class ProductServiceTest {
                 .build();
 
         UpdateDisplayProductWithProductsRequestDto requestDto = TestDisplayProductFactory.generalUpdateRequest()
+                .id(createResponseDto.getId())
                 .products(List.of(updateProduct, updateProductNew))
                 .build();
 
@@ -283,6 +286,7 @@ class ProductServiceTest {
                 .build();
 
         UpdateDisplayProductWithProductsRequestDto requestDto = TestDisplayProductFactory.generalUpdateRequest()
+                .id(createResponseDto.getId())
                 .product(updateProduct)
                 .build();
 
@@ -330,26 +334,54 @@ class ProductServiceTest {
                 .isInstanceOf(NoSuchProductException.class);
     }
 
+    @DisplayName("이미 삭제 처리된 전시용 상품을 다시 삭제할 수는 없다.")
+    @Test
+    void deleteDisplayProductById_cant_delete_already_deleted_display_product() {
+        //given
+        CreateProductRequestDto createProductRequest = TestProductFactory.generalCreateRequest()
+                .build();
+
+        CreateDisplayProductRequestDto createDisplayProductRequest = TestDisplayProductFactory.generalCreateRequest()
+                .product(createProductRequest)
+                .build();
+
+        DisplayProductResponseDto createResponseDto = productService.createDisplayProductWithProducts(
+                createDisplayProductRequest);
+
+        productService.deleteDisplayProductById(createResponseDto.getId());
+
+        //then
+        assertThatThrownBy(
+                () -> productService.deleteDisplayProductById(createResponseDto.getId()))
+                .isInstanceOf(NoSuchProductException.class);
+    }
+
+
+    @Autowired
+    DisplayProductRepository displayProductRepository;
+
+    @Autowired
+    ProductRepository productRepository;
+
     @DisplayName("카테고리로 상품 리스트 조회시 카테고리 내의 총 페이지 수를 알 수 있다.")
     @ParameterizedTest
     @CsvSource({"31,4", "30,3", "0,0"})
     void getDisplayProductListByCategoryId_return_totalPages(int totalCount,
             int expectedTotalPages) {
         //given
-        DisplayProductCreator creator = new DisplayProductCreator(productService);
+        DisplayProductCreator creator = new DisplayProductCreator(displayProductRepository,
+                productRepository);
 
         int categoryId = 1;
         for (int i = 0; i < totalCount; i++) {
             creator.categoryID(categoryId).create();
         }
 
-        GetDisplayProductsCondition condition = TestDisplayProductListFactory.generalCondition()
-                .perPage(10)
-                .build();
+        Pageable pageCondition = PageRequest.of(1, 10);
 
         //when
         DisplayProductListResponseDto responseDto = productService.getDisplayProductListByCategory(
-                categoryId, condition);
+                categoryId, pageCondition);
 
         //then
         assertThat(responseDto.getMeta().getTotalPages()).isEqualTo(expectedTotalPages);
@@ -361,13 +393,13 @@ class ProductServiceTest {
         //given
         int notExistCategoryId = 10000;
 
-        GetDisplayProductsCondition condition = TestDisplayProductListFactory.generalCondition()
-                .build();
+        Pageable pageCondition = PageRequest.of(1, 50);
+
         //when
         DisplayProductListResponseDto responseDto = productService.getDisplayProductListByCategory(
-                notExistCategoryId, condition);
+                notExistCategoryId, pageCondition);
 
         //then
-        assertThat(responseDto.getData().size()).isZero();
+        assertThat(responseDto.getData()).isEmpty();
     }
 }

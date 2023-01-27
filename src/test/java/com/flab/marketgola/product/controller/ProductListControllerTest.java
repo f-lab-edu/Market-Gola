@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.flab.marketgola.product.domain.SortType;
 import com.flab.marketgola.product.dto.response.DisplayProductListResponseDto;
 import com.flab.marketgola.product.dto.response.DisplayProductListResponseDto.DisplayProductListData;
 import com.flab.marketgola.product.dto.response.DisplayProductListResponseDto.Pagination;
@@ -53,7 +52,7 @@ class ProductListControllerTest {
     void getDisplayProductsByCategory() throws Exception {
         //given
         DisplayProductListData data = new DisplayProductListData(1, "이름", "url", 1000);
-        Pagination meta = new Pagination(SortType.PRICE_ASC, 1, 1, 1);
+        Pagination meta = new Pagination(1, 1, 1);
 
         DisplayProductListResponseDto displayProductListDto = new DisplayProductListResponseDto(
                 List.of(data), meta);
