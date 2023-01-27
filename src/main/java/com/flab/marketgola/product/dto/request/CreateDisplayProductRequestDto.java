@@ -46,23 +46,11 @@ public class CreateDisplayProductRequestDto {
     }
 
     public DisplayProduct toDisplayProduct() {
-        List<Product> productList =
-                this.products
-                        .stream()
-                        .map(productDto ->
-                                Product.builder()
-                                        .name(productDto.getName())
-                                        .price(productDto.getPrice())
-                                        .stock(productDto.getStock())
-                                        .build())
-                        .collect(Collectors.toList());
-
         return DisplayProduct.builder()
                 .name(name)
                 .mainImageName(Image.parseImageName(mainImageUrl))
                 .descriptionImageName(Image.parseImageName(descriptionImageUrl))
                 .category(ProductCategory.builder().id(productCategoryId).build())
-                .products(productList)
                 .build();
     }
 
