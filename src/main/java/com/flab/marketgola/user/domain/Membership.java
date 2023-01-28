@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -26,11 +25,4 @@ public class Membership extends BaseEntity {
 
     @Column(nullable = false)
     private BigDecimal pointRate;
-
-    @Builder
-    public Membership(Long id, String level, BigDecimal pointRate) {
-        this.id = id;
-        this.level = level;
-        this.pointRate = pointRate;
-    }
 }
