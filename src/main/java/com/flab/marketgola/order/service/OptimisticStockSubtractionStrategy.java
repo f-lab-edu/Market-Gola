@@ -31,7 +31,6 @@ public class OptimisticStockSubtractionStrategy implements StockSubtractionStrat
 
         int updatedRowCount = 0;
         while (updatedRowCount == 0) {
-            em.clear();
             Product findProduct = productRepository.findById(productId)
                     .orElseThrow(NoSuchProductException::new);
 
