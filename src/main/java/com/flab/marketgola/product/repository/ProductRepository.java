@@ -16,4 +16,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("select p from Product p where p.id = :id and p.isDeleted = false")
     Optional<Product> findById(@Param("id") Long id);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("update Product p set p.stock=:stock where p.id=:#{#product.id} and p.updatedAt=:#{#product.updatedAt}")
+    int updateStockOptimistic(@Param("stock") int updatedStock, @Param("product") Product product);
 }
