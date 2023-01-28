@@ -38,9 +38,12 @@ public class Order extends BaseEntity {
 
     @Column(length = 100, nullable = false)
     private String receiverAddress;
+
     @Enumerated(value = EnumType.STRING)
     private OrderStatus orderStatus;
+
     private LocalDateTime deliveredAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
