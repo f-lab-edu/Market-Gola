@@ -69,18 +69,32 @@ jacoco {
 
 jacocoTestReport {
     finalizedBy jacocoTestCoverageVerification
+
+    def Qdomains = []
+
+    for (qPattern in "**/QA".."**/QZ") {
+        Qdomains.add(qPattern + "*")
+    }
+
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, include: [
                     'com/flab/marketgola/*/controller/*',
                     'com/flab/marketgola/*/service/*',
                     'com/flab/marketgola/*/domain/*',
-            ])
+            ], excludes: [] + Qdomains)
         }))
     }
 }
 
 jacocoTestCoverageVerification {
+    def Qdomains = []
+
+    // 패키지 + 클래스명
+    for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
+        Qdomains.add(qPattern + '*')
+    }
+
     violationRules {
         rule {
             element = 'CLASS' //각각의 클래스 파일이 이 기준을 넘어야 함
@@ -107,7 +121,7 @@ jacocoTestCoverageVerification {
                     '*.controller.**.*',
                     '*.service.**.*',
                     '*.domain.**.*'
-            ]
+            ] + Qdomains
         }
     }
 }
