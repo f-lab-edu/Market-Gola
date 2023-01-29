@@ -40,6 +40,10 @@ dependencies {
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
+    //쿼리 파마리터를 찍어주는 라이브러리
+    //개발 때만 편하게 사용하고 운영 때는 병목이 될 수 있으므로 성능테스트하고 사용할 것
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
+
     runtimeOnly 'mysql:mysql-connector-java'
     runtimeOnly 'com.h2database:h2'
     compileOnly 'org.projectlombok:lombok'
