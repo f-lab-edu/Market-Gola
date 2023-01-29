@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,10 +17,11 @@ public class LoginService {
 
     private final UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     public LoginUser login(LoginRequestDto loginRequestDTO)
             throws InvalidKeySpecException, NoSuchAlgorithmException {
         User loginUser = userRepository.findByLoginId(loginRequestDTO.getLoginId())
-                .orElseThrow(() -> new LoginFailException());
+                .orElseThrow(LoginFailException::new);
 
         if (loginUser.isPasswordEqual(loginRequestDTO.getPassword())) {
             return new LoginUser(loginUser.getId(), loginUser.getName());

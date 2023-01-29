@@ -25,6 +25,7 @@ public class ProductService {
     private final DisplayProductRepository displayProductRepository;
     private final ProductRepository productRepository;
 
+    @Transactional(readOnly = true)
     public DisplayProductResponseDto getDisplayProductById(Long id) {
         DisplayProduct displayProduct = displayProductRepository.findByIdWithAll(id)
                 .orElseThrow(NoSuchProductException::new);
@@ -75,6 +76,7 @@ public class ProductService {
         productRepository.updateStateByDisplayProductId(true, id);
     }
 
+    @Transactional(readOnly = true)
     public DisplayProductListResponseDto getDisplayProductListByCategory(int categoryId,
             Pageable pageCondition) {
 

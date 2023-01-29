@@ -61,6 +61,7 @@ public class UserService {
         }
     }
 
+    @Transactional(readOnly = true)
     public UserPublicInfoResponseDto getUser(GetUserRequestDto getUserRequestDto) {
         User user = userRepository.findByCondition(getUserRequestDto)
                 .orElseThrow(NoSuchUserException::new);
@@ -68,6 +69,7 @@ public class UserService {
         return new UserPublicInfoResponseDto(user.getLoginId(), user.getName());
     }
 
+    @Transactional(readOnly = true)
     public UserPrivateInfoResponseDto getMyInfo(Long id) {
         User user = userRepository.findById(id).orElseThrow(NoSuchUserException::new);
 

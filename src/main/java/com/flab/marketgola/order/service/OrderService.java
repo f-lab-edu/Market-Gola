@@ -35,6 +35,7 @@ public class OrderService {
         return order.getId();
     }
 
+    @Transactional(readOnly = true)
     public OrderResponseDto getOrderById(long id) {
         List<OrderProduct> orderProducts = orderProductRepository.findByOrderId(id);
         return OrderResponseDto.of(orderProducts);
