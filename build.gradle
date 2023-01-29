@@ -1,8 +1,17 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+
 plugins {
-	id 'org.springframework.boot' version '2.7.0'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
-	id 'jacoco'
+    id 'org.springframework.boot' version '2.7.0'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'jacoco'
+
+    //querydsl 추가
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com.flab'
@@ -21,11 +30,19 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.session:spring-session-data-redis'
     implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.1'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    //querydsl 추가
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+    //쿼리 파마리터를 찍어주는 라이브러리
+    //개발 때만 편하게 사용하고 운영 때는 병목이 될 수 있으므로 성능테스트하고 사용할 것
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
 
     runtimeOnly 'mysql:mysql-connector-java'
     runtimeOnly 'com.h2database:h2'
@@ -37,7 +54,6 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
-    testCompileOnly 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.2.2'
     testImplementation('it.ozimov:embedded-redis:0.7.3') { exclude group: "org.slf4j", module: "slf4j-simple" }
     testImplementation 'io.findify:s3mock_2.13:0.2.6'
 }
@@ -46,9 +62,7 @@ test {
 	useJUnitPlatform()
 	finalizedBy jacocoTestReport
 
-    filter{
-        //h2 mysql mode에서 이해하지 못하는 쿼리(insert into ... on duplicate key 에서 row alias 사용)가 있어서 테스트에서 제외
-        excludeTestsMatching "*.ProductServiceTest.updateDisplayProductByIdWithProducts*"
+    filter {
         excludeTestsMatching "*.learning.*"
     }
 }
@@ -59,18 +73,32 @@ jacoco {
 
 jacocoTestReport {
     finalizedBy jacocoTestCoverageVerification
+
+    def Qdomains = []
+
+    for (qPattern in "**/QA".."**/QZ") {
+        Qdomains.add(qPattern + "*")
+    }
+
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, include: [
                     'com/flab/marketgola/*/controller/*',
                     'com/flab/marketgola/*/service/*',
                     'com/flab/marketgola/*/domain/*',
-            ])
+            ], excludes: [] + Qdomains)
         }))
     }
 }
 
 jacocoTestCoverageVerification {
+    def Qdomains = []
+
+    // 패키지 + 클래스명
+    for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
+        Qdomains.add(qPattern + '*')
+    }
+
     violationRules {
         rule {
             element = 'CLASS' //각각의 클래스 파일이 이 기준을 넘어야 함
@@ -97,7 +125,25 @@ jacocoTestCoverageVerification {
                     '*.controller.**.*',
                     '*.service.**.*',
                     '*.domain.**.*'
-            ]
+            ] + Qdomains
         }
     }
 }
+
+//querydsl 추가 시작
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets {
+    main.java.srcDir querydslDir
+}
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+//querydsl 추가 끝

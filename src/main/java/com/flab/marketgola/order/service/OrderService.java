@@ -4,9 +4,8 @@ import com.flab.marketgola.order.domain.Order;
 import com.flab.marketgola.order.domain.OrderProduct;
 import com.flab.marketgola.order.dto.request.CreateOrderRequestDto;
 import com.flab.marketgola.order.dto.response.OrderResponseDto;
-import com.flab.marketgola.order.exception.NoSuchOrderException;
-import com.flab.marketgola.order.mapper.OrderMapper;
-import com.flab.marketgola.order.mapper.OrderProductMapper;
+import com.flab.marketgola.order.repository.OrderProductRepository;
+import com.flab.marketgola.order.repository.OrderRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,29 +16,28 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OrderService {
 
-    private final OrderMapper orderRepository;
-    private final OrderProductMapper orderProductRepository;
+    private final OrderRepository orderRepository;
+    private final OrderProductRepository orderProductRepository;
     private final StockSubtractionStrategy stockSubtractionStrategy;
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public long createOrder(long userId, CreateOrderRequestDto request) {
+    public Long createOrder(long userId, CreateOrderRequestDto request) {
         Order order = request.toOrder(userId);
         List<OrderProduct> orderProducts = request.toOrderProducts();
 
         stockSubtractionStrategy.subtractStock(orderProducts);
 
-        orderRepository.insert(order);
+        orderRepository.save(order);
 
-        orderProducts.forEach(orderProduct -> {
-            orderProduct.setOrder(order);
-            orderProductRepository.insert(orderProduct);
-        });
+        orderProducts.forEach(orderProduct -> orderProduct.setOrder(order));
 
+        orderProductRepository.saveAll(orderProducts);
         return order.getId();
     }
 
+    @Transactional(readOnly = true)
     public OrderResponseDto getOrderById(long id) {
-        Order order = orderRepository.findById(id).orElseThrow(NoSuchOrderException::new);
-        return OrderResponseDto.of(order);
+        List<OrderProduct> orderProducts = orderProductRepository.findByOrderId(id);
+        return OrderResponseDto.of(orderProducts);
     }
 }

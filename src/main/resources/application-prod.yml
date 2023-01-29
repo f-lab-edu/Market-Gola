@@ -13,15 +13,6 @@ spring:
   session:
     store-type: redis
 
-# mybatis
-mybatis:
-  mapper-locations: classpath:mybatis/mapper/*.xml
-  configuration:
-    map-underscore-to-camel-case: 'true'
-  type-aliases-package:
-    com.flab.marketgola.user.domain,com.flab.marketgola.product.domain,com.flab.marketgola.product.mapper.dto,
-    com.flab.marketgola.order.domain
-
 # logging
 logging:
   file:

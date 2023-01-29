@@ -5,6 +5,8 @@ CREATE TABLE `membership`
     `id`         tinyint       NOT NULL AUTO_INCREMENT,
     `level`      varchar(45)   NOT NULL,
     `point_rate` decimal(6, 3) NOT NULL,
+    `created_at` datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     UNIQUE KEY `level_UNIQUE` (`level`)
 ) ENGINE = InnoDB
@@ -41,6 +43,8 @@ CREATE TABLE `shipping_address`
     `address`    varchar(100) NOT NULL,
     `is_default` tinyint      NOT NULL,
     `user_id`    int unsigned NOT NULL,
+    `created_at` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     KEY `user_id_idx` (`user_id`),
     CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
@@ -50,9 +54,11 @@ CREATE TABLE `shipping_address`
 
 CREATE TABLE `product_category`
 (
-    `id`        int unsigned NOT NULL AUTO_INCREMENT,
-    `name`      varchar(30)  NOT NULL,
-    `parent_id` int unsigned DEFAULT NULL,
+    `id`         int unsigned NOT NULL AUTO_INCREMENT,
+    `name`       varchar(30)  NOT NULL,
+    `parent_id`  int unsigned          DEFAULT NULL,
+    `created_at` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     UNIQUE KEY `name_UNIQUE` (`name`),
     KEY `product_category_product_category_id_idx` (`parent_id`),
@@ -65,6 +71,7 @@ CREATE TABLE `display_product`
 (
     `id`                     bigint unsigned NOT NULL AUTO_INCREMENT,
     `name`                   varchar(100)    NOT NULL,
+    `price`                  int unsigned    NOT NULL,
     `description_image_name` varchar(300)    NOT NULL,
     `main_image_name`        varchar(300)    NOT NULL,
     `created_at`             datetime        NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -84,7 +91,7 @@ CREATE TABLE `product`
     `price`              int unsigned      NOT NULL,
     `stock`              smallint unsigned NOT NULL,
     `created_at`         datetime          NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at`         datetime          NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `updated_at`         datetime(6)       NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
     `is_deleted`         tinyint           NOT NULL DEFAULT '0',
     `display_product_id` bigint unsigned   NOT NULL,
     PRIMARY KEY (`id`),
@@ -102,7 +109,7 @@ CREATE TABLE `order`
     `receiver_address` varchar(100)                                            NOT NULL,
     `order_status`     enum ('PROCESSING','DELIVERING','DELIVERED','CANCELED') NOT NULL DEFAULT 'PROCESSING',
     `created_at`       datetime                                                NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at`       datetime(6)                                             NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+    `updated_at`       datetime                                                NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `delivered_at`     datetime                                                         DEFAULT NULL,
     `user_id`          int unsigned                                            NOT NULL,
     PRIMARY KEY (`id`),
@@ -118,6 +125,8 @@ CREATE TABLE `order_product`
     `count`      int unsigned    NOT NULL,
     `order_id`   bigint unsigned NOT NULL,
     `product_id` bigint unsigned NOT NULL,
+    `created_at` datetime        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` datetime        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     KEY `product_idx` (`product_id`),
     KEY `order_idx` (`order_id`),

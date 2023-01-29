@@ -69,7 +69,7 @@ public class UpdateDisplayProductWithProductsRequestDto {
                                 .name(productDto.getName())
                                 .price(productDto.getPrice())
                                 .stock(productDto.getStock())
-                                .isDeleted(false)
+                                .isDeleted(productDto.isDeleted())
                                 .displayProduct(displayProduct)
                                 .build())
                 .collect(Collectors.toList());

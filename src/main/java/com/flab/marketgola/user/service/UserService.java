@@ -1,6 +1,5 @@
 package com.flab.marketgola.user.service;
 
-import com.flab.marketgola.user.domain.ShippingAddress;
 import com.flab.marketgola.user.domain.User;
 import com.flab.marketgola.user.dto.request.CreateUserRequestDto;
 import com.flab.marketgola.user.dto.request.GetUserRequestDto;
@@ -10,25 +9,18 @@ import com.flab.marketgola.user.exception.DuplicatedEmailExcepiton;
 import com.flab.marketgola.user.exception.DuplicatedLoginIdException;
 import com.flab.marketgola.user.exception.DuplicatedPhoneNumberException;
 import com.flab.marketgola.user.exception.NoSuchUserException;
-import com.flab.marketgola.user.mapper.ShippingAddressMapper;
-import com.flab.marketgola.user.mapper.UserMapper;
+import com.flab.marketgola.user.repository.UserRepository;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    private final UserMapper userRepository;
-    private final ShippingAddressMapper addressRepository;
-
-    @Autowired
-    public UserService(UserMapper userRepository, ShippingAddressMapper addressRepository) {
-        this.userRepository = userRepository;
-        this.addressRepository = addressRepository;
-    }
+    private final UserRepository userRepository;
 
     @Transactional
     public UserPrivateInfoResponseDto createUser(CreateUserRequestDto createUserRequestDto)
@@ -36,12 +28,11 @@ public class UserService {
         validateDuplication(createUserRequestDto);
 
         User user = createUserRequestDto.toUser();
-        ShippingAddress shippingAddress = createUserRequestDto.toShippingAddress(user);
+        user.addShippingAddress(createUserRequestDto.toShippingAddress());
 
         user.encryptPassword();
 
-        userRepository.insert(user);
-        addressRepository.insert(shippingAddress);
+        userRepository.save(user);
 
         return UserPrivateInfoResponseDto.of(user);
     }
@@ -70,6 +61,7 @@ public class UserService {
         }
     }
 
+    @Transactional(readOnly = true)
     public UserPublicInfoResponseDto getUser(GetUserRequestDto getUserRequestDto) {
         User user = userRepository.findByCondition(getUserRequestDto)
                 .orElseThrow(NoSuchUserException::new);
@@ -77,6 +69,7 @@ public class UserService {
         return new UserPublicInfoResponseDto(user.getLoginId(), user.getName());
     }
 
+    @Transactional(readOnly = true)
     public UserPrivateInfoResponseDto getMyInfo(Long id) {
         User user = userRepository.findById(id).orElseThrow(NoSuchUserException::new);
 

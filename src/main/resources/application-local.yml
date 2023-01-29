@@ -24,14 +24,20 @@ spring:
     url: jdbc:mysql://localhost:3306/marketgola
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-# mybatis
-mybatis:
-  mapper-locations: classpath:mybatis/mapper/*.xml
-  configuration:
-    map-underscore-to-camel-case: 'true'
-  type-aliases-package:
-    com.flab.marketgola.user.domain,com.flab.marketgola.product.domain,com.flab.marketgola.product.mapper.dto,
-    com.flab.marketgola.order.domain
+  # jpa
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: true
+
+  # paging
+  data:
+    web:
+      pageable:
+        default-page-size: 50
+        max-page-size: 100
+        one-indexed-parameters: true # spring data의 페이지는 0부터 시작하기에 1부터 시작하도록 변경
 
 # AWS
 cloud:

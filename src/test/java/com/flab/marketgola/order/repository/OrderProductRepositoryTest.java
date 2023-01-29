@@ -1,4 +1,4 @@
-package com.flab.marketgola.order.mapper;
+package com.flab.marketgola.order.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,11 +10,11 @@ import com.flab.marketgola.product.constant.TestDisplayProductFactory;
 import com.flab.marketgola.product.constant.TestProductFactory;
 import com.flab.marketgola.product.domain.DisplayProduct;
 import com.flab.marketgola.product.domain.Product;
-import com.flab.marketgola.product.mapper.DisplayProductMapper;
-import com.flab.marketgola.product.mapper.ProductMapper;
+import com.flab.marketgola.product.repository.DisplayProductRepository;
+import com.flab.marketgola.product.repository.ProductRepository;
 import com.flab.marketgola.user.constant.TestUserFactory;
 import com.flab.marketgola.user.domain.User;
-import com.flab.marketgola.user.mapper.UserMapper;
+import com.flab.marketgola.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,37 +25,37 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @ActiveProfiles("unit")
 @SpringBootTest(classes = TestRedisConfiguration.class)
-class OrderProductMapperTest {
+class OrderProductRepositoryTest {
 
     @Autowired
-    OrderProductMapper orderProductRepository;
+    OrderProductRepository orderProductRepository;
     @Autowired
-    ProductMapper productRepository;
+    ProductRepository productRepository;
     @Autowired
-    DisplayProductMapper displayProductRepository;
+    DisplayProductRepository displayProductRepository;
     @Autowired
-    OrderMapper orderRepository;
+    OrderRepository orderRepository;
     @Autowired
-    UserMapper userRepository;
+    UserRepository userRepository;
 
     @DisplayName("정상적으로 주문 상품 기록을 생성할 수 있다.")
     @Test
-    void insert() {
+    void save() {
         //given
         //상품 사전 등록
         DisplayProduct displayProduct = TestDisplayProductFactory.generalDisplayProduct().build();
-        displayProductRepository.insert(displayProduct);
+        displayProductRepository.save(displayProduct);
         Product product = TestProductFactory.generalProduct().displayProduct(displayProduct)
                 .build();
-        productRepository.insert(product);
+        productRepository.save(product);
 
         //유저 사전 등록
         User user = TestUserFactory.generalUser().build();
-        userRepository.insert(user);
+        userRepository.save(user);
 
         //주문 사전 등록
         Order order = TestOrderFactory.generalOrder().user(user).build();
-        orderRepository.insert(order);
+        orderRepository.save(order);
 
         OrderProduct orderProduct = OrderProduct.builder()
                 .product(product)
@@ -63,9 +63,9 @@ class OrderProductMapperTest {
                 .build();
 
         //when
-        Long orderProductId = orderProductRepository.insert(orderProduct);
+        orderProductRepository.save(orderProduct);
 
         //then
-        assertThat(orderProductRepository.findById(orderProductId)).isNotEmpty();
+        assertThat(orderProductRepository.findById(orderProduct.getId())).isNotEmpty();
     }
 }

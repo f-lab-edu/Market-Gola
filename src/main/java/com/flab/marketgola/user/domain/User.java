@@ -1,35 +1,67 @@
 package com.flab.marketgola.user.domain;
 
+import com.flab.marketgola.common.domain.BaseEntity;
 import com.flab.marketgola.user.util.PasswordEncryptionUtil;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+@Entity
+@Table(name = "`user`")
 @Getter
 @ToString
 @NoArgsConstructor
-public class User {
+public class User extends BaseEntity {
 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(length = 30, unique = true, nullable = false)
     private String loginId;
+
+    @Column(length = 256, nullable = false)
     private String password;
+
+    @Column(length = 30, nullable = false)
     private String name;
+
+    @Column(length = 30, unique = true, nullable = false)
     private String email;
+
+    @Column(length = 11, unique = true, nullable = false)
     private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
     private Gender gender;
+
     private LocalDate birth;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    private List<ShippingAddress> shippingAddresses = new ArrayList<>();
 
     @Builder
     public User(Long id, String loginId, String password, String name, String email,
-            String phoneNumber,
-            Gender gender, LocalDate birth, LocalDateTime createdAt, LocalDateTime updatedAt) {
+            String phoneNumber, Gender gender, LocalDate birth) {
         this.id = id;
         this.loginId = loginId;
         this.password = password;
@@ -38,8 +70,6 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.gender = gender;
         this.birth = birth;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public void encryptPassword() throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -49,5 +79,9 @@ public class User {
     public boolean isPasswordEqual(String password)
             throws InvalidKeySpecException, NoSuchAlgorithmException {
         return PasswordEncryptionUtil.validatePassword(this.password, password);
+    }
+
+    public void addShippingAddress(ShippingAddress shippingAddress) {
+        shippingAddresses.add(shippingAddress);
     }
 }

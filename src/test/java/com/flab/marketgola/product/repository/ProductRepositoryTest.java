@@ -1,4 +1,4 @@
-package com.flab.marketgola.product.mapper;
+package com.flab.marketgola.product.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,27 +17,27 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @ActiveProfiles("unit")
 @SpringBootTest(classes = TestRedisConfiguration.class)
-class ProductMapperTest {
+class ProductRepositoryTest {
 
     @Autowired
-    ProductMapper productRepository;
+    ProductRepository productRepository;
 
     @Autowired
-    DisplayProductMapper displayProductRepository;
+    DisplayProductRepository displayProductRepository;
 
     @DisplayName("정상적으로 상품을 추가할 수 있다")
     @Test
     void insert() {
         //given
         DisplayProduct displayProduct = TestDisplayProductFactory.generalDisplayProduct().build();
-        displayProductRepository.insert(displayProduct);
+        displayProductRepository.save(displayProduct);
 
         Product product = TestProductFactory.generalProduct()
                 .displayProduct(displayProduct)
                 .build();
 
         //when
-        productRepository.insert(product);
+        productRepository.save(product);
 
         //then
         assertThat(productRepository.findById(product.getId())).isNotEmpty();

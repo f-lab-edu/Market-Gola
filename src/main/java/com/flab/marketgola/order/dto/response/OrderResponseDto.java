@@ -1,7 +1,9 @@
 package com.flab.marketgola.order.dto.response;
 
 import com.flab.marketgola.order.domain.Order;
+import com.flab.marketgola.order.domain.OrderProduct;
 import com.flab.marketgola.order.domain.OrderStatus;
+import com.flab.marketgola.product.domain.Product;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
@@ -27,12 +29,15 @@ public class OrderResponseDto {
         this.products = products;
     }
 
-    public static OrderResponseDto of(Order order) {
-        List<ProductDto> products = order.getOrderProducts().stream()
+    public static OrderResponseDto of(List<OrderProduct> orderProducts) {
+        Order order = orderProducts.get(0).getOrder();
+
+        List<ProductDto> products = orderProducts.stream()
                 .map(orderProduct -> {
-                    long productId = orderProduct.getProduct().getId();
-                    String productName = orderProduct.getProduct().getName();
-                    int price = orderProduct.getProduct().getPrice();
+                    Product product = orderProduct.getProduct();
+                    long productId = product.getId();
+                    String productName = product.getName();
+                    int price = product.getPrice();
                     int count = orderProduct.getCount();
 
                     return new ProductDto(productId, productName, price, count);

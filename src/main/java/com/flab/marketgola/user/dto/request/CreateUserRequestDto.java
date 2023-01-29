@@ -62,9 +62,8 @@ public class CreateUserRequestDto {
                 .build();
     }
 
-    public ShippingAddress toShippingAddress(User user) {
+    public ShippingAddress toShippingAddress() {
         return ShippingAddress.builder()
-                .user(user)
                 .address(address)
                 .isDefault(true)
                 .build();
