@@ -49,8 +49,10 @@ public class User extends BaseEntity {
 
     @Column(length = 11, unique = true, nullable = false)
     private String phoneNumber;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
     private LocalDate birth;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
