@@ -21,7 +21,7 @@ public class OrderService {
     private final StockSubtractionStrategy stockSubtractionStrategy;
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public long createOrder(long userId, CreateOrderRequestDto request) {
+    public Long createOrder(long userId, CreateOrderRequestDto request) {
         Order order = request.toOrder(userId);
         List<OrderProduct> orderProducts = request.toOrderProducts();
 
@@ -29,11 +29,9 @@ public class OrderService {
 
         orderRepository.save(order);
 
-        orderProducts.forEach(orderProduct -> {
-            orderProduct.setOrder(order);
-            orderProductRepository.save(orderProduct);
-        });
+        orderProducts.forEach(orderProduct -> orderProduct.setOrder(order));
 
+        orderProductRepository.saveAll(orderProducts);
         return order.getId();
     }
 
