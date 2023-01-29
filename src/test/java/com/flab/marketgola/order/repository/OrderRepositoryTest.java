@@ -30,7 +30,7 @@ class OrderRepositoryTest {
     @Test
     void insert() {
         //given
-        User user = TestUserFactory.generalUser().id(1L).build();
+        User user = TestUserFactory.generalUser().build();
         userRepository.save(user);
         Order order = TestOrderFactory.generalOrder().user(user).build();
 
