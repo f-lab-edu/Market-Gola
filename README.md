@@ -11,7 +11,7 @@
 * Spring 5.3.20
 * Spring Boot 2.7.0
 * Mysql 8.0.29
-* Mybatis 3.5.9
+* JPA 2.2.3
 * Redis 4
 * Github Actions
 * AWS S3
