@@ -10,11 +10,3 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username:
     password:
-
-# mybatis
-mybatis:
-  mapper-locations: classpath:mybatis/mapper/*.xml
-  configuration:
-    map-underscore-to-camel-case: true
-  type-aliases-package:
-    'com.flab.marketgola.user.domain'

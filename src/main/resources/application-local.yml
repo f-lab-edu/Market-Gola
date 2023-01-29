@@ -26,13 +26,8 @@ spring:
 
   # jpa
   jpa:
-    hibernate:
-      ddl-auto: create
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
-        use_sql_comments: true
         dialect: org.hibernate.dialect.MySQL8Dialect
     open-in-view: true
 
@@ -43,15 +38,6 @@ spring:
         default-page-size: 50
         max-page-size: 100
         one-indexed-parameters: true # spring data의 페이지는 0부터 시작하기에 1부터 시작하도록 변경
-
-# mybatis
-mybatis:
-  mapper-locations: classpath:mybatis/mapper/*.xml
-  configuration:
-    map-underscore-to-camel-case: 'true'
-  type-aliases-package:
-    com.flab.marketgola.user.domain,com.flab.marketgola.product.domain,com.flab.marketgola.product.mapper.dto,
-    com.flab.marketgola.order.domain
 
 # AWS
 cloud:
