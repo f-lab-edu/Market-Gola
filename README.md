@@ -14,7 +14,7 @@
 * JPA 2.2.3
 * Redis 4
 * Github Actions
-* AWS S3
+* AWS S3, Lambda
 
 # 프로젝트 중점 사항
 
@@ -22,7 +22,6 @@
 - 서버 확장을 고려한 설계
 - 객체지향적이고 깔끔한 코드
 - 꼼꼼하고 가독성 높은 테스트 코드
-- 성능 튜닝
 - Restful한 API
 
 
@@ -47,4 +46,5 @@
 ![ERD 최종](https://user-images.githubusercontent.com/71138398/172528406-28439eab-715b-4e8c-88ac-506709659d2f.png)
 
 # Issue Posting
-[낙관적 락 구현 도중 무한 루프 문제 해결기](https://velog.io/@sontulip/optimistic-lock-infinite-loop)
+[낙관적 락 구현 도중 무한 루프 문제 해결기](https://velog.io/@sontulip/optimistic-lock-infinite-loop)<br>
+[상품 저장 실패시 저장된 이미지에 대한 롤백 처리 문제 해결기](https://velog.io/@sontulip/s3-rollback-problem) 관련 코드 : https://github.com/sgo8308/Market-Gola-Batch
