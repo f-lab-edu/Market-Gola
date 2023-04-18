@@ -44,8 +44,7 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(BASE_PATH + "/" + responseDto.getId()));
 
-        return new ResponseEntity<>(userService.createUser(createUserRequestDto), headers,
-                HttpStatus.CREATED);
+        return new ResponseEntity<>(responseDto, headers, HttpStatus.CREATED);
     }
 
     @GetMapping
