@@ -4,6 +4,7 @@ import com.flab.marketgola.order.domain.Order;
 import com.flab.marketgola.order.domain.OrderProduct;
 import com.flab.marketgola.order.dto.request.CreateOrderRequestDto;
 import com.flab.marketgola.order.dto.response.OrderResponseDto;
+import com.flab.marketgola.order.exception.NoSuchOrderException;
 import com.flab.marketgola.order.repository.OrderProductRepository;
 import com.flab.marketgola.order.repository.OrderRepository;
 import java.util.List;
@@ -38,6 +39,10 @@ public class OrderService {
     @Transactional(readOnly = true)
     public OrderResponseDto getOrderById(long id) {
         List<OrderProduct> orderProducts = orderProductRepository.findByOrderId(id);
+        if (orderProducts.isEmpty()) {
+            throw new NoSuchOrderException();
+        }
+
         return OrderResponseDto.of(orderProducts);
     }
 }
