@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -18,14 +20,24 @@ public class ShippingAddress extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(length = 100, nullable = false)
     private String address;
+
     @Column(nullable = false)
     private boolean isDefault;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Builder
     public ShippingAddress(String address, boolean isDefault) {
         this.address = address;
         this.isDefault = isDefault;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

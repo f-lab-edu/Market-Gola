@@ -15,7 +15,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Builder;
@@ -29,7 +28,6 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class User extends BaseEntity {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,8 +53,7 @@ public class User extends BaseEntity {
 
     private LocalDate birth;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ShippingAddress> shippingAddresses = new ArrayList<>();
 
     @Builder
@@ -83,5 +80,6 @@ public class User extends BaseEntity {
 
     public void addShippingAddress(ShippingAddress shippingAddress) {
         shippingAddresses.add(shippingAddress);
+        shippingAddress.setUser(this);
     }
 }

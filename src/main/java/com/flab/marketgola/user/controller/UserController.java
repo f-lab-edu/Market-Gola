@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-
     public static final String BASE_PATH = "/users";
     public static final String GET_MY_INFO_PATH = "/me";
     private final UserService userService;
