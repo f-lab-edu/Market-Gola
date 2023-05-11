@@ -5,14 +5,14 @@ import java.io.InputStream;
 
 public class MainImage extends Image {
 
-    private static String STORE_PATH = ProductController.BASE_PATH;
+    private static final String STORE_PATH = ProductController.BASE_PATH;
 
     public static String generateUrl(String storedName) {
         return IMAGE_DOMAIN + STORE_PATH + "/" + storedName;
     }
 
     public String getStoreKey() {
-        return STORE_PATH + "/" + storedName;
+        return STORE_PATH.substring(1) + "/" + storedName;
     }
 
     @Override

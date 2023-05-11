@@ -12,7 +12,7 @@ public class DescriptionImage extends Image {
     }
 
     public String getStoreKey() {
-        return STORE_PATH + "/" + storedName;
+        return STORE_PATH.substring(1) + "/" + storedName;
     }
 
     public DescriptionImage(InputStream imageInputStream, String originalFileName) {
