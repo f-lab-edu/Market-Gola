@@ -1,7 +1,6 @@
 package com.flab.marketgola.image.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.flab.marketgola.image.domain.Image;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +21,7 @@ public class S3ImageService implements ImageService {
     @Override
     public String upload(Image image) {
         s3.putObject(new PutObjectRequest(bucketName, image.getStoreKey(),
-                image.getImageInputStream(), null)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
+                image.getImageInputStream(), null));
 
         image.closeInputStream();
 
