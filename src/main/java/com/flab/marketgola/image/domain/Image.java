@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor
 public abstract class Image {
 
-    protected static final String IMAGE_DOMAIN = "https://www.image.gola.com";
+    protected static final String IMAGE_DOMAIN = "https://market-gola.s3.ap-northeast-2.amazonaws.com";
 
     protected InputStream imageInputStream;
 
