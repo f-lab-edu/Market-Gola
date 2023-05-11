@@ -46,7 +46,7 @@ public class DisplayProductRepositoryCustomImpl implements DisplayProductReposit
     @Override
     public Page<DisplayProduct> findByCategory(int categoryId, Pageable pageable) {
         List<DisplayProduct> result = queryFactory
-                .selectFrom(displayProduct)
+                .selectFrom(displayProduct).distinct()
                 .join(displayProduct.category, productCategory)
                 .join(displayProduct.products, product)
                 .where(productCategory.id.eq(categoryId), product.isDeleted.eq(false))
@@ -56,7 +56,7 @@ public class DisplayProductRepositoryCustomImpl implements DisplayProductReposit
                 .fetch();
 
         Long total = queryFactory
-                .select(displayProduct.count())
+                .select(displayProduct.count()).distinct()
                 .from(displayProduct)
                 .join(displayProduct.category, productCategory)
                 .join(displayProduct.products, product)
