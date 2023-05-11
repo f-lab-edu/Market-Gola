@@ -1,6 +1,7 @@
 package com.flab.marketgola.order.controller;
 
 import com.flab.marketgola.order.dto.request.CreateOrderRequestDto;
+import com.flab.marketgola.order.dto.response.OrderResponseDto;
 import com.flab.marketgola.order.service.OrderService;
 import com.flab.marketgola.user.controller.argumentresolver.AuthenticatedUser;
 import com.flab.marketgola.user.domain.LoginUser;
@@ -11,6 +12,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,5 +41,10 @@ public class OrderController {
         Map<String, Long> response = Map.of("orderId", orderId);
 
         return new ResponseEntity<>(response, headers, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<OrderResponseDto> getOrder(@PathVariable Long id) {
+        return new ResponseEntity<>(orderService.getOrderById(id), HttpStatus.OK);
     }
 }
